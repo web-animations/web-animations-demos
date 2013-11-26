@@ -11,7 +11,8 @@ RETURN_SUCCESS = 0
 
 
 def _CheckJSLint(input_api, output_api):
-  return_code = subprocess.call(['gjslint', '-r', input_api.PresubmitLocalPath()])
+  source_dir = input_api.os_path.join(input_api.PresubmitLocalPath(), 'demos')
+  return_code = subprocess.call(['gjslint', '-r', source_dir])
   if return_code != RETURN_SUCCESS:
     return [output_api.PresubmitError(
         'Javascript style check failed.\n'
