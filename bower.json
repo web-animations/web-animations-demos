@@ -8,5 +8,5 @@
   "dependencies": {
     "polymer": "Polymer/polymer",
     "web-animations-js": "web-animations/web-animations-js"
-  },
+  }
 }
