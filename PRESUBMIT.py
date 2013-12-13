@@ -5,6 +5,9 @@
 """Presubmit checks for Web Animation Demos."""
 
 import subprocess
+from git_cl import Changelist
+import tempfile
+import os
 
 
 RETURN_SUCCESS = 0
@@ -35,6 +38,31 @@ def _CheckRemoteIsOrigin(input_api, output_api):
   return []
 
 
+def _WriteTemporaryFile(data):
+  f = tempfile.NamedTemporaryFile('w')
+  f.write(data)
+  f.flush()
+  os.fsync(f)
+  return f
+
+
+def _CheckLocalBranchMatchesPatchset(input_api, output_api):
+  issue = input_api.change.issue
+  cl = Changelist(issue=issue)
+  patch_set = cl.GetMostRecentPatchset()
+
+  patch_set_diff = cl.GetPatchSetDiff(issue, patch_set)
+  local_diff = subprocess.check_output(['git', 'diff', 'origin/master']);
+
+  with _WriteTemporaryFile(patch_set_diff) as patch_set_diff_file:
+    with _WriteTemporaryFile(local_diff) as local_diff_file:
+      diff_diff = subprocess.check_output(['interdiff', patch_set_diff_file.name, local_diff_file.name])
+
+  if diff_diff:
+    return [output_api.PresubmitError('Local branch does not match patch set %s for issue %s. Revert or upload new changes to branch to resolve.\n\n%s' % (patch_set, issue, diff_diff))]
+  return []
+
+
 def CheckChangeOnUpload(input_api, output_api):
   return _CheckJSLint(input_api, output_api)
 
@@ -46,4 +74,5 @@ def CheckChangeOnCommit(input_api, output_api):
   results.extend(input_api.canned_checks.CheckChangeHasDescription(input_api, output_api))
   results.extend(input_api.canned_checks.CheckOwners(input_api, output_api))
   results.extend(_CheckRemoteIsOrigin(input_api, output_api))
+  results.extend(_CheckLocalBranchMatchesPatchset(input_api, output_api))
   return results
