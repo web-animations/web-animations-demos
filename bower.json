@@ -1,0 +1,7 @@
+{
+  "name": "wat",
+  "private": true,
+  "dependencies": {
+    "web-animations-tools": "web-animations/web-animations-tools#master"
+  }
+}
