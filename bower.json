@@ -1,12 +1,9 @@
 {
   "name": "web-animations-demos",
   "description": "Web Animations Demos",
-  "authors": [
-    "Alan Cutter <alancutter@chromium.org>"
-  ],
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer",
-    "web-animations-js": "web-animations/web-animations-js"
+    "polymer": "Polymer/polymer#master",
+    "web-animations-tools": "web-animations/web-animations-tools#master"
   }
 }
