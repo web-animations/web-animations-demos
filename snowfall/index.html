@@ -1,0 +1,119 @@
+<!--
+Copyright 2013 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+
+<script src="../components/platform/platform.js"></script>
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-animation/web-animations.html">
+
+<polymer-element name="snow-fall">
+  <template>
+    <style>
+      #snow {
+        width: 1000px;
+        height: 500px;
+        background: #555555;
+        overflow: hidden;
+        -webkit-filter: blur(1px);
+        filter: blur(1px);
+        display: block;
+      }
+      .snowflake {
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 8px;
+        position: absolute;
+      }
+    </style>
+    <input type="range" min="5" max="5000" step="5" value="{{count}}"> {{count}}
+    <canvas id="snow" width="1000" height="500"></canvas>
+  </template>
+  <script>
+    Polymer('snow-fall', {
+      snowflakes: [],
+      count: 0,
+      countChanged: function() {
+        // FIXME: This works around a performance issue in the polyfill which
+        // makes it expensive to add/remove animations while they are attached
+        // to a player.
+        this.player.source = null;
+        while (this.snowflakes.length > this.count) {
+            this.snowflakes.pop().remove();
+        }
+
+        while (this.snowflakes.length < this.count) {
+          var snowflake = (function() {
+            var scale = 0.35 + Math.random() * 0.65;
+            var width = 1000;
+            var fromX = Math.random() * width;
+            var toX = fromX + Math.random() * (0.3 * width) - (0.15 * width);
+
+            return new Animation(null, {sample: function(t) {
+              var x = fromX + (toX - fromX) * t;
+              var y = 500 * t;
+              this.ctx.globalAlpha = scale;
+              this.ctx.beginPath();
+              this.ctx.arc(x, y, scale * 4, 0, Math.PI * 2, false);
+              this.ctx.closePath();
+              this.ctx.fill();
+            }.bind(this)}, {
+              iterationStart: Math.random(),
+              iterations: Infinity,
+              playbackRate: 2 - Math.random() * 1.2,
+              duration: 5
+            });
+          }).call(this);
+
+          this.group.append(snowflake);
+          this.snowflakes.push(snowflake);
+        }
+        this.player.source = this.group;
+      },
+      player: null,
+      group: null,
+      ready: function() {
+        this.ctx = this.$.snow.getContext('2d');
+        this.ctx.fillStyle = '#FFF';
+
+        var clear = new Animation(null, {sample: function(t) {
+          this.ctx.clearRect(0, 0, 1000, 500);
+        }.bind(this)}, {
+          duration: Infinity
+        });
+
+        this.group = new ParGroup([clear]);
+        this.player = document.timeline.play(this.group);
+        this.count = 300;
+      }
+    });
+  </script>
+</polymer-element>
+
+<snow-fall></snow-fall>
+<!--
+<link rel="import" href="../components/web-animations-tools/wat-player-controls/wat-player-controls.html">
+<wat-player-controls step="0.001"></wat-player-controls>
+
+<script>
+document.addEventListener('WebComponentsReady', function() {
+  document.querySelector('wat-player-controls').player = document.querySelector('snow-fall').player;
+});
+</script>
+
+-->
