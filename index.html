@@ -54,22 +54,25 @@ limitations under the License.
         width: 80vw;
         margin: 0 auto;
       }
-      li {
+      .demo-link {
+        text-decoration: none;
+        font-size: 30px;
+        color: white;
         display: inline-block;
-        margin: 20px; 
+        margin: 20px;
         text-align: center;
         padding: 10px;
         background-color: rgb(205,38,38);
-        width: 200px;
+        width: 180px;
         height: 200px;
         box-shadow: 2px 2px 2px #999;
         border-radius: 5px;
       }
-      .demo-link {
-        font-size: 30px;
-        color: white;
+      .demo-link > img {
+        width: 150px;
+        height: 150px;
       }
-      li:hover {
+      .demo-link:hover {
         background-color: rgb(215,81,81);
       }
       body {
@@ -208,14 +211,23 @@ limitations under the License.
       <div id="hill"></div>
     </div>
     <div id="grass">
-      <ul>
-        <a class="demo-link" href="rolio/rolio.html"><li>Rolio</li></a>
-        <a class="demo-link" href="globe/"><li>Globe</li></a>
-        <a class="demo-link" href="countries/"><li>Countries</li></a>
-        <a class="demo-link" href="touch/touch.html"><li>Touch</li></a>
-        <a class="demo-link" href="curtains/curtains.html"><li>Curtains</li></a>
-        <a class="demo-link" href="test-circle-square/test-circle-square.html"><li>Shapes</li></a>
-      </ul>
+      <ul id="demos"></ul>
     </div>
   </body>
+<script src="demos.js"></script>
+<script>
+var demoList = document.querySelector('#demos');
+for (var k in demos) {
+  var a = document.createElement('a');
+  a.classList.add('demo-link');
+  var base = document.location.toString();
+  var url = base + k + '/';
+  a.setAttribute('href', url);
+  a.appendChild(document.createTextNode(demos[k]));
+  var img = document.createElement('img');
+  img.setAttribute('src', 'https://www.google.com/webpagethumbnail?c=41&r=4&s=150&d=' + url);
+  a.appendChild(img);
+  demoList.appendChild(a);
+}
+</script>
 </html>
