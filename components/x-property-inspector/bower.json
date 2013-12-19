@@ -1,0 +1,10 @@
+{
+  "name": "x-property-inspector",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "x-editors": "Polymer/x-editors#master",
+    "x-binding": "Polymer/x-binding#master",
+    "polymer-animation": "Polymer/polymer-animation#master"
+  }
+}

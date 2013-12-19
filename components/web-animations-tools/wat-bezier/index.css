@@ -1,0 +1,46 @@
+.box {
+  position: relative;
+  background-color: black;
+  left: -10px;
+  top: -10px;
+  margin: 10px;
+  height: 60px;
+  width: 60px;
+  border-radius: 5px;
+  display: table;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.box span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  font-size: 90%;
+  font-family: helvetica;
+}
+
+.box-container {
+  position: relative;
+  left: 10px;
+  top: 10px;
+  margin: 10px;
+  padding: 0px;
+  height: 130px;
+  width: 560px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 6px;
+}
+
+#player-controls {
+  position: relative;
+  left: 10px;
+}
+
+#bezier {
+  position: relative;
+  left: 10px;
+}
+

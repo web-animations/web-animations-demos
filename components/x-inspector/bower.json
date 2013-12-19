@@ -1,0 +1,10 @@
+{
+  "name": "x-inspector",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "x-property-inspector": "Polymer/x-property-inspector#master",
+    "polymer-ui-icon-button": "Polymer/polymer-ui-icon-button#master",
+    "x-meta": "Polymer/x-meta#master"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "x-binding",
+  "private": true,
+  "dependencies": {},
+  "homepage": "https://github.com/Polymer/x-binding",
+  "_release": "754cc44aa6",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "754cc44aa615e5f8652315ffbf30c5fb78161d31"
+  },
+  "_source": "git://github.com/Polymer/x-binding.git",
+  "_target": "master",
+  "_originalSource": "Polymer/x-binding"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "x-editors",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "homepage": "https://github.com/Polymer/x-editors",
+  "_release": "d479778eab",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d479778eabecd69097b482cc564bf5f83a4b718e"
+  },
+  "_source": "git://github.com/Polymer/x-editors.git",
+  "_target": "master",
+  "_originalSource": "Polymer/x-editors"
+}

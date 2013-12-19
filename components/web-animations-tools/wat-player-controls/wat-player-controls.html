@@ -1,0 +1,191 @@
+<!--
+Copyright 2013 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+
+<link rel="import" href="../../polymer/polymer.html">
+
+<polymer-element name="wat-player-controls" attributes="step">
+  <template>
+    <style>
+      .button,
+      .not-repeating,
+      .repeating, 
+      .not-reversed,
+      .reversed {
+        width: 30px;
+        height: 30px;
+        padding: 0px;
+        margin: 2px;
+        text-align: center;
+        vertical-align: middle;
+        outline: none;
+        color: white;
+        background-color: rgba(66,133,244,1);
+        border: 1px solid rgba(66,133,244,0.84);
+        border-radius: 10%;
+        cursor: pointer;
+      }
+      
+      .repeating,
+      .reversed {
+        color: rgba(66,133,244,1);
+        background-color: white;
+      }
+
+      .slider {
+        -webkit-appearance: none;
+        margin: 2px;
+        width: 150px;
+        vertical-align: middle;
+        outline: none;
+        overflow: hidden;
+        border: 1px solid rgba(221,221,221,1);
+        background-color: white;
+        border-radius: 99px;
+        box-shadow: 1px 1px 3px rgba(0,0,0,.21) inset;
+        cursor: pointer;
+      }
+      
+      
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        background: rgba(66, 133, 244, 1);
+        height: 13px;
+        width: 13px;
+        border-radius: 50%;
+        box-shadow: -1px -1px 5px rgba(0,0,0,.42) inset,
+            -1px -1px 4px 3px rgba(66,133,244,.84) inset,
+            1px 1px 3px rgba(0,0,0,.3),
+            -203px 0 0 198px rgba(66,133,244,.42);
+        cursor: pointer;
+      }
+    </style>
+    
+    <input class="button" type="button" value="{{playPauseText}}" 
+        on-click="{{playPause}}" title="Play / Pause">
+    <input class="button" type="button" value="⏮" on-click="{{skipToStart}}"
+        title="Skip To Start">
+    <input class="button" type="button" value="⏭" on-click="{{skipToEnd}}"
+        title="Skip To End">
+    <input class="not-repeating" id="repeatButton" type="button" value="🔁" 
+        on-click="{{toggleRepeat}}" title="Repeat On / Off">
+    <input class="not-reversed" id="reverseButton" type="button" value="⬅" 
+        on-click="{{toggleReversed}}" title="Reverse On / Off">
+    <input class="slider" type="range" value="{{player.currentTime}}" 
+        step="{{step}}" min="{{player.source.startTime || 0}}" 
+        max="{{player.source.endTime || 0}}" on-pointerup="{{resume}}"
+        on-pointerdown="{{pauseWhileSeeking}}" title="Adjust Current Time">
+  </template>
+  
+  <script>
+    Polymer('wat-player-controls', {
+      step: 0.001,
+      paused: true,
+      repeating: false,
+      playPauseText: '▶',
+      
+      observe: {
+        'player.currentTime': 'restart'
+      },
+      
+      ensurePlayerIsInitialized: function() {
+        if (!this.player) {
+          var initializer = {};
+          this.fire('initialize-player', initializer);
+          if (!initializer.player) {
+            return;
+          }
+          this.player = initializer.player;
+          this.player.paused = true;
+        }
+      },
+      
+      playPause: function() {
+        this.ensurePlayerIsInitialized();
+        this.paused = !this.paused;
+        this.player.paused = this.paused;
+        if (this.paused) {
+          this.playPauseText = '▶';
+        } else {
+          this.playPauseText = '❚❚';
+        }
+      },
+      
+      pauseWhileSeeking: function() {
+        this.ensurePlayerIsInitialized();
+        this.player.paused = true;
+      },
+      
+      resume: function() {
+        this.ensurePlayerIsInitialized();
+        this.player.paused = this.paused;
+      },
+      
+      skipToStart: function() {
+        this.ensurePlayerIsInitialized();
+        this.player.currentTime = this.player.source.startTime;
+      },
+      
+      skipToEnd: function() {
+        this.ensurePlayerIsInitialized();
+        this.player.currentTime = this.player.source.endTime;
+      }, 
+      
+      restart: function() {
+        if (this.player.playbackRate > 0 && 
+            this.player.currentTime >= this.player.source.endTime) {
+          if (this.repeating) {
+            this.skipToStart();
+          } else if (!this.paused) {
+            this.playPause();
+          }
+        } else if (this.player.playbackRate <= 0 && 
+            this.player.currentTime <= this.player.source.startTime) {
+          if (this.repeating) {
+            this.skipToEnd();
+          } else if (!this.paused) {
+            this.playPause();
+          }       
+        }
+      },
+      
+      toggleRepeat: function() {
+        this.repeating = !this.repeating;
+        if (this.repeating) {
+          this.$.repeatButton.className = 'repeating';
+        } else {
+          this.$.repeatButton.className = 'not-repeating';
+        }
+      },
+      
+      toggleReversed: function() {
+        this.ensurePlayerIsInitialized();
+        this.player.playbackRate = -this.player.playbackRate;
+        if (this.player.playbackRate < 0) {
+          if (this.player.currentTime > this.player.source.endTime) {
+            this.player.currentTime = this.player.source.endTime;
+          }
+          this.$.reverseButton.className = 'reversed';
+        } else {
+          this.$.reverseButton.className = 'not-reversed';
+        }
+      }
+    });
+  </script>
+</polymer-element>
+
