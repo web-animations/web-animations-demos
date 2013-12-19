@@ -18,8 +18,8 @@ Polymer('wat-bezier', {
   ready: function() {
     var canvas = this.$.canvas;
     var context = canvas.getContext('2d');
-    context.scale(canvas.width, -0.5 * canvas.height);
-    context.translate(0, -1.5);
+    context.translate(15, 0.75 * canvas.height)
+    context.scale(canvas.width - 30, -0.5 * canvas.height);
   },
   
   stringToCoords: function(str) {
@@ -47,7 +47,10 @@ Polymer('wat-bezier', {
     var canvas = this.$.canvas;
     var context = canvas.getContext('2d');
 
-    context.clearRect(0, -1.5, canvas.width, canvas.height);
+    context.save();
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.restore();
 
     // Linear guide.
     context.lineWidth = 0.02;
@@ -88,7 +91,25 @@ Polymer('wat-bezier', {
     context.stroke();
     context.closePath();
 
-    // P2 handle.
+    // P0 (fixed).
+    context.beginPath();
+    context.arc(0, 0, 0.03, 0, Math.PI * 2, false);
+    context.strokeStyle = 'silver';
+    context.lineWidth = 0.01;
+    context.stroke();
+    context.fillStyle = 'white';
+    context.fill();
+
+    // P3 (fixed).
+    context.beginPath();
+    context.arc(1, 1, 0.03, 0, Math.PI * 2, false);
+    context.strokeStyle = 'silver';
+    context.lineWidth = 0.01;
+    context.stroke();
+    context.fillStyle = 'white';
+    context.fill();
+
+    // P1 handle.
     context.beginPath();
     context.arc(this.controlPoints[0], this.controlPoints[1], 0.03, 0, Math.PI * 2, false);
     context.strokeStyle = 'black';
@@ -108,6 +129,10 @@ Polymer('wat-bezier', {
   },
   
   controlPointsChanged: function() {
+    this.controlPoints[0] = Math.max(Math.min(
+        parseFloat(this.controlPoints[0]).toFixed(3), 1), 0);
+    this.controlPoints[2] = Math.max(Math.min(
+        parseFloat(this.controlPoints[2]).toFixed(3), 1), 0);
     this.updateCanvas();
     this.updateEasing();
   },

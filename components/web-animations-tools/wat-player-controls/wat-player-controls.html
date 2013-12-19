@@ -103,20 +103,11 @@ limitations under the License.
         'player.currentTime': 'restart'
       },
       
-      ensurePlayerIsInitialized: function() {
-        if (!this.player) {
-          var initializer = {};
-          this.fire('initialize-player', initializer);
-          if (!initializer.player) {
-            return;
-          }
-          this.player = initializer.player;
-          this.player.paused = true;
-        }
+      playerChanged: function() {
+        this.player.paused = true;
       },
       
       playPause: function() {
-        this.ensurePlayerIsInitialized();
         this.paused = !this.paused;
         this.player.paused = this.paused;
         if (this.paused) {
@@ -127,22 +118,18 @@ limitations under the License.
       },
       
       pauseWhileSeeking: function() {
-        this.ensurePlayerIsInitialized();
         this.player.paused = true;
       },
       
       resume: function() {
-        this.ensurePlayerIsInitialized();
         this.player.paused = this.paused;
       },
       
       skipToStart: function() {
-        this.ensurePlayerIsInitialized();
         this.player.currentTime = this.player.source.startTime;
       },
       
       skipToEnd: function() {
-        this.ensurePlayerIsInitialized();
         this.player.currentTime = this.player.source.endTime;
       }, 
       
@@ -174,7 +161,6 @@ limitations under the License.
       },
       
       toggleReversed: function() {
-        this.ensurePlayerIsInitialized();
         this.player.playbackRate = -this.player.playbackRate;
         if (this.player.playbackRate < 0) {
           if (this.player.currentTime > this.player.source.endTime) {
@@ -188,4 +174,3 @@ limitations under the License.
     });
   </script>
 </polymer-element>
-

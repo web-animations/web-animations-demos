@@ -33,7 +33,6 @@ document.addEventListener('WebComponentsReady', function() {
   document.querySelectorAll('wat-bezier')[1].target = anim2;
 
   var player = document.timeline.play(animation);
-  player.paused = true;
   document.querySelector('wat-player-controls').player = player;
 });
 

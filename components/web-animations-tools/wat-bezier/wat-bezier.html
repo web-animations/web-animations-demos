@@ -24,22 +24,23 @@ limitations under the License.
   <template>
     <style>
       #canvas {
-        border-radius: 6px;
-        /* top and bottom quarters of canvas background are grey, middle is white */
+        /* top and bottom quarters of background are grey, middle is white */
         background: repeating-linear-gradient(white, white 200px,
             transparent 200px, transparent 200px) no-repeat,
-            linear-gradient(#ddd, #ddd);
+            linear-gradient(#dfdfdf, #dfdfdf);
         background-size: 100% 50%, 100% 50%, auto;
         background-position: 25%, 0, 0;
+        /* white border on left and right to cover up gradient */
+        box-shadow: inset 15px 0px 0px 0px white, 
+            inset -30px 0px 0px -15px white;
       }
       input {
         width: 50px;
       }
     </style>
-    <link rel="stylesheet" type="text/css" href="wat-bezier.css">
     <canvas on-pointerdown="{{pointerDown}}" on-pointermove="{{pointerMove}}"
             on-pointerup="{{pointerUp}}" touch-action="none" id="canvas"
-            height="600" width="300"></canvas>
+            height="600" width="330"></canvas>
     <div>
       <select id="preset" name="select" value="{{preset}}">
         <option value="custom">custom</option>

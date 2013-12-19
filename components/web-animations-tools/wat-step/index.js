@@ -29,12 +29,9 @@ document.addEventListener('WebComponentsReady', function() {
 
   var animation = new ParGroup([linear, step]);
   
-  document.querySelector('#step').target = step;
+  document.querySelector('wat-step').target = step;
 
-  document.querySelector('#player-controls').addEventListener(
-      'initialize-player',
-      function(event) {
-        event.detail.player = document.timeline.play(animation);  
-      });
+  document.querySelector('wat-player-controls').player = 
+      document.timeline.play(animation);  
 });
 
