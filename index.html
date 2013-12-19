@@ -224,9 +224,6 @@ for (var k in demos) {
   var url = base + k + '/';
   a.setAttribute('href', url);
   a.appendChild(document.createTextNode(demos[k]));
-  var img = document.createElement('img');
-  img.setAttribute('src', 'https://www.google.com/webpagethumbnail?c=41&r=4&s=150&d=' + url);
-  a.appendChild(img);
   demoList.appendChild(a);
 }
 </script>
