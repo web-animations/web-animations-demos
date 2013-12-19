@@ -21,23 +21,26 @@ limitations under the License.
 <link rel="import" href="../../polymer-animation/web-animations.html">
 
 <polymer-element name="wat-bezier" attributes="controlPoints">
-  <template> 
+  <template>
+    <style>
+      #canvas {
+        border-radius: 6px;
+        /* top and bottom quarters of canvas background are grey, middle is white */
+        background: repeating-linear-gradient(white, white 200px,
+            transparent 200px, transparent 200px) no-repeat,
+            linear-gradient(#ddd, #ddd);
+        background-size: 100% 50%, 100% 50%, auto;
+        background-position: 25%, 0, 0;
+      }
+      input {
+        width: 50px;
+      }
+    </style>
     <link rel="stylesheet" type="text/css" href="wat-bezier.css">
-
+    <canvas on-pointerdown="{{pointerDown}}" on-pointermove="{{pointerMove}}"
+            on-pointerup="{{pointerUp}}" touch-action="none" id="canvas"
+            height="600" width="300"></canvas>
     <div>
-      <label for="P1x">P1x:</label>
-      <input id="P1x" type="number" min="0" max="1" step="0.01" 
-          value="{{controlPoints[0]}}">  
-      <label for="P1y">P1y:</label>
-      <input id="P1y" type="number" step="0.01" 
-          value="{{controlPoints[1]}}">
-      <label for="P2x">P2x:</label>
-      <input id="P2x" type="number" min="0" max="1" step="0.01" 
-          value="{{controlPoints[2]}}">  
-      <label for="P2y">P2y:</label>
-      <input id="P2y" type="number" step="0.01" 
-          value="{{controlPoints[3]}}">
-      <label for="preset">Preset:</label>
       <select id="preset" name="select" value="{{preset}}">
         <option value="custom">custom</option>
         <option value="linear">linear</option>
@@ -46,28 +49,27 @@ limitations under the License.
         <option value="ease-out">ease-out</option>
         <option value="ease-in-out">ease-in-out</option>
       </select>
-    </div>
-    <div class="coordinate-plane">
-      <button class="control-point" id="P0">
-        P0
-      </button>
-      <button class="control-point" id="P1" on-mousedown="{{moveP1}}">
-        P1
-      </button>
-      <button class="control-point" id="P2" on-mousedown="{{moveP2}}">
-        P2
-      </button>
-      <button class="control-point" id="P3">
-        P3
-      </button>            
-      <div>
-        <canvas id="canvas" height="600" width="300" on-click="{{selectPoint}}">
-        </canvas>
+
+      <div style="display: inline-block">
+      <label for="P1x">x1:</label>
+      <input id="P1x" type="number" min="0" max="1" step="0.01"
+          value="{{controlPoints[0]}}">
+
+      <label for="P1y">y1:</label>
+      <input id="P1y" type="number" step="0.01"
+          value="{{controlPoints[1]}}">
+      <br>
+
+      <label for="P2x">x2:</label>
+      <input id="P2x" type="number" min="0" max="1" step="0.01"
+          value="{{controlPoints[2]}}">
+
+      <label for="P2y">y2:</label>
+      <input id="P2y" type="number" step="0.01"
+          value="{{controlPoints[3]}}">
       </div>
     </div>
   </template>
   
-  <script src="wat-bezier.js">
-  </script>
+  <script src="wat-bezier.js"></script>
 </polymer-element>
-

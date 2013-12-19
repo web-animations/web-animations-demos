@@ -17,23 +17,24 @@
 "use strict";
 
 document.addEventListener('WebComponentsReady', function() {
-  var anim1 = new Animation(document.querySelector('#box1'),
+  var linear = new Animation(document.querySelector('#box-linear'),
       {left: '500px'},
-      {duration: 2.5, easing: 'ease-in'}
+      {duration: 2.5, easing: 'linear'}
   );
 
-  var anim2 = new Animation(document.querySelector('#box2'),
+  var step = new Animation(document.querySelector('#box-step'),
       {left: '500px'},
-      {duration: 2.5, easing: 'ease-out'}
+      {duration: 2.5, easing: 'step-end'}
   );
 
-  var animation = new ParGroup([anim1, anim2]);
+  var animation = new ParGroup([linear, step]);
+  
+  document.querySelector('#step').target = step;
 
-  document.querySelectorAll('wat-bezier')[0].target = anim1;
-  document.querySelectorAll('wat-bezier')[1].target = anim2;
-
-  var player = document.timeline.play(animation);
-  player.paused = true;
-  document.querySelector('wat-player-controls').player = player;
+  document.querySelector('#player-controls').addEventListener(
+      'initialize-player',
+      function(event) {
+        event.detail.player = document.timeline.play(animation);  
+      });
 });
 

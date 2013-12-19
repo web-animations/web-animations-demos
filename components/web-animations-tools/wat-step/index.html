@@ -20,20 +20,21 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="index.css">
 <script src="../../platform/platform.js"></script>
 <link rel="import" href="../wat-player-controls/wat-player-controls.html">
-<link rel="import" href="wat-bezier.html">
+<link rel="import" href="wat-step.html">
 <link rel="import" href="../../polymer-animation/web-animations.html">
 
 <div class="box-container">
-  <div class="box" id="box1"><span>left</span></div>
-  <div class="box" id="box2"><span>right</span></div>
+  <div class="box" id="box-linear"><span>linear</span></div>
+  <div class="box" id="box-step"><span>step</span></div>
 </div>
 
 <div style="padding: 10px">
-  <wat-player-controls step="0.001"></wat-player-controls>
+  <wat-player-controls id="player-controls" step="0.001"></wat-player-controls>
 </div>
 
-<wat-bezier></wat-bezier>
-<wat-bezier></wat-bezier>
+<div style="padding: 10px">
+  <wat-step id="step"></wat-step>
+</div>
 
 <script src="index.js"></script>
 
