@@ -8,11 +8,11 @@
     "x-meta": "Polymer/x-meta#master"
   },
   "homepage": "https://github.com/Polymer/x-inspector",
-  "_release": "72c5805698",
+  "_release": "270c1e2da7",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "72c5805698a7ae839d0071b0f463994c3839eaf3"
+    "commit": "270c1e2da7eaead1fbf90e29f85c049298f4eba4"
   },
   "_source": "git://github.com/Polymer/x-inspector.git",
   "_target": "master",

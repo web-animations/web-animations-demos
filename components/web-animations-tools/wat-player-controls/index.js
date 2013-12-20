@@ -103,10 +103,6 @@ document.addEventListener('WebComponentsReady', function() {
         colors[i % colors.length], i, coords[str[i]]));
   }
 
-  document.querySelector('#player-controls').addEventListener(
-      'initialize-player',
-      function(event) {
-        event.detail.player = document.timeline.play(logoAnimation);  
-      });
+  document.querySelector('wat-player-controls').player = 
+      document.timeline.play(logoAnimation);  
 });
-
