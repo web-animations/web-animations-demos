@@ -10,4 +10,5 @@ var demos = {
   breakout: 'Breakout',
   rhythm: 'Rhythm',
   starfield: 'Starfield',
+  snowfall: 'Snowfall',
 };
