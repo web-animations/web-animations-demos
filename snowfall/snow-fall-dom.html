@@ -17,11 +17,10 @@ limitations under the License.
 
 <!DOCTYPE html>
 
-<script src="../components/platform/platform.js"></script>
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-animation/web-animations.html">
 
-<polymer-element name="snow-fall">
+<polymer-element name="snow-fall-dom" attributes="count">
   <template>
     <style>
       #snow {
@@ -40,14 +39,16 @@ limitations under the License.
         position: absolute;
       }
     </style>
-    <input type="range" min="5" max="300" step="5" value="{{count}}"> {{count}}
     <div id="snow"></div>
   </template>
   <script>
-    Polymer('snow-fall', {
+    'use strict';
+    Polymer('snow-fall-dom', {
       snowflakes: [],
       count: 0,
       countChanged: function() {
+        if (!this.player)
+            return;
         // FIXME: This works around a performance issue in the polyfill which
         // makes it expensive to add/remove animations while they are attached
         // to a player.
@@ -63,7 +64,6 @@ limitations under the License.
             snowflake.classList.add('snowflake');
             this.$.snow.appendChild(snowflake);
 
-            var z = 1 - Math.random() * 100;
             var scale = 0.35 + Math.random() * 0.65;
             snowflake.style.opacity = scale;
             var width = 1000;
@@ -81,25 +81,16 @@ limitations under the License.
         }
         this.player.source = this.group;
       },
-      player: null,
-      group: null,
-      ready: function() {
+      enteredView: function() {
         this.player = document.timeline.play(this.group = new ParGroup());
-        this.count = 100;
-      }
+        this.countChanged();
+      },
+      leftView: function() {
+        if (!this.player)
+            return;
+        this.player.source = null;
+        this.player = null;
+      },
     });
   </script>
 </polymer-element>
-
-<snow-fall></snow-fall>
-<!--
-<link rel="import" href="../components/web-animations-tools/wat-player-controls/wat-player-controls.html">
-<wat-player-controls step="0.001"></wat-player-controls>
-
-<script>
-document.addEventListener('WebComponentsReady', function() {
-  document.querySelector('wat-player-controls').player = document.querySelector('snow-fall').player;
-});
-</script>
-
--->
