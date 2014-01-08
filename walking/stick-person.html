@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<script src="../components/web-animations-js/web-animations.js"></script>
+<link rel='import' href='../components/polymer/polymer.html'>
+<polymer-element name='stick-person'>
+    <template>
+        <link rel='stylesheet' type='text/css' href='stick-person.css'>
+        <div id="bruce">
+            <div id="head" class="bodyPart"></div>
+            <div id="torso" class="bodyPart stick"></div>
+            <div id="leftArm" class="arm bodyPart stick">
+                <div id="leftForearm" class="forearm bodyPart stick"></div>
+            </div>
+            <div id="rightArm" class="arm bodyPart stick">
+                <div id="rightForearm" class="forearm bodyPart stick"></div>
+            </div>
+            <div id="leftLeg" class="leg bodyPart stick">
+                <div id="leftShin" class="shin bodyPart stick">
+                    <div id="leftFoot" class="foot bodyPart stick"></div>
+                </div>
+            </div>
+            <div id="rightLeg" class="leg bodyPart stick">
+                <div id="rightShin" class="shin bodyPart stick">
+                    <div id="rightFoot" class="foot bodyPart stick"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script src='stick-person.js'></script>
+</polymer-element>

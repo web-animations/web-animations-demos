@@ -1,101 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Walking Bruce</title>
-        <script src="../components/web-animations-js/web-animations.js"></script>
-        <style>
-            body {
-                background: black;
-            }
-            .bodyPart {
-                background: white;
-                position: absolute;
-                left: 50%;
-            }
-            .stick {
-                margin-left: -2px;
-                width: 4px;
-                -webkit-transform-origin: top;
-            }
-            .arm {
-                top: 175px;
-                height: 70px;
-            }
-            /* forearm is a child of arm, so its absolute position is relative to the arm */
-            .forearm {
-                top: 70px;
-                height: 75px;
-            }
-            .leg {
-                top: 289px;
-                height: 75px;
-            }
-            .shin {
-                top: 75px;
-                height: 75px;
-            }
-            .foot {
-                top: 75px;
-                height: 25px;
-            }
-            #head {
-                margin-left: -25px;
-                top: 100px;
-                width: 50px;
-                height: 50px;
-                border-radius: 25px;
-            }
-            #torso {
-                top: 150px;
-                height: 140px;
-            }
-        </style>
+        <title>stick-person demo</title>
+        <script src="../components/platform/platform.js"></script>
+        <link rel="import" href="stick-person.html">
     </head>
     <body>
-        <!--Bruce's body-->
-        <div id="bruce">
-            <div id="head" class="bodyPart"></div>
-            <div id="torso" class="bodyPart stick"></div>
-            <div id="leftArm" class="arm bodyPart stick">
-                <div id="leftForearm" class="forearm bodyPart stick"></div>
-            </div>
-            <div id="rightArm" class="arm bodyPart stick">
-                <div id="rightForearm" class="forearm bodyPart stick"></div>
-            </div>
-            <div id="leftLeg" class="leg bodyPart stick">
-                <div id="leftShin" class="shin bodyPart stick">
-                    <div id="leftFoot" class="foot bodyPart stick"></div>
-                </div>
-            </div>
-            <div id="rightLeg" class="leg bodyPart stick">
-                <div id="rightShin" class="shin bodyPart stick">
-                    <div id="rightFoot" class="foot bodyPart stick"></div>
-                </div>
-            </div>
+        <div>
+            <stick-person id='stick1'></stick-person>
         </div>
-
-        <!--Bruce walks-->
-        <script>
-            var timingLimbs = {direction: 'alternate', duration: 1.5, iterations: 2};
-            var anim = new ParGroup([
-                new Animation(bruce, [{transform: 'translateY(15px)'}, {transform: 'translateY(0px)'}], {direction: 'alternate', duration: 0.75, iterations: 4}),
-
-                /* Arms */
-                new Animation(leftArm, [{transform: 'rotate(-40deg)'}, {transform: 'rotate(53deg)'}], timingLimbs),
-                new Animation(leftForearm, [{transform: 'rotate(-30deg)'}, {transform: 'rotate(0deg)'}], timingLimbs),
-                new Animation(rightArm, [{transform: 'rotate(53deg)'}, {transform: 'rotate(-40deg)'}], timingLimbs),
-                new Animation(rightForearm,[{transform: 'rotate(0deg)'}, {transform: 'rotate(-30deg)'}], timingLimbs),
-
-                /* Legs */
-                new Animation(leftLeg, [{transform: 'rotate(35deg)'}, {transform: 'rotate(-30deg)'}], timingLimbs),
-                new Animation(leftShin, [{transform: 'rotate(0deg)'}, {transform: 'rotate(20deg)'}], timingLimbs),
-                new Animation(leftFoot, [{transform: 'rotate(-110deg)'}, {transform: 'rotate(-90deg)'}], timingLimbs),
-                new Animation(rightLeg, [{transform: 'rotate(-30deg)'}, {transform: 'rotate(35deg)'}], timingLimbs),
-                new Animation(rightShin, [{transform: 'rotate(20deg)'}, {transform: 'rotate(0deg)'}], timingLimbs),
-                new Animation(rightFoot, [{transform: 'rotate(-90deg)'}, {transform: 'rotate(-110deg)'}], timingLimbs)
-            ], {iterations: Infinity});
-
-            document.timeline.play(anim);
-        </script>
     </body>
 </html>
