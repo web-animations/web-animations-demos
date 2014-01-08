@@ -1,8 +1,5 @@
-body {
-    background: black;
-}
 .bodyPart {
-    background: white;
+    background: black;
     position: absolute;
     left: 50%;
 }
