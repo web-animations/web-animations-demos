@@ -74,6 +74,12 @@ limitations under the License.
             -203px 0 0 198px rgba(66,133,244,.42);
         cursor: pointer;
       }
+
+      .number {
+        width: 4em;
+        margin: 2px;
+        vertical-align: middle;
+      }
     </style>
     
     <input class="button" type="button" value="{{playPauseText}}" 
@@ -86,9 +92,11 @@ limitations under the License.
         on-click="{{toggleRepeat}}" title="Repeat On / Off">
     <input class="not-reversed" id="reverseButton" type="button" value="⬅" 
         on-click="{{toggleReversed}}" title="Reverse On / Off">
+    <input class="number" type="Number" value="{{player.playbackRate}}"
+        step="0.1" title="Playback Rate">
     <input class="slider" type="range" value="{{player.currentTime}}" 
-        step="{{step}}" min="{{player.source.startTime || 0}}" 
-        max="{{player.source.endTime || 0}}" on-pointerup="{{resume}}"
+        step="{{step}}" min="{{player.source.startTime}}"
+        max="{{player.source.endTime}}" on-pointerup="{{resume}}"
         on-pointerdown="{{pauseWhileSeeking}}" title="Adjust Current Time">
   </template>
   
@@ -100,14 +108,19 @@ limitations under the License.
       playPauseText: '▶',
       
       observe: {
-        'player.currentTime': 'restart'
+        'player.currentTime': 'restart',
+        'player.playbackRate': 'toggleReverseButton'
       },
       
       playerChanged: function() {
         this.player.paused = true;
       },
-      
+
       playPause: function() {
+        if (this.player.playbackRate < 0 &&
+            this.player.currentTime > this.player.source.endTime) {
+          this.player.currentTime = this.player.source.endTime;
+        }
         this.paused = !this.paused;
         this.player.paused = this.paused;
         if (this.paused) {
@@ -166,6 +179,14 @@ limitations under the License.
           if (this.player.currentTime > this.player.source.endTime) {
             this.player.currentTime = this.player.source.endTime;
           }
+          this.$.reverseButton.className = 'reversed';
+        } else {
+          this.$.reverseButton.className = 'not-reversed';
+        }
+      },
+
+      toggleReverseButton: function() {
+        if (this.player.playbackRate < 0) { 
           this.$.reverseButton.className = 'reversed';
         } else {
           this.$.reverseButton.className = 'not-reversed';

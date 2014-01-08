@@ -8,11 +8,11 @@
     "web-animations-js": "web-animations/web-animations-js#master"
   },
   "homepage": "https://github.com/web-animations/web-animations-tools",
-  "_release": "fc44732f63",
+  "_release": "1e3bbbb6f5",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "fc44732f634a1806557538e699d8da2c30b9006d"
+    "commit": "1e3bbbb6f55a13fe46916b0cb6bc6e9c53ae3809"
   },
   "_source": "git://github.com/web-animations/web-animations-tools.git",
   "_target": "master",

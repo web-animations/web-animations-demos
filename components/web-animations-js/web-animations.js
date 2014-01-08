@@ -99,7 +99,6 @@ TimingDict.prototype = {
   iterationStart: 0,
   iterations: 1,
   duration: 'auto',
-  activeDuration: 'auto',
   playbackRate: 1,
   direction: 'normal',
   easing: 'linear',
@@ -135,10 +134,6 @@ Timing.prototype = {
   },
   _duration: function() {
     var value = this._dict.duration;
-    return typeof value === 'number' ? value : 'auto';
-  },
-  _activeDuration: function() {
-    var value = this._dict.activeDuration;
     return typeof value === 'number' ? value : 'auto';
   },
   getEasingTimes: function() {
@@ -487,12 +482,8 @@ TimedItem.prototype = {
     return result;
   },
   get activeDuration() {
-    var result = this.specified._activeDuration();
-    if (result === 'auto') {
-      var repeatedDuration = this.duration * this.specified._iterations();
-      result = repeatedDuration / Math.abs(this.specified.playbackRate);
-    }
-    return result;
+    var repeatedDuration = this.duration * this.specified._iterations();
+    return repeatedDuration / Math.abs(this.specified.playbackRate);
   },
   get endTime() {
     return this._startTime + this.activeDuration + this.specified.delay +
@@ -500,6 +491,26 @@ TimedItem.prototype = {
   },
   get parent() {
     return this._parent;
+  },
+  get previousSibling() {
+    if (!this.parent) {
+      return null;
+    }
+    var siblingIndex = this.parent.indexOf(this) - 1;
+    if (siblingIndex < 0) {
+      return null;
+    }
+    return this.parent.children[siblingIndex];
+  },
+  get nextSibling() {
+    if (!this.parent) {
+      return null;
+    }
+    var siblingIndex = this.parent.indexOf(this) + 1;
+    if (siblingIndex >= this.parent.children.length) {
+      return null;
+    }
+    return this.parent.children[siblingIndex];
   },
   _attach: function(player) {
     // Remove ourselves from our parent, if we have one. This also removes any
@@ -1068,7 +1079,7 @@ var interpretAnimationEffect = function(animationEffect) {
     // The spec requires animationEffect to be an instance of
     // OneOrMoreKeyframes, but this type is just a dictionary or a list of
     // dictionaries, so the best we can do is test for an object.
-    return new KeyframeAnimationEffect(animationEffect);
+    return new KeyframeEffect(animationEffect);
   }
   return null;
 };
@@ -1936,7 +1947,7 @@ var normalizeKeyframeDictionary = function(properties) {
 
 
 /** @constructor */
-var KeyframeAnimationEffect = function(oneOrMoreKeyframeDictionaries,
+var KeyframeEffect = function(oneOrMoreKeyframeDictionaries,
     composite, accumulate) {
   enterModifyCurrentAnimationState();
   try {
@@ -1950,7 +1961,7 @@ var KeyframeAnimationEffect = function(oneOrMoreKeyframeDictionaries,
   }
 };
 
-KeyframeAnimationEffect.prototype = createObject(AnimationEffect.prototype, {
+KeyframeEffect.prototype = createObject(AnimationEffect.prototype, {
   get composite() {
     return this._composite;
   },
@@ -2127,13 +2138,13 @@ KeyframeAnimationEffect.prototype = createObject(AnimationEffect.prototype, {
     return this._cachedPropertySpecificKeyframes;
   },
   clone: function() {
-    var result = new KeyframeAnimationEffect([], this.composite,
+    var result = new KeyframeEffect([], this.composite,
         this.accumulate);
     result._keyframeDictionaries = this._keyframeDictionaries.slice(0);
     return result;
   },
   toString: function() {
-    return '<KeyframeAnimationEffect>';
+    return '<KeyframeEffect>';
   },
   _compositeForKeyframe: function(keyframe) {
     return isDefinedAndNotNull(keyframe.composite) ?
@@ -2414,7 +2425,7 @@ TimingFunction.createNormalizedPositionList = function(easingPoints,
     if (timedItem instanceof Animation &&
         // We have to test for keyframe or path effects because custom effects
         // may inherit from AnimationEffect.
-        (timedItem.effect instanceof KeyframeAnimationEffect ||
+        (timedItem.effect instanceof KeyframeEffect ||
          timedItem.effect instanceof PathAnimationEffect)) {
       return timedItem.effect._positionListForTiming();
     }
@@ -5351,7 +5362,7 @@ window.Element.prototype.getCurrentAnimations = function() {
 
 window.Animation = Animation;
 window.AnimationEffect = AnimationEffect;
-window.KeyframeAnimationEffect = KeyframeAnimationEffect;
+window.KeyframeEffect = KeyframeEffect;
 window.MediaReference = MediaReference;
 window.ParGroup = ParGroup;
 window.PathAnimationEffect = PathAnimationEffect;

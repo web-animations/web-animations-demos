@@ -20,6 +20,8 @@ Polymer('wat-bezier', {
     var context = canvas.getContext('2d');
     context.translate(15, 0.75 * canvas.height)
     context.scale(canvas.width - 30, -0.5 * canvas.height);
+    this.updateCanvas();
+    this.updateEasing();
   },
   
   stringToCoords: function(str) {
