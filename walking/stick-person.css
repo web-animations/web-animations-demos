@@ -1,7 +1,11 @@
+#bruce {
+    visibility: hidden;
+}
 .bodyPart {
     background: black;
     position: absolute;
     left: 50%;
+    visibility: visible;
 }
 .stick {
     margin-left: -2px;
