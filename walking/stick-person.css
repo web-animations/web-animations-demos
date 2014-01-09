@@ -1,10 +1,12 @@
-#bruce {
+:host {
     visibility: hidden;
     position: absolute;
     left: 50%;
 }
+div {
+    background: inherit;
+}
 #bruce div {
-    background: black;
     position: absolute;
 }
 #head {
