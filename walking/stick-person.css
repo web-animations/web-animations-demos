@@ -1,16 +1,31 @@
 #bruce {
     visibility: hidden;
-}
-.bodyPart {
-    background: black;
     position: absolute;
     left: 50%;
+}
+#bruce div {
+    background: black;
+    position: absolute;
+}
+#head {
+    margin-left: -25px;
+    top: 100px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
     visibility: visible;
 }
-.stick {
-    margin-left: -2px;
+#body div {
     width: 4px;
     -webkit-transform-origin: top;
+}
+#body > div {
+    margin-left: -2px;
+    visibility: visible;
+}
+#torso {
+    top: 150px;
+    height: 140px;
 }
 .arm {
     top: 175px;
@@ -31,15 +46,4 @@
 .foot {
     top: 75px;
     height: 25px;
-}
-#head {
-    margin-left: -25px;
-    top: 100px;
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-}
-#torso {
-    top: 150px;
-    height: 140px;
 }
