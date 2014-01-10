@@ -1,7 +1,8 @@
 :host {
-    visibility: hidden;
     position: absolute;
     left: 50%;
+    background-color: black;
+    visibility: hidden;
 }
 div {
     background: inherit;
