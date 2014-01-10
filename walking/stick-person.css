@@ -1,7 +1,13 @@
 :host {
     position: absolute;
-    left: 50%;
     background-color: black;
+    visibility: hidden;
+}
+#bruce {
+    top: inherit;
+    bottom: inherit;
+    left: inherit;
+    right: inherit;
     visibility: hidden;
 }
 div {
@@ -12,7 +18,6 @@ div {
 }
 #head {
     margin-left: -25px;
-    top: 100px;
     width: 50px;
     height: 50px;
     border-radius: 25px;
@@ -27,11 +32,11 @@ div {
     visibility: visible;
 }
 #torso {
-    top: 150px;
+    top: 50px;
     height: 140px;
 }
 .arm {
-    top: 175px;
+    top: 75px;
     height: 70px;
 }
 .forearm {
@@ -39,7 +44,7 @@ div {
     height: 75px;
 }
 .leg {
-    top: 289px;
+    top: 190px;
     height: 75px;
 }
 .shin {
