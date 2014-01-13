@@ -4,10 +4,21 @@
         <title>stick-person demo</title>
         <script src="../components/platform/platform.js"></script>
         <link rel="import" href="stick-person.html">
+        <style>
+            #stick1 {
+                background-color: red;
+                -webkit-transform: translate(200px, 200px);
+            }
+            #stick2 {
+                right: 60%;
+                bottom: 500px;
+            }
+        </style>
     </head>
     <body>
         <div>
             <stick-person id='stick1'></stick-person>
+            <stick-person id='stick2'></stick-person>
         </div>
     </body>
 </html>
