@@ -18,15 +18,14 @@ limitations under the License.
 <!DOCTYPE html>
 
 <link rel="import" href="../../polymer/polymer.html">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 <polymer-element name="wat-player-controls" attributes="step">
   <template>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
     <style>
-      .button,
-      .not-repeating,
-      .repeating, 
-      .not-reversed,
-      .reversed {
+      button {
         width: 30px;
         height: 30px;
         padding: 0px;
@@ -41,13 +40,12 @@ limitations under the License.
         cursor: pointer;
       }
       
-      .repeating,
-      .reversed {
+      .repeating {
         color: rgba(66,133,244,1);
         background-color: white;
       }
 
-      .slider {
+      .scrubber {
         -webkit-appearance: none;
         margin: 2px;
         width: 150px;
@@ -62,7 +60,7 @@ limitations under the License.
       }
       
       
-      .slider::-webkit-slider-thumb {
+      .scrubber::-webkit-slider-thumb {
         -webkit-appearance: none;
         background: rgba(66, 133, 244, 1);
         height: 13px;
@@ -78,23 +76,40 @@ limitations under the License.
       .number {
         width: 4em;
         margin: 2px;
+        padding: 0px 1px;
         vertical-align: middle;
+        border: 1px solid silver;
+        border-radius: 2px;
+        height: 20px;
+      }
+
+      .number:focus {
+        outline: 1px solid rgba(66,133,244,1);
       }
     </style>
-    
-    <input class="button" type="button" value="{{playPauseText}}" 
-        on-click="{{playPause}}" title="Play / Pause">
-    <input class="button" type="button" value="⏮" on-click="{{skipToStart}}"
-        title="Skip To Start">
-    <input class="button" type="button" value="⏭" on-click="{{skipToEnd}}"
-        title="Skip To End">
-    <input class="not-repeating" id="repeatButton" type="button" value="🔁" 
-        on-click="{{toggleRepeat}}" title="Repeat On / Off">
-    <input class="not-reversed" id="reverseButton" type="button" value="⬅" 
-        on-click="{{toggleReversed}}" title="Reverse On / Off">
+
+    <button on-click="{{playPause}}" title="Play / Pause">
+      <i class="{{!player || player.paused ? 'fa fa-play' : 'fa fa-pause'}}">
+      </i>
+    </button>
+    <button on-click="{{skipToStart}}" title="Skip To Start">
+      <i class="fa fa-fast-backward"></i>
+    </button>
+    <button on-click="{{skipToEnd}}" title="Skip To End">
+      <i class="fa fa-fast-forward"></i>
+    </button>
+    <button class="not-repeating" id="repeatButton" on-click="{{toggleRepeat}}" 
+        title="Repeat On / Off">
+      <i class="fa fa-repeat"></i>
+    </button>
+    <button id="reverseButton" on-click="{{toggleReversed}}" 
+        title="Reverse On / Off">
+      <i class="{{!player || player.playbackRate < 0 ? 'fa fa-long-arrow-left' : 'fa fa-long-arrow-right'}}">
+      </i>
+    </button>
     <input class="number" type="Number" value="{{player.playbackRate}}"
         step="0.1" title="Playback Rate">
-    <input class="slider" type="range" value="{{player.currentTime}}" 
+    <input class="scrubber" type="range" value="{{player.currentTime}}" 
         step="{{step}}" min="{{player.source.startTime}}"
         max="{{player.source.endTime}}" on-pointerup="{{resume}}"
         on-pointerdown="{{pauseWhileSeeking}}" title="Adjust Current Time">
@@ -105,11 +120,9 @@ limitations under the License.
       step: 0.001,
       paused: true,
       repeating: false,
-      playPauseText: '▶',
       
       observe: {
-        'player.currentTime': 'restart',
-        'player.playbackRate': 'toggleReverseButton'
+        'player.currentTime': 'restart'
       },
       
       playerChanged: function() {
@@ -121,13 +134,8 @@ limitations under the License.
             this.player.currentTime > this.player.source.endTime) {
           this.player.currentTime = this.player.source.endTime;
         }
-        this.paused = !this.paused;
-        this.player.paused = this.paused;
-        if (this.paused) {
-          this.playPauseText = '▶';
-        } else {
-          this.playPauseText = '❚❚';
-        }
+        this.player.paused = !this.player.paused;
+        this.paused = this.player.paused;
       },
       
       pauseWhileSeeking: function() {
@@ -179,17 +187,6 @@ limitations under the License.
           if (this.player.currentTime > this.player.source.endTime) {
             this.player.currentTime = this.player.source.endTime;
           }
-          this.$.reverseButton.className = 'reversed';
-        } else {
-          this.$.reverseButton.className = 'not-reversed';
-        }
-      },
-
-      toggleReverseButton: function() {
-        if (this.player.playbackRate < 0) { 
-          this.$.reverseButton.className = 'reversed';
-        } else {
-          this.$.reverseButton.className = 'not-reversed';
         }
       }
     });
