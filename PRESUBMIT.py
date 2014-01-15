@@ -14,12 +14,14 @@ RETURN_SUCCESS = 0
 
 
 def _CheckJSLint(input_api, output_api):
-  source_dir = input_api.os_path.join(input_api.PresubmitLocalPath(), 'demos')
-  return_code = subprocess.call(['gjslint', '-r', source_dir])
-  if return_code != RETURN_SUCCESS:
-    return [output_api.PresubmitError(
-        'Javascript style check failed.\n'
-        'Style guide: http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml')]
+  intern_projects = ['breakout', 'walking']
+  for directory in intern_projects:
+    source_dir = input_api.os_path.join(input_api.PresubmitLocalPath(), directory)
+    return_code = subprocess.call(['gjslint', '-r', source_dir])
+    if return_code != RETURN_SUCCESS:
+      return [output_api.PresubmitError(
+          'Javascript style check failed.\n'
+          'Style guide: http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml')]
   return []
 
 
