@@ -17,13 +17,13 @@ var BLOCK_FADE_SPEED = 0.02;
 var MAX_BOUNCES = 5000;
 
 /**
- * Helper function updating all coordinates for the ball.
+ * Helper function updating all coordinates for an element.
  */
-function updateBallPosition(leftCoord, topCoord) {
-  ball['left'] = leftCoord;
-  ball['top'] = topCoord;
-  ball['right'] = leftCoord + ball.clientWidth;
-  ball['bottom'] = topCoord + ball.clientHeight;
+function updatePosition(target, leftCoord, topCoord) {
+  target['left'] = leftCoord;
+  target['top'] = topCoord;
+  target['right'] = leftCoord + target.clientWidth;
+  target['bottom'] = topCoord + target.clientHeight;
 }
 
 /**
@@ -34,25 +34,20 @@ function setUp() {
   field.style.width = GRID_WIDTH * BLOCK_WIDTH;
 
   var grid = createGrid(GRID_HEIGHT, GRID_WIDTH);
-  field['left'] = 0;
-  field['top'] = 0;
-  field['right'] = field.clientWidth;
-  field['bottom'] = field.clientHeight;
+  updatePosition(field, 0, 0);
 
   var ball = document.getElementById('ball');
-  updateBallPosition(field.clientWidth / 2 - ball.clientWidth / 2,
+  updatePosition(ball, field.clientWidth / 2 - ball.clientWidth / 2,
       field.clientHeight / 2 - ball.clientHeight / 2);
 
   var paddle = document.getElementById('paddle');
-  paddle['left'] = field.clientWidth / 2 - paddle.clientWidth / 2;
-  paddle['top'] = paddle.offsetTop;
-  paddle['right'] = paddle['left'] + paddle.clientWidth;
-  paddle['bottom'] = paddle['top'] + paddle.clientHeight;
+  updatePosition(paddle, field.clientWidth / 2 - paddle.clientWidth / 2,
+                 paddle.offsetTop);
+  paddle.style.webkitTransform = 'translateX(' + paddle['left'] + 'px)';
 
   return new ParGroup([
       transformAnimation(ball, ['translate(' + ball['left'] + 'px, ' +
                          ball['top'] + 'px)'], 0),
-      transformAnimation(paddle, ['translateX(' + paddle['left'] + 'px)'], 0),
       gridAnimation()
   ]);
 }
@@ -135,22 +130,7 @@ function playAnimation(ball, paddle) {
     var parAnim = new ParGroup([]);
     var nextPos = getNextBallMovement(ball, paddle, velocity);
 
-    // Follow the ball with the paddle.
-    var dx = ball['left'] - nextPos['x'];
-    if (dx) {
-      paddle['left'] = nextPos['x'] + ball.clientHeight / 2 -
-        paddle.clientWidth / 2;
-      // Check the paddle will not go past the boundaries of the field.
-      paddle['left'] = Math.min(paddle['left'], field['right'] -
-          paddle.clientWidth - ball.clientWidth);
-      paddle['left'] = Math.max(paddle['left'], field['left']);
-      var paddleAnim = transformAnimation(paddle,
-          ['translateX(' + paddle['left'] + 'px)'],
-          {duration: nextPos['dt'] * 0.5, delay: nextPos['dt'] * 0.5});
-      parAnim.append(paddleAnim);
-    }
-
-    updateBallPosition(nextPos['x'], nextPos['y']);
+    updatePosition(ball, nextPos['x'], nextPos['y']);
 
     var ballAnim = transformAnimation(ball, ['translate(' + ball['left'] +
           'px, ' + ball['top'] + 'px)'], nextPos['dt']);
@@ -366,11 +346,9 @@ function getNextBallMovement(ball, paddle, velocity) {
   if (collision['horzBlock'] || collision['vertBlock']) {
     if (dt == horzDt) {
       collision['horzBlock'].classList.remove('active');
-      collision['horzBlock'].classList.add('inactive');
       destroyed = collision['horzBlock'];
     } else {
       collision['vertBlock'].classList.remove('active');
-      collision['vertBlock'].classList.add('inactive');
       destroyed = collision['vertBlock'];
     }
   }
@@ -440,6 +418,25 @@ function playGame() {
   return new SeqGroup([setUp(), playAnimation(document.getElementById('ball'),
         document.getElementById('paddle')), gameOver()]);
 }
+
+// Track the position of the mouse pointer.
+window.onmousemove = function(event) {
+  var field = document.getElementById('field');
+  event = event || window.event;              // For IE.
+
+  // Gets mouse pointer position relative to the field.
+  function getPointerX(event) {
+    return event.clientX - field.offsetLeft;
+  }
+  // Move the paddle to the same position.
+  var pointerX = getPointerX(event);
+  paddle['left'] = pointerX - paddle.clientWidth / 2;
+  paddle['left'] = Math.min(paddle['left'], field['right'] -
+      paddle.clientWidth);
+  paddle['left'] = Math.max(paddle['left'], field['left']);
+  updatePosition(paddle, paddle['left'], paddle['top']);
+  paddle.style.webkitTransform = 'translateX(' + paddle['left'] + 'px)';
+};
 
 document.timeline.play(playGame());
 

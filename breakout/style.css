@@ -29,8 +29,10 @@ body {
 #paddle {
   background-color: #BBB;
   border-radius: 10px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
   height: 12px;
-  left: 5px;
   position: absolute;
   bottom: 5px;
   width: 60px;
