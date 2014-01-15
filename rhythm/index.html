@@ -1,0 +1,172 @@
+<!--
+Copyright 2013 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+
+limitations under the License.
+--> 
+<!DOCTYPE html>
+
+<head>
+  <script src="../components/platform/platform.js"></script>
+  <script src="../components/web-animations-js/web-animations.js"></script>
+  <link rel="import" href="music-note.html">
+  <link rel="import" href="music-light.html">
+
+  <style>
+  #container {
+    display: table-row;
+    width: 310px;
+    height: 500px;
+    background-color: black;
+    border: 1px solid black;
+    position: relative;
+  }
+  #score-board {
+    font-size: 16px;
+    color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  #score {
+    font-size: 16px;
+    width: 150px;
+    color: white;
+    outline: none;
+    border: none;
+    background-color: black;
+  }
+  .column {
+    display: table-cell;
+    position: relative;
+    width: 60px;
+    left: 10px;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="column-0" class="column">
+      <music-light color="rgb(51,181,229)"></music-light>
+    </div>
+    <div id="column-1" class="column">
+      <music-light color="rgb(170,102,204)"></music-light>
+    </div>
+    <div id="column-2" class="column">
+      <music-light color="rgb(153,204,0)"></music-light>
+    </div>
+    <div id="column-3" class="column">
+      <music-light color="rgb(255,187,51)"></music-light>
+    </div>
+    <div id="column-4" class="column">
+      <music-light color="rgb(255,68,68)"></music-light>
+    </div>
+    <div id="score-board">Score: <input id="score" value="0" readonly></div>
+  </div>
+  Controls: A S J K L <br>
+  How To Play: Press the corresponding button before the note goes off the screen. 
+  The lower the note when you hit it the higher the score you get.
+</body>
+
+<script>
+// This map the keys to the columns.
+var keymap = {};
+keymap['A'.charCodeAt(0)] = 0;
+keymap['S'.charCodeAt(0)] = 1;
+keymap['J'.charCodeAt(0)] = 2;
+keymap['K'.charCodeAt(0)] = 3;
+keymap['L'.charCodeAt(0)] = 4;
+
+var score = 0;
+var difficulty = 0;
+
+function startGame() {
+  spawnNote();
+}
+
+function spawnNote() {
+  // Choose a random column for the note to spawn.
+  var columnIndex = Math.floor(Math.random() * 5);
+  var column = document.querySelector('#column-' + columnIndex);
+
+  var note = document.createElement('music-note');
+  note.color = column.children[0].color;
+  note.columnIndex = columnIndex;
+  note.column = column;
+  note.dropTime = Math.max(2 - 0.1 * difficulty, 0.1);
+
+  column.appendChild(note);
+  note.fall();
+
+  setTimeout(spawnNote, Math.max(1000 - difficulty * 100, 300));
+}
+
+function updateScore(scorePosition) { 
+  var SCORE_REGION_HEIGHT = 150;
+  var NOTE_SCORE = 100;
+
+  score += Math.ceil(NOTE_SCORE * (scorePosition / SCORE_REGION_HEIGHT));
+  difficulty = score / 500.0;
+
+  // Play an animation to make the score increment stand out.
+  var scoreElem = document.getElementById('score');
+  scoreElem.value = score;
+
+  var anim = new Animation(document.getElementById('score-board'), [
+    {transform: 'scale(1)'},
+    {transform: 'scale(1.5)'},
+    {transform: 'scale(1)'}
+  ], 0.05);
+
+  document.timeline.play(anim); 
+}
+
+document.addEventListener('keyup', function (e) {
+  var columnIndex = keymap[e.keyCode];
+  if (columnIndex !== 0 && !columnIndex) {
+    return;
+  }
+
+  var column = document.querySelector('#column-' + columnIndex);
+  var light = column.children[0];
+  light.shine(); 
+
+  // Check if it hits the lowest note.
+  var note = column.children[1];
+  if (!note) {
+    return;
+  }
+
+  var matrix;
+  if (CSS.supports('transform', 'none')) {
+    matrix = getComputedStyle(column.children[1]).transform;
+  } else {
+    matrix = getComputedStyle(column.children[1]).webkitTransform;
+  }
+      
+  // Extract the y value out from the matrix string.
+  var noteY = parseFloat(matrix.substring(7, matrix.length - 1).split(',')[5]);
+  var SCORE_REGION_Y = 310;
+
+  var scorePosition = (noteY - SCORE_REGION_Y);
+  if (scorePosition > 0) {
+    note.disappear();
+    updateScore(scorePosition);
+  }
+});
+
+document.addEventListener('WebComponentsReady', function() {
+  startGame();
+});
+</script>

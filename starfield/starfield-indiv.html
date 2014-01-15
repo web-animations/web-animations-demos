@@ -1,0 +1,66 @@
+<!doctype html>
+<script src="../components/web-animations-js/web-animations.js"></script>
+<style>
+  body {
+    background-color: black;
+    overflow: hidden;
+  }
+
+  .starfield {
+    background-color: rgba(0,0,0,0);
+  }
+
+  .star0 {
+    height: 1px;
+    width: 1px;
+    opacity: 1;
+    position: absolute;
+  }
+
+  .star1 {
+    height: 2px;
+    width: 2px;
+    border-radius: 50%;
+    opacity: 1;
+    position: absolute;
+  }
+
+  .star2 {
+    height: 3px;
+    width: 3px;
+    border-radius: 50%;
+    opacity: 1;
+    position: absolute;
+  }
+
+  .star3 {
+    height: 4px;
+    width: 4px;
+    border-radius: 50%;
+    opacity: 1;
+    position: absolute;
+  }
+</style>
+<div id="universe"></div>
+<script>
+  var layerCount = 4;
+  var starCount = 500;
+  var maxTime = 32;
+  var universe = document.getElementById('universe');
+  var width = document.documentElement.clientWidth;
+  var height = document.documentElement.clientHeight;
+  var stars = [];
+  var starGroup = [];
+  for (var i = 0; i < starCount; ++i) {
+    var ypos = Math.round(Math.random() * height);
+    var star = document.createElement('div');
+    var speed = Math.random() * maxTime + 1;
+    star.setAttribute('class', 'star' + (3 - Math.floor(speed / 8)));
+    star.style.backgroundColor = 'white';//rgb(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ')';
+    universe.appendChild(star);
+    stars.push(star);
+    starGroup.push(new Animation(stars[i], [{transform: 'translate3d(' + width + ', ' + ypos + ', 0)'}, {transform: 'translate3d(-' + Math.random() * 256 + 'px, ' + ypos + ', 0)'}], {delay: Math.random() * -speed, duration: speed, iterations: 1000}));
+  }
+  var anim = new ParGroup(starGroup, {iterations: Infinity});
+  document.timeline.play(anim);
+</script>
