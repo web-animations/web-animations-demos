@@ -18,7 +18,25 @@
     <body>
         <div>
             <stick-person id="stick1"></stick-person>
-            <stick-person id="stick2"></stick-person>
+            <stick-person id="stick2" walk></stick-person>
         </div>
+        <script>
+            var stick1 = document.getElementById('stick1');
+            stick1.addEventListener('click', toggleWalk);
+            stick1.addEventListener('click', setColor);
+
+            function toggleWalk(e) {
+                var stick = e.currentTarget;
+                stick.walk = !stick.walk;
+            }
+
+            function setColor(e) {
+                var stick = e.currentTarget;
+                if (stick.walk)
+                    stick.style.background = 'green';
+                else
+                    stick.style.background = 'red';
+            }
+        </script>
     </body>
 </html>

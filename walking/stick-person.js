@@ -1,5 +1,12 @@
 Polymer('stick-person', {
+    walk: false,
+    walkPlayer: null,
+
     ready: function() {
+        this.prepareAnim();
+    },
+
+    prepareAnim: function() {
         var anim = new ParGroup([
             new Animation(this.$.bruce, [
                 {transform: 'translateY(15px)'},
@@ -21,7 +28,8 @@ Polymer('stick-person', {
             this.limbAnimation(this.$.rightFoot, -90, -110)
         ], {iterations: Infinity});
 
-        document.timeline.play(anim);
+        this.walkPlayer = document.timeline.play(anim);
+        this.walkPlayer.paused = !this.walk;
     },
 
     limbAnimation: function(limb, startDeg, endDeg) {
@@ -29,5 +37,9 @@ Polymer('stick-person', {
             {transform: 'rotate(' + startDeg + 'deg)'},
             {transform: 'rotate(' + endDeg + 'deg)'}
         ], {direction: 'alternate', duration: 1.5, iterations: 2});
+    },
+
+    walkChanged: function() {
+        this.walkPlayer.paused = !this.walk;
     }
 });
