@@ -6,36 +6,53 @@
         <link rel="import" href="stick-person.html">
         <style>
             #stick1 {
-                background-color: red;
+                background-color: green;
                 -webkit-transform: translate(200px, 200px);
             }
             #stick2 {
-                right: 60%;
-                bottom: 500px;
+                left: 50%;
+                bottom: 400px;
             }
         </style>
     </head>
     <body>
         <div>
-            <stick-person id="stick1"></stick-person>
-            <stick-person id="stick2" walk></stick-person>
+            <stick-person id="stick1" walk></stick-person>
+            <stick-person id="stick2"></stick-person>
         </div>
         <script>
             var stick1 = document.getElementById('stick1');
-            stick1.addEventListener('click', toggleWalk);
-            stick1.addEventListener('click', setColor);
+            var stick2 = document.getElementById('stick2');
 
-            function toggleWalk(e) {
-                var stick = e.currentTarget;
-                stick.walk = !stick.walk;
-            }
-
-            function setColor(e) {
+            stick1.addEventListener('click', function(e) {
+                toggleWalk(e);
                 var stick = e.currentTarget;
                 if (stick.walk)
                     stick.style.background = 'green';
                 else
                     stick.style.background = 'red';
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.keyCode == 39) {
+                    stick2.direction = 'right';
+                    stick2.walk = true;
+                }
+                else if (e.keyCode == 37) {
+                    stick2.direction = 'left';
+                    stick2.walk = true;
+                }
+            });
+
+            document.addEventListener('keyup', function(e) {
+                if (e.keyCode == 39 || e.keyCode == 37) {
+                    stick2.walk = false;
+                }
+            });
+
+            function toggleWalk(e) {
+                var stick = e.currentTarget;
+                stick.walk = !stick.walk;
             }
         </script>
     </body>
