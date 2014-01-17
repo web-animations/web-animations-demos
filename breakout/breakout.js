@@ -410,7 +410,6 @@ function cleanUp() {
   screen.remove();
 }
 
-
 /**
  * Sets up and returns the entire animation of the breakout game.
  */
@@ -419,8 +418,7 @@ function playGame() {
         document.getElementById('paddle')), gameOver()]);
 }
 
-// Track the position of the mouse pointer.
-window.onmousemove = function(event) {
+function movePaddle(event) {
   var field = document.getElementById('field');
   event = event || window.event;              // For IE.
 
@@ -438,6 +436,11 @@ window.onmousemove = function(event) {
   paddle.style.webkitTransform = 'translateX(' + paddle['left'] + 'px)';
 };
 
+// Track touch/mouse pointer movements on the field.
+// FIXME: Dynamically resize the breakout field to match the device viewport
+// as scroll is disabled.
+document.body.addEventListener('pointermove', movePaddle);
+document.body.addEventListener('pointerdown', movePaddle);
 document.timeline.play(playGame());
 
 })();
