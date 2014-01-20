@@ -9,12 +9,13 @@ var COLORS = [
   'rgb(0, 153, 57)'
 ];
 var BASE_SPEED = 500;
-var BLOCK_WIDTH = 45;
+var BLOCK_FADE_SPEED = 0.02;
 var BLOCK_HEIGHT = 15;
+var BLOCK_WIDTH = 45;
 var GRID_HEIGHT = 10;
 var GRID_WIDTH = 15;
-var BLOCK_FADE_SPEED = 0.02;
 var MAX_BOUNCES = 5000;
+var PADDING = 20;
 
 /**
  * Helper function updating all coordinates for an element.
@@ -30,9 +31,6 @@ function updatePosition(target, leftCoord, topCoord) {
  * Create the field, blocks, ball and animation before the game starts.
  */
 function setUp() {
-  var field = document.getElementById('field');
-  field.style.width = GRID_WIDTH * BLOCK_WIDTH;
-
   var grid = createGrid(GRID_HEIGHT, GRID_WIDTH);
   updatePosition(field, 0, 0);
 
@@ -436,11 +434,32 @@ function movePaddle(event) {
   paddle.style.webkitTransform = 'translateX(' + paddle['left'] + 'px)';
 };
 
-// Track touch/mouse pointer movements on the field.
-// FIXME: Dynamically resize the breakout field to match the device viewport
-// as scroll is disabled.
-document.body.addEventListener('pointermove', movePaddle);
-document.body.addEventListener('pointerdown', movePaddle);
-document.timeline.play(playGame());
+window.addEventListener('load', function() {
+  var field = document.getElementById('field');
+  var fieldHeight = GRID_HEIGHT * BLOCK_HEIGHT * 3;
+  var fieldWidth = GRID_WIDTH * BLOCK_WIDTH;
+
+  // If the field is too big, then calculate size that will fit viewport.
+  var viewportHeight = document.documentElement.clientHeight - PADDING;
+  var viewportWidth = document.documentElement.clientWidth - PADDING;
+
+  if (fieldHeight > viewportHeight) {
+    GRID_HEIGHT = Math.floor(viewportHeight / 3 / BLOCK_HEIGHT);
+    field.style.height = viewportHeight;
+  } else {
+    field.style.height = fieldHeight;
+  }
+
+  if (fieldWidth > viewportWidth) {
+    GRID_WIDTH = Math.floor(viewportWidth / BLOCK_WIDTH);
+    fieldWidth = GRID_WIDTH * BLOCK_WIDTH;
+  }
+  field.style.width = fieldWidth;
+
+  // Track touch/mouse pointer movements on the field.
+  document.body.addEventListener('pointermove', movePaddle);
+  document.body.addEventListener('pointerdown', movePaddle);
+  document.timeline.play(playGame());
+});
 
 })();
