@@ -1,0 +1,68 @@
+:host {
+  display: flex;
+  flex-flow: column;
+}
+
+#top-bar {
+  display: flex;
+  flex-flow: row;
+  margin: 5px;
+}
+
+wat-button {
+  margin-right: 5px;
+}
+
+#toggle-button {
+  width: 32px;
+}
+
+#preview {
+  display: flex;
+  flex-flow: column;
+}
+
+#preview-frame {
+  border: 0;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+
+polymer-selector > * {
+  display: inline-block;
+  min-width: 60px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  padding: 0 8px;
+  cursor: pointer;
+  color: #999;
+  margin-right: 5px;
+  border: 1px solid white;
+}
+
+polymer-selector > *.polymer-selected {
+  color: rgba(66,133,244,1);
+  border: 1px solid rgba(66,133,244,1);
+  border-radius: 3px;
+  background-color: white;
+}
+
+.player-controls {
+  text-align: center;
+  padding: 8px;
+}
+
+wat-player-controls {
+  margin: 10px;
+}
+
+#preview,
+wat-ace-editor {
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 5px;
+}

@@ -29,7 +29,7 @@ document.addEventListener('WebComponentsReady', function() {
 
   var animation = new ParGroup([linear, step]);
   
-  document.querySelector('wat-step').target = step;
+  document.querySelector('wat-step').timedItem = step;
 
   document.querySelector('wat-player-controls').player = 
       document.timeline.play(animation);  

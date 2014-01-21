@@ -20,42 +20,56 @@ limitations under the License.
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../polymer-animation/web-animations.html">
 
-<polymer-element name="wat-step" attributes="steps position">
+<polymer-element name="wat-step" attributes="timedItem steps position">
   <template> 
     <style>
       #canvas {
+        display: block;
         background: rgba(0,0,0,.1);
         box-shadow: inset 0px 0px 0px 12.5px white;
       }
 
-      #steps,
-      #position,
-      #preset {
-        margin-right: 10px;
+      input {
+        width: 4em;
       }
 
-      #steps {
-        width: 5em;
+      input,
+      select {
+        margin-right: 10px;
+        border: 1px solid silver;
+        border-radius: 2px;
+        color: #333;
+        background: #fff;
+      }
+
+      input:focus,
+      select:focus {
+        border: 1px solid rgba(66,133,244,1);
+        outline: none;
       }
     </style>
 
-    <canvas id="canvas" height="425" width="425"></canvas>
-    <div>
-      <label for="steps">Steps:</label>
-      <input id="steps" type="number" min="1" step="1" value="{{steps}}">  
-      <label for="position">Position:</label>
-      <select id="position" name="select" value="{{position}}">
-        <option value="start">start</option>
-        <option value="middle">middle</option>
-        <option value="end">end</option>
-      </select>
-      <label for="preset">Preset:</label>
-      <select id="preset" name="select" value="{{preset}}">
-        <option value="custom">custom</option>
-        <option value="step-start">step-start</option>
-        <option value="step-middle">step-middle</option>
-        <option value="step-end">step-end</option>
-      </select>
+    <canvas id="canvas" height="330" width="330"></canvas>
+    <div style="text-align: center;">
+      <div style="margin-bottom: 8px;">
+        <label for="steps">Steps:</label>
+        <input id="steps" type="number" min="1" step="1" value="{{steps}}">  
+        <label for="position">Position:</label>
+        <select id="position" name="select" value="{{position}}">
+          <option value="start">start</option>
+          <option value="middle">middle</option>
+          <option value="end">end</option>
+        </select>
+      </div>
+      <div>
+        <label for="preset">Preset:</label>
+        <select id="preset" name="select" value="{{preset}}">
+          <option value="custom">custom</option>
+          <option value="step-start">step-start</option>
+          <option value="step-middle">step-middle</option>
+          <option value="step-end">step-end</option>
+        </select>
+      </div>
     </div>
   </template>
   

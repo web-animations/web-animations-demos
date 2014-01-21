@@ -1,0 +1,54 @@
+<!doctype html>
+
+<link rel="import" href="../../../polymer/polymer.html">
+
+<polymer-element name="wat-ace-editor" attributes="value mode">
+  <template>
+    <style>
+      :host {
+        display: flex;
+      }
+      
+      editor {
+        flex-grow: 1;
+      }
+
+      .ace_scrollbar {
+        z-index: 1;
+        overflow: auto;
+      }
+    </style>
+
+    <editor id="editor"></editor>
+  </template>
+  
+  <script>
+    Polymer('wat-ace-editor', {
+      value: '',
+      mode: 'ace/mode/javascript',
+
+      ready: function() {
+        this.shadowRoot.applyAuthorStyles = true;
+        this.editor = ace.edit(this.$.editor);
+        this.editor.setTheme('ace/theme/github');
+        this.editor.getSession().setValue(this.value);
+        this.editor.getSession().setMode(this.mode);
+        this.editor.getSession().on('change', this.editorTextChanged.bind(this));
+      },
+
+      editorTextChanged: function() {
+        this.value = this.editor.getSession().getValue();
+      },
+
+      valueChanged: function() {
+        if (this.editor.getSession().getValue() != this.value) {
+          this.editor.getSession().setValue(this.value);
+        }
+      },
+
+      modeChanged: function() {
+        this.editor.getSession().setMode(this.mode);
+      }
+    });
+  </script>
+</polymer-element>

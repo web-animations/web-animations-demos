@@ -1,8 +1,10 @@
 Polymer('wat-step', {
   steps: 1,
   position: 'end',
-  target: new Animation(null, null, 0),
+  timedItem: new Animation(null, null, 0),
   preset: 'custom',
+  stepEasings: ['step-start', 'step-middle', 'step-end', 'steps'],
+  disabled: false,
   
   easing: {
     'step-start': {steps: 1, position: 'start'},
@@ -13,7 +15,7 @@ Polymer('wat-step', {
   observe: {
     'steps': 'updateTimingFunction',
     'position': 'updateTimingFunction',
-    'target.specified.easing': 'updateCanvasFromTarget',
+    'timedItem.specified.easing': 'timedItemEasingChanged',
   },
   
   ready: function() {
@@ -24,6 +26,28 @@ Polymer('wat-step', {
     context.scale(canvas.width - 25, 25 - canvas.height);
     this.drawTimingFunction(context);
     this.updateEasing();
+  },
+
+  disabledChanged: function() {
+    var canvas = this.$.canvas;
+    var context = canvas.getContext('2d');
+
+    if (this.disabled) {
+      this.$.steps.disabled = true;
+      this.$.position.disabled = true;
+      this.$.preset.disabled = true;
+      this.preset = 'custom';
+      context.save();
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.restore();
+    } else {
+      this.$.steps.disabled = false;
+      this.$.position.disabled = false;
+      this.$.preset.disabled = false;
+      this.drawTimingFunction(context);
+      this.updateEasing();
+    }
   },
   
   drawTimingFunction: function(context) {
@@ -147,6 +171,7 @@ Polymer('wat-step', {
     if (str.indexOf('steps(') != -1) {
       var array = str.substring(
           str.indexOf('(')+1, str.indexOf(')')).split(',');
+      this.preset = 'custom';
       return {steps: parseInt(array[0]), position: array[1].trim()};  
     } else {
       return this.easing[str];
@@ -182,17 +207,23 @@ Polymer('wat-step', {
   },
   
   updateEasing: function() {
-    if (this.target && this.target.specified) {
-      this.target.specified.easing = 
+    if (this.timedItem && this.timedItem.specified) {
+      this.timedItem.specified.easing = 
           this.propsToString({steps: this.steps, position: this.position});
     }
   },
   
-  updateCanvasFromTarget: function() {
-    var stepsPos = this.stringToProps(this.target.specified.easing);
-    
-    this.steps = stepsPos.steps;
-    this.position = stepsPos.position;
+  timedItemEasingChanged: function() {
+    if (this.stepEasings.indexOf(this.timedItem.specified.easing) >= 0 ||
+        this.timedItem.specified.easing.indexOf('steps') >= 0) {
+      var stepsPos = this.stringToProps(this.timedItem.specified.easing);
+      
+      this.disabled = false;
+      this.steps = stepsPos.steps;
+      this.position = stepsPos.position;
+    } else {
+      this.disabled = true;
+    }
   },
     
   presetChanged: function() {   

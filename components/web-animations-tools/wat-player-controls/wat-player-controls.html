@@ -26,8 +26,8 @@ limitations under the License.
 
     <style>
       button {
-        width: 30px;
-        height: 30px;
+        width: 32px;
+        height: 32px;
         padding: 0px;
         margin: 2px;
         text-align: center;
@@ -84,7 +84,8 @@ limitations under the License.
       }
 
       .number:focus {
-        outline: 1px solid rgba(66,133,244,1);
+        border: 1px solid rgba(66,133,244,1);
+        outline: none;
       }
     </style>
 
@@ -103,7 +104,7 @@ limitations under the License.
       <i class="fa fa-repeat"></i>
     </button>
     <button id="reverseButton" on-click="{{toggleReversed}}" 
-        title="Reverse On / Off">
+        title="Playback Direction">
       <i class="{{!player || player.playbackRate < 0 ? 'fa fa-long-arrow-left' : 'fa fa-long-arrow-right'}}">
       </i>
     </button>

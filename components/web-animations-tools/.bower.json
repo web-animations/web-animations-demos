@@ -3,16 +3,16 @@
   "private": true,
   "dependencies": {
     "polymer": "Polymer/polymer#master",
-    "x-inspector": "Polymer/x-inspector#master",
+    "polymer-selector": "Polymer/polymer-selector#master",
     "polymer-animation": "Polymer/polymer-animation#master",
     "web-animations-js": "web-animations/web-animations-js#master"
   },
   "homepage": "https://github.com/web-animations/web-animations-tools",
-  "_release": "966091e1f0",
+  "_release": "86b2f7d1b7",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "966091e1f0b161214a43e522b322c5741c15d943"
+    "commit": "86b2f7d1b7e6e749e17220126a35fb846b5da023"
   },
   "_source": "git://github.com/web-animations/web-animations-tools.git",
   "_target": "master",

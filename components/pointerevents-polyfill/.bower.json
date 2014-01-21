@@ -1,0 +1,34 @@
+{
+  "name": "PointerEvents",
+  "main": "pointerevents.min.js",
+  "homepage": "https://github.com/Polymer/PointerEvents",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "description": "PointerEvents Polyfill: a unified event system for the web platform",
+  "keywords": [
+    "PointerEvents"
+  ],
+  "dependencies": {
+    "WeakMap": "Polymer/WeakMap#0.1.1"
+  },
+  "license": "BSD",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "version": "0.1.1",
+  "_release": "0.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.1",
+    "commit": "31ec02eb468cd5aa93f3c9abc9811ee309853b0a"
+  },
+  "_source": "git://github.com/components/pointerevents-polyfill.git",
+  "_target": "*",
+  "_originalSource": "components/pointerevents-polyfill"
+}

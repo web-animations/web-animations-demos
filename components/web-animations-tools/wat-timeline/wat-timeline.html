@@ -1,0 +1,150 @@
+<!--
+Copyright 2014 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="wat-timeline-axis.html">
+<link rel="import" href="wat-timeline-scrubber.html">
+<link rel="import" href="wat-timeline-item.html">
+
+<polymer-element name="wat-timeline" attributes="timedItem player">
+  <template>
+  <style>
+    #timeline-container {
+      margin-top: 6px;
+      overflow: hidden;
+    }
+  </style>
+  <div id="container">
+    <input id="back-button" type="button" value="<">
+    <wat-timeline-scrubber id="scrubber"></wat-timeline-scrubber>
+    <wat-timeline-axis id="axis"></wat-timeline-axis>
+    <div id="timeline-container">
+    </div>
+  <div>
+  </template>
+  <script>
+    'use strict';
+
+    Polymer('wat-timeline', {
+      timedItem: null,
+      player: null,
+      viewStack: [],
+      playerChanged: function() {
+        this.$.scrubber.player = this.player;
+      },
+      ready: function() {
+        this.addEventListener('on-timedItem-focus', function(e) {
+          var newTimedItem = e.detail;
+          if (newTimedItem === this.timedItem) {
+            return;
+          }
+          // Use a stack to save the previous view so that we can navigate back.
+          this.viewStack.push({
+            oldItem: this.timedItem,
+            // Need to remember the sibling and the parent because when setting
+            // the source of the player, the timedItem will be removed from the group.
+            // Therefore we need to remember where it was in the group to restore it.
+            prevSibling: newTimedItem.previousSibling,
+            parentGroup: newTimedItem.parent,
+          })
+
+          this.timedItem = newTimedItem;
+          this.player.source = newTimedItem;
+          this.player.currentTime = this.player.source.startTime;
+        });
+
+        this.addEventListener('on-timedItem-select', function(e) {
+          function deselectChildren(root, selectedItem) {
+            if (!root || root.timedItem === selectedItem) {
+              return;
+            } 
+            root.selected = false;
+            var children = root.childNodes;
+            for (var i = 0; i < children.length; i++) {
+              deselectChildren(children[i]);
+            }
+          }
+
+          var root = this.$['timeline-container'].querySelector('wat-timeline-item');
+          deselectChildren(root, e.detail);
+        });
+
+        this.$['back-button'].addEventListener('click', function(e){
+          var item = this.viewStack.pop();
+          if (!item) {
+            return;
+          }
+          // Restore the item.
+          if (item.prevSibling) {
+            item.prevSibling.after(this.timedItem);
+          } else {
+            item.parentGroup.prepend(this.timedItem);
+          }
+          this.timedItem = item.oldItem;
+          this.player.source = this.timedItem;
+          this.player.currentTime = this.player.source.startTime;   
+        }.bind(this));
+      },
+      timedItemChanged: function() {
+        if (this.timedItem.player) {
+          this.player = this.timedItem.player;
+        }
+
+        // Remove all the children and rebuild the view.
+        var timeline = this.$['timeline-container'];
+        while (timeline.firstChild) {
+          timeline.removeChild(timeline.firstChild);
+        }
+
+        // Get the visual attributes of the timeline container so that
+        // the axis and the scrubber will have the same width with it.
+        var containerWidth = timeline.clientWidth; 
+        var timespan = Math.max(this.timedItem.endTime - this.timedItem.startTime, 0);
+        var pixelsPerSecond = containerWidth / timespan;
+
+        this.$.axis.width = containerWidth;
+        this.$.axis.timespan = timespan;
+        this.$.scrubber.pixelsPerSecond = pixelsPerSecond;
+
+        // If there is no visible animation then show nothing.
+        if (timespan === 0) {
+          return;
+        }
+
+        var timing = {
+          // The timespan is the amount of time the animation is visible
+          // However, the actual length of the animation is greater
+          // when negative delay is introduced.
+          duration: timespan - Math.min(this.timedItem.specified.delay, 0),
+          // If the parent has an iteration start less than 1
+          // then the children need to be clipped as well.
+          // It is treated similar to negative delay.
+          iterationStartTime: 0,
+          // Playback rate on the current item will not affect the length of the delay
+          // but parent's playback rate will. Therefore it need to be passed down the tree.
+          playbackRate: 1,
+        };
+
+        var root = document.createElement('wat-timeline-item');
+        root.init(this.timedItem, pixelsPerSecond, timing);
+        this.$['timeline-container'].appendChild(root);
+      }
+    });
+  </script>
+</polymer-element>

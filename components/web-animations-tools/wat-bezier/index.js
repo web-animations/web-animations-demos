@@ -29,8 +29,8 @@ document.addEventListener('WebComponentsReady', function() {
 
   var animation = new ParGroup([anim1, anim2]);
 
-  document.querySelectorAll('wat-bezier')[0].target = anim1;
-  document.querySelectorAll('wat-bezier')[1].target = anim2;
+  document.querySelectorAll('wat-bezier')[0].timedItem = anim1;
+  document.querySelectorAll('wat-bezier')[1].timedItem = anim2;
 
   var player = document.timeline.play(animation);
   document.querySelector('wat-player-controls').player = player;

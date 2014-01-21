@@ -1,0 +1,165 @@
+<!--
+Copyright 2014 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+
+<link rel="import" href="../../polymer/polymer.html">
+
+<polymer-element name="wat-timeline-item" attributes="timedItem pixelsPerSecond">
+  <template>
+  <style>
+    #group-container {
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      width: intrinsic;
+      background-color: rgba(66, 133, 244, 0.5);
+    }
+    .timeline-item {
+      overflow: hidden;
+      display: inline-block;
+      border: 1px solid rgba(250, 250, 250, 0.5);
+      box-sizing: border-box;
+    }
+    #group-container.selected {
+      border: 1px solid red;
+      background-color: rgba(255, 0, 0, 0.8);
+      box-shadow: 0 0 5px red;
+    }
+    .iteration {
+      background-color: rgba(192, 192, 192, 0.8);
+    }
+    .negativePlayback {
+      background-color: rgba(0, 255, 0, 0.3);
+    }
+    #group-container.playing {
+      background-color: rgba(247, 195, 52, 0.8);
+    }
+    span {
+      overflow: hidden;
+      display: block;
+      padding: 10px;
+    }
+  </style>
+    <div id="group-container" class="{{selected ? 'selected' : ''}}"
+          style="left:{{translateX * pixelsPerSecond}}px">
+      <div class="timeline-item {{playbackRate < 0 ? 'negativePlayback' : ''}}" 
+            style="min-width:{{width * pixelsPerSecond}}px;"
+            on-click="{{onSelect}}" on-dblclick="{{onFocus}}">
+        <span>{{timedItem ? (timedItem.type ? timedItem.type + 'Group' : 'animation') : ''}}</span>
+        <content>
+      </div>
+      <template repeat="{{length in iterations}}">
+        <!-- FIXME: Not sure why do we need min width here but without it 
+             there will have layout problem when zoom in on the page. -->
+        <div class="timeline-item iteration" style="min-width:{{length * pixelsPerSecond}}px"
+            on-click="{{onSelect}}" on-dblclick="{{onFocus}}"></div>
+      </template>
+    </div>
+  </template>
+  <script>
+    'use strict';
+
+    Polymer('wat-timeline-item', {
+      playbackRate: 1,
+      translateX: 0,
+      width: 0,
+      timedItem: null,
+      pixelsPerSecond: 0,
+      selected: false,
+      detached: function() {
+        if (this.timedItem instanceof Animation) {
+          this.timedItem.removeEventListener('start', this.onStart);
+          this.timedItem.removeEventListener('end', this.onEnd);
+        }
+      },
+      init: function(timedItem, pixelsPerSecond, parentTiming) {
+        this.timedItem = timedItem;
+        this.pixelsPerSecond = pixelsPerSecond;
+        var timingInput = timedItem.specified;
+        this.playbackRate = parentTiming.playbackRate * timingInput.playbackRate;
+
+        // Determind the translate amount of this item.
+        var totalDelay = (timingInput.delay - parentTiming.iterationStartTime);
+        var translate = (totalDelay + timedItem.startTime) / Math.abs(parentTiming.playbackRate);
+        this.translateX = translate;
+                
+        // When the animation is playing, toggle the class to change the style.
+        // This is limited because if the player is manually adjusted then
+        // these events may not be triggered.
+        if (this.timedItem instanceof Animation) {
+          this.timedItem.addEventListener('start', this.onStart.bind(this));
+          this.timedItem.addEventListener('end', this.onEnd.bind(this));
+        }
+
+        var iterationCount = timingInput.iterations;
+        var iterationLength = Math.min(iterationCount, 1) * (1 - timingInput.iterationStart);
+
+        var firstItem = true;
+        var iterations = [];
+        var duration = parentTiming.duration;
+        while (iterationCount > 0 && duration > 0) {
+          var timespan = (timedItem.duration * iterationLength) / Math.abs(this.playbackRate);
+          
+          if (firstItem) {
+            this.width = timespan;
+          } else {
+            iterations.push(timespan);
+          }
+
+          iterationCount -= iterationLength;
+          iterationLength = Math.min(iterationCount, 1);
+          duration -= timespan;
+          firstItem = false;
+        }
+
+        this.iterations = iterations;
+
+        //Build children.
+        var itemDuration = timedItem.duration / Math.abs(this.playbackRate);
+        var timing = {
+          duration: Math.min(parentTiming.duration, itemDuration),
+          iterationStartTime: (itemDuration * timingInput.iterationStart) + parentTiming.iterationStartTime,
+          playbackRate: this.playbackRate,
+        };
+
+        if (timedItem instanceof ParGroup || timedItem instanceof SeqGroup) {
+          for (var i = 0; i < timedItem.children.length; i++) {
+            var child = document.createElement('wat-timeline-item');
+            child.init(timedItem.children[i], pixelsPerSecond, timing);
+            this.appendChild(child);
+          }
+        }
+      },
+      onSelect: function(e) {
+        e.stopPropagation();
+        this.fire('on-timedItem-select', this.timedItem);
+        this.selected = true;
+      },
+      onFocus: function(e) {
+        this.fire('on-timedItem-focus', this.timedItem);
+      },
+      onStart: function(e) {
+        this.$['group-container'].classList.add('playing');
+      },
+      onEnd: function(e) {
+        this.$['group-container'].classList.remove('playing');
+      }
+    });
+  </script>
+</polymer-element>

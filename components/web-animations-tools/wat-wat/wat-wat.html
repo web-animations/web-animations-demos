@@ -1,0 +1,43 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../polymer-animation/web-animations.html">
+<link rel="import" href="../wat-code-editor/wat-code-editor.html">
+<link rel="import" href="../wat-timeditem-inspector/wat-timeditem-inspector.html">
+<link rel="import" href="../wat-timeline/wat-timeline.html">
+
+<polymer-element name="wat-wat" noscript>
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-flow: column;
+      }
+
+      #inspector {
+        display: flex;
+        flex-grow: 1;
+      }
+
+      wat-code-editor {
+        flex-grow: 1;
+      }
+
+      wat-timeditem-inspector {
+        margin: 47px 5px 5px 5px;
+        box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 5px;
+      }
+
+      wat-timeline {
+        max-height: 30vh;
+      }
+    </style>
+
+    <div id="inspector">
+      <wat-code-editor timedItem="{{timedItem}}" mode="rows"></wat-code-editor>
+      <wat-timeditem-inspector timedItem="{{timedItem}}"></wat-timeditem-inspector>
+    </div>
+    <wat-timeline timedItem="{{timedItem}}"></wat-timeline>
+  </template>
+</polymer-element>

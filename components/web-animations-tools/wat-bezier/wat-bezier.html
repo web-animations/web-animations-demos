@@ -20,7 +20,7 @@ limitations under the License.
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../polymer-animation/web-animations.html">
 
-<polymer-element name="wat-bezier" attributes="controlPoints">
+<polymer-element name="wat-bezier" attributes="timedItem controlPoints">
   <template>
     <style>
       :host {
@@ -42,10 +42,26 @@ limitations under the License.
       input {
         width: 4em;
       }
+
+      input,
+      select {  
+        border: 1px solid silver;
+        border-radius: 2px;
+        color: #333;
+        background: #fff;
+      }
+
+      input:focus,
+      select:focus {
+        border: 1px solid rgba(66,133,244,1);
+        outline: none;
+      }
     </style>
+    
     <canvas on-pointerdown="{{pointerDown}}" on-pointermove="{{pointerMove}}"
             on-pointerup="{{pointerUp}}" touch-action="none" id="canvas"
             height="600" width="330"></canvas>
+
     <div style="padding-top: 5px;">
       <select id="preset" name="select" value="{{preset}}">
         <option value="custom">custom</option>

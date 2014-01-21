@@ -13,11 +13,11 @@
   ],
   "license": "BSD",
   "private": true,
-  "_release": "9745b3b1c6",
+  "_release": "2a2889bc40",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "9745b3b1c6fc493d9e1c203e197ff32e5b981d67"
+    "commit": "2a2889bc403edf691fa0387afbfbc5d74ab927c6"
   },
   "_source": "git://github.com/Polymer/platform.git",
   "_target": "master",

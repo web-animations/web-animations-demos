@@ -1,0 +1,169 @@
+<!--
+Copyright 2014 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+
+<head>
+  <script src="../../web-animations-js/web-animations.js"></script>
+  <script src="../../platform/platform.js"></script>
+  <link rel='import' href='wat-timeline.html'>
+  <style>
+    select {
+      display: block;
+    }
+    #timeline {
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <select></select>
+  <input id='test_button' type='button' value='+1'>
+  <wat-timeline id='timeline'></wat-timeline>
+  <script>
+    var b = document.querySelector('#test_button');
+    var sampleKeyframes = [
+      {transform: 'scale(1)', offset: 0},
+      {transform: 'scale(1.5)', offset: 0.5}, 
+      {transform: 'scale(1)', offset: 1}
+    ];
+    var sampleKeyframes1 = [
+      {backgroundColor: 'red', offset: 0},
+      {backgroundColor: 'blue', offset: 0.5}, 
+      {backgroundColor: 'green', offset: 1}
+    ];
+
+    var animations = [{
+      name: 'Normal animation',
+      timedItem: new Animation(b, sampleKeyframes, {duration: 1}),
+    }, {
+      name: 'Positive delay',
+      timedItem: new Animation(b, sampleKeyframes, {delay: 1, duration: 3}),
+    }, {
+      name: 'Negative delay',
+      timedItem: new Animation(b, sampleKeyframes, {delay: -2, duration: 3}),
+    }, {
+      name: 'Negative delay and invisible animation',
+      timedItem: new Animation(b, sampleKeyframes, 
+          {delay: -2, duration: 3, playbackRate: 2}),
+    }, {
+      name: 'Positive playbackRate',
+      timedItem: new Animation(b, sampleKeyframes,
+          {delay: 1, duration: 3, playbackRate: 2}),
+    }, {
+      name: 'Negative playbackRate',
+      timedItem: new Animation(b, sampleKeyframes,
+          {delay: 1, duration: 3, playbackRate: -1}),
+    }, {
+      name: 'Iteration',
+      timedItem: new Animation(b, sampleKeyframes,
+          {delay: 1, duration: 1, iterations: 3}),    
+    }, {
+      name: 'Iteration with fraction',
+      timedItem: new Animation(b, sampleKeyframes,
+          {delay: 1, duration: 1, iterations: 2.3}),
+    }, {
+      name: 'Iteration start with positive delay',
+       timedItem: new Animation(b, sampleKeyframes,
+          {delay: 1, duration: 1, iterations: 1, iterationStart: 0.7}),
+    }, {
+      name: 'Iteration start with negative delay', 
+      timedItem: new Animation(b, sampleKeyframes,
+          {delay: -0.5, duration: 1, iterations: 1, iterationStart: 0.5}),
+    }, {
+      name: 'Iteration start with fraction', 
+      timedItem: new Animation(b, sampleKeyframes,
+          {delay: 0.5, duration: 1, iterations: 2.3, iterationStart: 0.7}),
+    }, {
+      name: 'SeqGroup',
+      timedItem: new SeqGroup([
+        new Animation(b, sampleKeyframes, 
+            {duration: 1, iterations: 2}),
+        new Animation(b, sampleKeyframes1, 2)
+      ]),
+    }, {
+      name: 'Positive delay inside SeqGroup',
+      timedItem: new SeqGroup([
+        new Animation(b, sampleKeyframes, 2),
+        new Animation(b, sampleKeyframes1,
+            {delay: 1, duration: 1, iterations: 2, iterationStart: 0.7}),
+      ]),
+    }, {
+      name: 'Negative delay inside SeqGroup',
+      timedItem: new SeqGroup([
+        new Animation(b, sampleKeyframes, 2),
+        new Animation(b, sampleKeyframes1,
+            {delay: -1, duration: 1}),
+      ]),
+    }, {
+      name: 'Infinite iterations',
+      timedItem: new SeqGroup([
+        new Animation(b, sampleKeyframes, {duration:1, iterations: Infinity})
+      ], {duration: 4}),
+    }, {
+      name: 'Iteration start and negative delay on group',
+      timedItem: new SeqGroup([
+        new Animation(b, sampleKeyframes, {duration: 2, iterations: 4}),
+        new Animation(b, sampleKeyframes1,
+            {delay: 1, duration: 3, iterations: 2, iterationStart: 0.6}),
+      ], {delay: -1, iterations: 1, iterationStart: 0.3}),
+    }, {
+      name: 'Negative playback rate on group',
+      timedItem: new ParGroup([
+        new Animation(b, sampleKeyframes, {delay: 2, duration: 2})
+      ], {playbackRate: -1}),
+    }, {
+      name: 'Complex animation',
+      timedItem: new SeqGroup([
+        new ParGroup([
+          new Animation(b, sampleKeyframes, {duration: 1, delay: 3}), 
+          new Animation(b, sampleKeyframes1, 
+              {
+                delay: -0.5, 
+                duration: 1, 
+                iterations: 1, 
+                iterationStart: 0.2, 
+                playbackRate: 1
+              }),
+        ]),
+        new ParGroup([
+          new Animation(b, sampleKeyframes, {duration: 8, iterations: 1}), 
+          new Animation(b, sampleKeyframes1, {duration:2, iterations: 5}),
+        ], {iterations: 2})
+      ], {playbackRate: 2, iterations: 2, delay: 1}),
+    }];
+
+    document.addEventListener('WebComponentsReady', function() {
+      var timeline = document.querySelector('wat-timeline');
+
+      var select = document.querySelector('select');
+      for (var i = 0; i < animations.length; i++) {
+        var option = document.createElement('option');
+        option.label = animations[i].name;
+        select.add(option);
+      }
+      select.onchange = function(e) {
+        timeline.timedItem = animations[this.selectedIndex].timedItem;
+        timeline.player = document.timeline.play(timeline.timedItem);
+      }
+
+      timeline.timedItem = animations[0].timedItem;
+      timeline.player = document.timeline.play(timeline.timedItem);
+    });
+  </script>
+</body>
