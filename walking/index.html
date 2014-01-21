@@ -1,59 +1,57 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>stick-person demo</title>
-        <script src="../components/platform/platform.js"></script>
-        <link rel="import" href="stick-person.html">
-        <style>
-            #stick1 {
-                background-color: green;
-                -webkit-transform: translate(200px, 200px);
-            }
-            #stick2 {
-                left: 50%;
-                bottom: 400px;
-            }
-        </style>
-    </head>
-    <body>
-        <div>
-            <stick-person id="stick1" walk></stick-person>
-            <stick-person id="stick2"></stick-person>
-        </div>
-        <script>
-            var stick1 = document.getElementById('stick1');
-            var stick2 = document.getElementById('stick2');
+<head>
+  <title>stick-person demo</title>
+  <script src="../components/platform/platform.js"></script>
+  <link rel="import" href="stick-person.html">
+  <style>
+    #stick1 {
+      background-color: green;
+      -webkit-transform: translate(200px, 200px);
+    }
+    #stick2 {
+      left: 50%;
+      bottom: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <stick-person id="stick1" walk></stick-person>
+    <stick-person id="stick2"></stick-person>
+  </div>
+  <script>
+    var stick1 = document.getElementById('stick1');
+    var stick2 = document.getElementById('stick2');
 
-            stick1.addEventListener('click', function(e) {
-                toggleWalk(e);
-                var stick = e.currentTarget;
-                if (stick.walk)
-                    stick.style.background = 'green';
-                else
-                    stick.style.background = 'red';
-            });
+    stick1.addEventListener('click', function(e) {
+      toggleWalk(e);
+      var stick = e.currentTarget;
+      if (stick.walk)
+          stick.style.background = 'green';
+      else
+          stick.style.background = 'red';
+    });
 
-            document.addEventListener('keydown', function(e) {
-                if (e.keyCode == 39) {
-                    stick2.direction = 'right';
-                    stick2.walk = true;
-                }
-                else if (e.keyCode == 37) {
-                    stick2.direction = 'left';
-                    stick2.walk = true;
-                }
-            });
+    document.addEventListener('keydown', function(e) {
+      if (e.keyCode == 39) {
+        stick2.direction = 'right';
+        stick2.walk = true;
+      }
+      else if (e.keyCode == 37) {
+        stick2.direction = 'left';
+        stick2.walk = true;
+      }
+    });
 
-            document.addEventListener('keyup', function(e) {
-                if (e.keyCode == 39 || e.keyCode == 37) {
-                    stick2.walk = false;
-                }
-            });
+    document.addEventListener('keyup', function(e) {
+      if (e.keyCode == 39 || e.keyCode == 37) {
+        stick2.walk = false;
+      }
+    });
 
-            function toggleWalk(e) {
-                var stick = e.currentTarget;
-                stick.walk = !stick.walk;
-            }
-        </script>
-    </body>
-</html>
+    function toggleWalk(e) {
+      var stick = e.currentTarget;
+      stick.walk = !stick.walk;
+    }
+  </script>
+</body>

@@ -1,64 +1,64 @@
 :host {
-    position: absolute;
-    background-color: black;
-    visibility: hidden;
+  position: absolute;
+  background-color: black;
+  visibility: hidden;
 }
 #bruce {
-    top: inherit;
-    bottom: inherit;
-    left: inherit;
-    right: inherit;
-    visibility: hidden;
+  top: inherit;
+  bottom: inherit;
+  left: inherit;
+  right: inherit;
+  visibility: hidden;
 }
 div {
-    background: inherit;
+  background: inherit;
 }
 #bruce div {
-    position: absolute;
+  position: absolute;
 }
 #head {
-    margin-left: -25px;
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-    visibility: visible;
+  margin-left: -25px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  visibility: visible;
 }
 #body div {
-    width: 4px;
-    -webkit-transform-origin: top;
+  width: 4px;
+  -webkit-transform-origin: top;
 }
 #body > div {
-    margin-left: -2px;
-    visibility: visible;
+  margin-left: -2px;
+  visibility: visible;
 }
 #torso {
-    top: 50px;
-    height: 140px;
+  top: 50px;
+  height: 140px;
 }
 .arm {
-    top: 75px;
-    height: 70px;
+  top: 75px;
+  height: 70px;
 }
 .forearm {
-    top: 70px;
-    height: 75px;
+  top: 70px;
+  height: 75px;
 }
 .leg {
-    top: 190px;
-    height: 75px;
+  top: 190px;
+  height: 75px;
 }
 .shin {
-    top: 75px;
-    height: 75px;
+  top: 75px;
+  height: 75px;
 }
 .foot {
-    top: 75px;
-    height: 25px;
+  top: 75px;
+  height: 25px;
 }
 .joint {
-    top: 100%;
-    margin-top: -50%;
-    height: 4px;
-    width: 4px;
-    border-radius: 50%;
+  top: 100%;
+  margin-top: -50%;
+  height: 4px;
+  width: 4px;
+  border-radius: 50%;
 }
