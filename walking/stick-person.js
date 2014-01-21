@@ -1,24 +1,53 @@
 Polymer('stick-person', {
-    ready: function() {
-        var timingLimbs = {direction: 'alternate', duration: 1.5, iterations: 2};
-        var anim = new ParGroup([
-            new Animation(this.$.bruce, [{transform: 'translateY(15px)'}, {transform: 'translateY(0px)'}], {direction: 'alternate', duration: 0.75, iterations: 4}),
+  walk: false,
+  direction: 'right',
+  walkPlayer: null,
 
-            /* Arms */
-            new Animation(this.$.leftArm, [{transform: 'rotate(-40deg)'}, {transform: 'rotate(53deg)'}], timingLimbs),
-            new Animation(this.$.leftForearm, [{transform: 'rotate(-30deg)'}, {transform: 'rotate(0deg)'}], timingLimbs),
-            new Animation(this.$.rightArm, [{transform: 'rotate(53deg)'}, {transform: 'rotate(-40deg)'}], timingLimbs),
-            new Animation(this.$.rightForearm, [{transform: 'rotate(0deg)'}, {transform: 'rotate(-30deg)'}], timingLimbs),
+  ready: function() {
+    this.prepareAnim();
+  },
 
-            /* Legs */
-            new Animation(this.$.leftLeg, [{transform: 'rotate(35deg)'}, {transform: 'rotate(-30deg)'}], timingLimbs),
-            new Animation(this.$.leftShin, [{transform: 'rotate(0deg)'}, {transform: 'rotate(20deg)'}], timingLimbs),
-            new Animation(this.$.leftFoot, [{transform: 'rotate(-110deg)'}, {transform: 'rotate(-90deg)'}], timingLimbs),
-            new Animation(this.$.rightLeg, [{transform: 'rotate(-30deg)'}, {transform: 'rotate(35deg)'}], timingLimbs),
-            new Animation(this.$.rightShin, [{transform: 'rotate(20deg)'}, {transform: 'rotate(0deg)'}], timingLimbs),
-            new Animation(this.$.rightFoot, [{transform: 'rotate(-90deg)'}, {transform: 'rotate(-110deg)'}], timingLimbs)
-        ], {iterations: Infinity});
+  prepareAnim: function() {
+    var anim = new ParGroup([
+      new Animation(this.$.bruce, [
+        {transform: 'translateY(15px)', composite: 'add'},
+        {transform: 'translateY(0px)', composite: 'add'}
+      ], {direction: 'alternate', duration: 0.75, iterations: 4}),
 
-        document.timeline.play(anim);
-    }
+      // Arms
+      this.limbAnimation(this.$.leftArm, -40, 53),
+      this.limbAnimation(this.$.leftForearm, -30, 0),
+      this.limbAnimation(this.$.rightArm, 53, -40),
+      this.limbAnimation(this.$.rightForearm, 0, -30),
+
+      // Legs
+      this.limbAnimation(this.$.leftLeg, 35, -30),
+      this.limbAnimation(this.$.leftShin, 0, 20),
+      this.limbAnimation(this.$.leftFoot, -110, -90),
+      this.limbAnimation(this.$.rightLeg, -30, 35),
+      this.limbAnimation(this.$.rightShin, 20, 0),
+      this.limbAnimation(this.$.rightFoot, -90, -110)
+    ], {iterations: Infinity});
+
+    this.walkPlayer = document.timeline.play(anim);
+    this.walkPlayer.paused = !this.walk;
+  },
+
+  limbAnimation: function(limb, startDeg, endDeg) {
+    return new Animation(limb, [
+      {transform: 'rotate(' + startDeg + 'deg)'},
+      {transform: 'rotate(' + endDeg + 'deg)'}
+    ], {direction: 'alternate', duration: 1.5, iterations: 2});
+  },
+
+  walkChanged: function() {
+    this.walkPlayer.paused = !this.walk;
+  },
+
+  directionChanged: function() {
+    if (this.direction == 'left')
+      this.$.bruce.style.webkitTransform = 'scale(-1,1)';
+    else if (this.direction == 'right')
+      this.$.bruce.style.webkitTransform = 'scale(1,1)';
+  }
 });

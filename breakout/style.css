@@ -1,13 +1,18 @@
-#field {
-  border: 1px #CCC solid;
-  display: inline-block;
-  height: 420px;
-  position: relative;
+* {
+  font-family: 'Raleway', sans-serif;
 }
 
-.block {
-  height: 10px;
-  width: 30px;
+body {
+  background-color: #EEE;
+  text-align: center;
+}
+
+#field {
+  background-color: #FFF;
+  border: 2px #CCC solid;
+  display: inline-block;
+  margin: auto;
+  position: relative;
 }
 
 #ball {
@@ -22,9 +27,34 @@
 
 #paddle {
   background-color: #BBB;
-  height: 13px;
-  left: 5px;
+  border-radius: 10px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 12px;
   position: absolute;
   bottom: 5px;
   width: 60px;
+}
+
+.block {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  position: absolute;
+}
+
+.screen {
+  color: transparent;
+  display: table-cell;
+  position: relative;
+  vertical-align: middle;
+  visibility: hidden;
+  z-index: 1;
+}
+
+.button {
+  font-weight: bold;
+  padding: 10px;
 }

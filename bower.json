@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "polymer": "Polymer/polymer#master",
-    "web-animations-tools": "web-animations/web-animations-tools#master"
+    "web-animations-tools": "web-animations/web-animations-tools#master",
+    "pointerevents-polyfill": "components/pointerevents-polyfill"
   }
 }
