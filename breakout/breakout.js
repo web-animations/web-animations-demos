@@ -8,7 +8,7 @@ var COLORS = [
   'rgb(238, 178, 17)',
   'rgb(0, 153, 57)'
 ];
-var BASE_SPEED = 500;
+var BASE_SPEED = 200;
 var BLOCK_FADE_SPEED = 0.02;
 var BLOCK_HEIGHT = 15;
 var BLOCK_WIDTH = 45;
@@ -68,8 +68,8 @@ function createGrid(height, width) {
       block.classList.add('active');
       block.setAttribute('id', y * width + x);
       block.style.visible = 'hidden';
-      block.style.height = BLOCK_HEIGHT;
-      block.style.width = BLOCK_WIDTH;
+      block.style.height = BLOCK_HEIGHT + 'px';
+      block.style.width = BLOCK_WIDTH + 'px';
       block.style.webkitTransform = 'translate(' + block['left'] + 'px, ' +
          block['top'] + 'px)';
 
@@ -371,8 +371,8 @@ function gameOver() {
   // Add game over screen.
   var screen = document.createElement('div');
   screen.classList.add('screen');
-  screen.style.height = field.clientHeight / 2;
-  screen.style.width = field.clientWidth;
+  screen.style.height = (field.clientHeight / 2) + 'px';
+  screen.style.width = field.clientWidth + 'px';
 
   var text = document.createElement('h2');
   text.appendChild(document.createTextNode('Game over!'));
@@ -445,16 +445,16 @@ window.addEventListener('load', function() {
 
   if (fieldHeight > viewportHeight) {
     GRID_HEIGHT = Math.floor(viewportHeight / 3 / BLOCK_HEIGHT);
-    field.style.height = viewportHeight;
+    field.style.height = viewportHeight + 'px';
   } else {
-    field.style.height = fieldHeight;
+    field.style.height = fieldHeight + 'px';
   }
 
   if (fieldWidth > viewportWidth) {
     GRID_WIDTH = Math.floor(viewportWidth / BLOCK_WIDTH);
     fieldWidth = GRID_WIDTH * BLOCK_WIDTH;
   }
-  field.style.width = fieldWidth;
+  field.style.width = fieldWidth + 'px';
 
   // Track touch/mouse pointer movements on the field.
   document.body.addEventListener('pointermove', movePaddle);
