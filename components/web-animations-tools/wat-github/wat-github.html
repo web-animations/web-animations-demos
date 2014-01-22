@@ -1,0 +1,90 @@
+<!--
+Copyright 2014 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+
+limitations under the License.
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+
+<polymer-element name="wat-github">
+  <template>
+  </template>
+
+  <script src="../../github-js/lib/underscore-min.js"></script>
+  <script src="../../github-js/lib/base64.js"></script>
+  <script src="../../github-js/github.js"></script>
+  
+  <script>
+    Polymer('wat-github', {
+      ready: function() {
+        this.github = new Github({token: ''});
+      },
+
+      save: function(description, publicGist, files) {
+        if (!this.github) {
+          return;
+        }
+
+        var gist = this.github.getGist();
+        gist.create({
+          'description': description,
+          'public': publicGist,
+          'files': files,
+          }, function(error, response) {
+            if (!error) {
+              window.location.hash = response.id;
+              console.log(response.html_url);
+            } else {
+              console.error(error);
+            }
+          });
+      },
+
+      update: function(id, description, publicGist, files) {
+        if (!this.github) {
+          return;
+        }
+
+        var gist = this.github.getGist(id);
+        gist.update({
+          'description': description,
+          'files': files,
+          }, function(error, response) {
+            if (!error) {
+              window.location.hash = response.id;
+              console.log(response.html_url);
+            } else {
+              console.error(error);
+            }
+          });
+      },
+
+      load: function(id) {
+        if (!this.github) {
+          return;
+        }
+        
+        var gist = this.github.getGist(id);
+        gist.read(function(error, response) {
+          if (!error) {
+            console.log(response.files);
+            this.fire('files-loaded', response.files);
+          } else {
+            console.error(error);
+          }
+        }.bind(this));
+      }
+    });
+  </script>
+</polymer-element>
