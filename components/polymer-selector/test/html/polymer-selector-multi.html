@@ -33,7 +33,7 @@
       o.observe(node, options);
     }
     
-    document.addEventListener('WebComponentsReady', function() {
+    document.addEventListener('polymer-ready', function() {
       //
       var s = document.querySelector('#selector');
       assert.equal(s.selected, null);

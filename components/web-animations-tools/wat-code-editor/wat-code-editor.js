@@ -16,12 +16,12 @@
 
 Polymer('wat-code-editor', {
   mode: 'columns',
+  javascript: '',
   html: '',
   css: '',
-  javascript: '',
 
   ready: function() {
-    this.selected = ['html', 'css', 'javascript'];
+    this.selected = ['javascript', 'html', 'css'];
     this.updatePreview();
   },
 
@@ -115,5 +115,11 @@ Polymer('wat-code-editor', {
         alert('Could not find any active players.');
       }
     }.bind(this);
+  },
+
+  clearAll: function() {
+    this.timedItem = new Animation(null, null, 0);
+    this.javascript = this.css = this.html = '';
+    this.updateCode();
   }
 });

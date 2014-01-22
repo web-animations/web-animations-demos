@@ -2,9 +2,10 @@
   "name": "web-animations-tools",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#master",
+    "polymer": "Polymer/polymer#0.1.3",
     "polymer-selector": "Polymer/polymer-selector#master",
     "polymer-animation": "Polymer/polymer-animation#master",
-    "web-animations-js": "web-animations/web-animations-js#master"
+    "web-animations-js": "web-animations/web-animations-js#master",
+    "github-js": "michael/github#master"
   }
 }

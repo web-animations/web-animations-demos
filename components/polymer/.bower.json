@@ -14,15 +14,16 @@
     "polymer.js"
   ],
   "dependencies": {
-    "platform": "Polymer/platform#master"
+    "platform": "Polymer/platform#0.1.3"
   },
-  "_release": "969fec8bd4",
+  "version": "0.1.3",
+  "_release": "0.1.3",
   "_resolution": {
-    "type": "branch",
-    "branch": "master",
-    "commit": "969fec8bd4dc79fbb57a588ebe3f10b104b5e956"
+    "type": "version",
+    "tag": "0.1.3",
+    "commit": "1879f0482e344e69a7e1c8267a44d98ec0fe8174"
   },
   "_source": "git://github.com/Polymer/polymer.git",
-  "_target": "master",
+  "_target": "0.1.3",
   "_originalSource": "Polymer/polymer"
 }

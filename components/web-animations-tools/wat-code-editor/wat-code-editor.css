@@ -58,11 +58,10 @@ wat-player-controls {
   margin: 10px;
 }
 
-#preview,
-wat-ace-editor {
+.paper {
   box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding: 5px;
   margin: 5px;
+  padding: 5px;
 }

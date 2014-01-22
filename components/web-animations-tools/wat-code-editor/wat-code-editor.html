@@ -72,17 +72,23 @@ limitations under the License.
 
     <div id="grid">
       <div id="container1" class="container">
-        <div id="preview">
+        <div id="preview" class="paper">
           <iframe id="preview-frame"></iframe>
           <div class="player-controls">
             <wat-player-controls id="player-controls"></wat-player-controls>
           </div>
         </div>
-        <wat-ace-editor id="javascript" mode="ace/mode/javascript" value="{{javascript}}"></wat-ace-editor>
+        <wat-ace-editor id="javascript" class="paper" mode="ace/mode/javascript" 
+            value="{{javascript}}">
+        </wat-ace-editor>
       </div>
       <div id="container2" class="container">
-        <wat-ace-editor id="html" mode="ace/mode/html" value="{{html}}"></wat-ace-editor>
-        <wat-ace-editor id="css" mode="ace/mode/css" value="{{css}}"></wat-ace-editor>
+        <wat-ace-editor id="html" class="paper" mode="ace/mode/html" 
+            value="{{html}}">
+        </wat-ace-editor>
+        <wat-ace-editor id="css" class="paper" mode="ace/mode/css" 
+            value="{{css}}">
+        </wat-ace-editor>
       </div>
     </div>
   </template>

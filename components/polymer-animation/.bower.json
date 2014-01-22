@@ -6,11 +6,11 @@
     "web-animations-js": "web-animations/web-animations-js#master"
   },
   "homepage": "https://github.com/Polymer/polymer-animation",
-  "_release": "2ad3dde3aa",
+  "_release": "100c5d394b",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "2ad3dde3aa88ef29a212dae4add1400cf7c70770"
+    "commit": "100c5d394b7edaaf2bec7239781315aa562c9dc9"
   },
   "_source": "git://github.com/Polymer/polymer-animation.git",
   "_target": "master",

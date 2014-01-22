@@ -18,20 +18,31 @@ limitations under the License.
 <!DOCTYPE html>
 
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../internal/wat-button/wat-button.html">
 <link rel="import" href="wat-timeline-axis.html">
 <link rel="import" href="wat-timeline-scrubber.html">
 <link rel="import" href="wat-timeline-item.html">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-<polymer-element name="wat-timeline" attributes="timedItem player">
+<polymer-element name="wat-timeline" attributes="timedItem player pixelsPerSecond selected">
   <template>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <style>
     #timeline-container {
       margin-top: 6px;
       overflow: hidden;
     }
+    #back-button {
+      width: 40px;
+    }
+    #back-button ^^ button {
+      padding: 0 3px 0 0;
+    }
   </style>
   <div id="container">
-    <input id="back-button" type="button" value="<">
+    <wat-button id="back-button" title="back" on-click="{{popViewStack}}">
+      <i class="fa fa-reply"></i>
+    </wat-button>
     <wat-timeline-scrubber id="scrubber"></wat-timeline-scrubber>
     <wat-timeline-axis id="axis"></wat-timeline-axis>
     <div id="timeline-container">
@@ -42,13 +53,19 @@ limitations under the License.
     'use strict';
 
     Polymer('wat-timeline', {
+      pixelsPerSecond: 1,
       timedItem: null,
+      selected: null,
       player: null,
       viewStack: [],
+      root: null,
+      parentForRoot: null,
       playerChanged: function() {
         this.$.scrubber.player = this.player;
       },
       ready: function() {
+        this.parentForRoot = {};
+
         this.addEventListener('on-timedItem-focus', function(e) {
           var newTimedItem = e.detail;
           if (newTimedItem === this.timedItem) {
@@ -69,37 +86,27 @@ limitations under the License.
           this.player.currentTime = this.player.source.startTime;
         });
 
-        this.addEventListener('on-timedItem-select', function(e) {
-          function deselectChildren(root, selectedItem) {
-            if (!root || root.timedItem === selectedItem) {
-              return;
-            } 
-            root.selected = false;
-            var children = root.childNodes;
-            for (var i = 0; i < children.length; i++) {
-              deselectChildren(children[i]);
-            }
-          }
+        this.addEventListener('on-timeline-relayout', this.relayoutTimeline.bind(this));
+      },
+      updateTimeline: function(timespan) {
+        var timeline = this.$['timeline-container'];
+        // Get the visual attributes of the timeline container so that
+        // the axis and the scrubber will have the same width with it.
+        var containerWidth = timeline.clientWidth; 
+        var timespan = Math.max(this.timedItem.endTime - this.timedItem.startTime, 0);
+        this.pixelsPerSecond = timespan === 0 ? 0 : containerWidth / timespan;
 
-          var root = this.$['timeline-container'].querySelector('wat-timeline-item');
-          deselectChildren(root, e.detail);
-        });
+        this.$.axis.width = containerWidth;
+        this.$.axis.timespan = timespan;
+        this.$.scrubber.pixelsPerSecond = this.pixelsPerSecond;
 
-        this.$['back-button'].addEventListener('click', function(e){
-          var item = this.viewStack.pop();
-          if (!item) {
-            return;
-          }
-          // Restore the item.
-          if (item.prevSibling) {
-            item.prevSibling.after(this.timedItem);
-          } else {
-            item.parentGroup.prepend(this.timedItem);
-          }
-          this.timedItem = item.oldItem;
-          this.player.source = this.timedItem;
-          this.player.currentTime = this.player.source.startTime;   
-        }.bind(this));
+        this.parentForRoot.playbackRate = 1;
+        this.parentForRoot.firstIterDuration = timespan - Math.min(this.timedItem.specified.delay, 0);
+        this.parentForRoot.iterStartDuration = 0;
+      },
+      relayoutTimeline: function() {
+        this.updateTimeline();
+        this.root.relayout();
       },
       timedItemChanged: function() {
         if (this.timedItem.player) {
@@ -107,44 +114,29 @@ limitations under the License.
         }
 
         // Remove all the children and rebuild the view.
-        var timeline = this.$['timeline-container'];
-        while (timeline.firstChild) {
-          timeline.removeChild(timeline.firstChild);
-        }
+        this.$['timeline-container'].innerHTML = '';
 
-        // Get the visual attributes of the timeline container so that
-        // the axis and the scrubber will have the same width with it.
-        var containerWidth = timeline.clientWidth; 
-        var timespan = Math.max(this.timedItem.endTime - this.timedItem.startTime, 0);
-        var pixelsPerSecond = containerWidth / timespan;
+        this.updateTimeline();
 
-        this.$.axis.width = containerWidth;
-        this.$.axis.timespan = timespan;
-        this.$.scrubber.pixelsPerSecond = pixelsPerSecond;
-
-        // If there is no visible animation then show nothing.
-        if (timespan === 0) {
+        this.root = document.createElement('wat-timeline-item');
+        this.root.init(this, this.timedItem, this.parentForRoot);
+        this.$['timeline-container'].appendChild(this.root);
+      },
+      popViewStack: function(e) {
+        var item = this.viewStack.pop();
+        if (!item) {
           return;
         }
-
-        var timing = {
-          // The timespan is the amount of time the animation is visible
-          // However, the actual length of the animation is greater
-          // when negative delay is introduced.
-          duration: timespan - Math.min(this.timedItem.specified.delay, 0),
-          // If the parent has an iteration start less than 1
-          // then the children need to be clipped as well.
-          // It is treated similar to negative delay.
-          iterationStartTime: 0,
-          // Playback rate on the current item will not affect the length of the delay
-          // but parent's playback rate will. Therefore it need to be passed down the tree.
-          playbackRate: 1,
-        };
-
-        var root = document.createElement('wat-timeline-item');
-        root.init(this.timedItem, pixelsPerSecond, timing);
-        this.$['timeline-container'].appendChild(root);
-      }
+        // Restore the item.
+        if (item.prevSibling) {
+          item.prevSibling.after(this.timedItem);
+        } else {
+          item.parentGroup.prepend(this.timedItem);
+        }
+        this.timedItem = item.oldItem;
+        this.player.source = this.timedItem;
+        this.player.currentTime = this.player.source.startTime;   
+      },
     });
   </script>
 </polymer-element>

@@ -18,7 +18,7 @@ limitations under the License.
 
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="wat-timeline-axis" attributes="width timespan numMarker">
+<polymer-element name="wat-timeline-axis" attributes="width timespan numMarker markersPerSecond minNumMarkers maxNumMarkers">
   <template>
   <style>
       #svg {
@@ -49,6 +49,9 @@ limitations under the License.
       width: 0,
       timespan: 1,
       numMarkers: 21,
+      markersPerSecond: 10,
+      minNumMarkers: 10,
+      maxNumMarkers: 50,
 
       observe: {
         width: 'updateView',
@@ -57,6 +60,10 @@ limitations under the License.
       },
 
       updateView: function(oldValue, newValue) {
+        this.numMarkers = Math.min(this.timespan * this.markersPerSecond, this.maxNumMarkers);
+        this.numMarkers = Math.max(this.numMarkers, this.minNumMarkers);
+        this.numMarkers++;
+
         var markers = this.$.axis.querySelector('#markers');
         if(markers) {
           markers.remove();

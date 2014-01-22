@@ -16,10 +16,9 @@ limitations under the License.
 -->
 
 <!DOCTYPE html>
-
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="wat-timeline-item" attributes="timedItem pixelsPerSecond">
+<polymer-element name="wat-timeline-item" attributes="timedItem">
   <template>
   <style>
     #group-container {
@@ -51,15 +50,15 @@ limitations under the License.
       background-color: rgba(247, 195, 52, 0.8);
     }
     span {
-      overflow: hidden;
       display: block;
       padding: 10px;
     }
   </style>
-    <div id="group-container" class="{{selected ? 'selected' : ''}}"
-          style="left:{{translateX * pixelsPerSecond}}px">
+    <div id="group-container" class="{{timeline.selected === timedItem ? 'selected' : ''}}"
+          style="left:{{(delay / parentPlaybackRate) * timeline.pixelsPerSecond}}px">
       <div class="timeline-item {{playbackRate < 0 ? 'negativePlayback' : ''}}" 
-            style="min-width:{{width * pixelsPerSecond}}px;"
+            style="min-width:{{firstIterDuration * timeline.pixelsPerSecond}}px;
+                    max-width:{{firstIterDuration * timeline.pixelsPerSecond}}px;"
             on-click="{{onSelect}}" on-dblclick="{{onFocus}}">
         <span>{{timedItem ? (timedItem.type ? timedItem.type + 'Group' : 'animation') : ''}}</span>
         <content>
@@ -67,7 +66,7 @@ limitations under the License.
       <template repeat="{{length in iterations}}">
         <!-- FIXME: Not sure why do we need min width here but without it 
              there will have layout problem when zoom in on the page. -->
-        <div class="timeline-item iteration" style="min-width:{{length * pixelsPerSecond}}px"
+        <div class="timeline-item iteration" style="min-width:{{length * timeline.pixelsPerSecond}}px;"
             on-click="{{onSelect}}" on-dblclick="{{onFocus}}"></div>
       </template>
     </div>
@@ -76,29 +75,32 @@ limitations under the License.
     'use strict';
 
     Polymer('wat-timeline-item', {
-      playbackRate: 1,
-      translateX: 0,
-      width: 0,
+      timeline: null,
       timedItem: null,
-      pixelsPerSecond: 0,
-      selected: false,
-      detached: function() {
-        if (this.timedItem instanceof Animation) {
-          this.timedItem.removeEventListener('start', this.onStart);
-          this.timedItem.removeEventListener('end', this.onEnd);
-        }
-      },
-      init: function(timedItem, pixelsPerSecond, parentTiming) {
+      parentItem: null,
+      playbackRate: 1,
+      parentPlaybackRate: 1,
+      allocatedTime: 0,
+      firstIterDuration: 0,
+      iterStartDuration: 0,
+      observer: null,
+      layouting: false,
+      init: function(timeline, timedItem, parentItem) {
+        this.timeline = timeline;
         this.timedItem = timedItem;
-        this.pixelsPerSecond = pixelsPerSecond;
-        var timingInput = timedItem.specified;
-        this.playbackRate = parentTiming.playbackRate * timingInput.playbackRate;
+        this.parentItem = parentItem;
 
-        // Determind the translate amount of this item.
-        var totalDelay = (timingInput.delay - parentTiming.iterationStartTime);
-        var translate = (totalDelay + timedItem.startTime) / Math.abs(parentTiming.playbackRate);
-        this.translateX = translate;
-                
+        this.performLayout();
+        
+        // Build children.
+        if (timedItem instanceof ParGroup || timedItem instanceof SeqGroup) {
+          for (var i = 0; i < timedItem.children.length; i++) {
+            var child = document.createElement('wat-timeline-item');
+            child.init(this.timeline, timedItem.children[i], this);
+            this.appendChild(child);
+          }
+        }
+
         // When the animation is playing, toggle the class to change the style.
         // This is limited because if the player is manually adjusted then
         // these events may not be triggered.
@@ -107,49 +109,87 @@ limitations under the License.
           this.timedItem.addEventListener('end', this.onEnd.bind(this));
         }
 
+        // Setup the observer.
+        this.observer = new CompoundObserver(this.notifyRelayout, this);
+        this.observer.addPath(this, 'timedItem.startTime');
+        this.observer.addPath(this, 'timedItem.endTime');
+        this.observer.addPath(this, 'timedItem.duration');
+        this.observer.addPath(this, 'timedItem.specified.delay');
+        this.observer.addPath(this, 'timedItem.specified.endDelay');
+        this.observer.addPath(this, 'timedItem.specified.playbackRate');
+        this.observer.addPath(this, 'timedItem.specified.iterations');
+        this.observer.addPath(this, 'timedItem.specified.iterationStart');
+        this.observer.open();
+      },
+      performLayout: function() {
+        var timingInput = this.timedItem.specified;
+
+        // parentPlaybackRate will affect the delay of this timedItem and this timedItem's 
+        // own playbackRate will only affect the duration of the item. Therefore we need both.
+        this.parentPlaybackRate = Math.abs(this.parentItem.playbackRate);
+        this.playbackRate = this.parentPlaybackRate * timingInput.playbackRate;
+
+        this.delay = (this.timedItem.parent instanceof SeqGroup) ?
+          ((this.timedItem.previousSibling) ? this.timedItem.previousSibling.specified.endDelay : 0) : 
+          0;
+        this.delay += timingInput.delay - this.parentItem.iterStartDuration + this.timedItem.startTime;
+
+        var duration = this.timedItem.duration / Math.abs(this.playbackRate);
+        var totalTime = this.timedItem.endTime - this.timedItem.startTime - Math.min(timingInput.delay, 0);
+        var allocatedTime = Math.min(totalTime, this.parentItem.firstIterDuration);
+
+        // Build the iterations.
         var iterationCount = timingInput.iterations;
         var iterationLength = Math.min(iterationCount, 1) * (1 - timingInput.iterationStart);
 
         var firstItem = true;
         var iterations = [];
-        var duration = parentTiming.duration;
-        while (iterationCount > 0 && duration > 0) {
-          var timespan = (timedItem.duration * iterationLength) / Math.abs(this.playbackRate);
-          
+        while (iterationCount > 0 && allocatedTime > 0) {
+          var itemWidth = duration * iterationLength;
+
           if (firstItem) {
-            this.width = timespan;
+            this.firstIterDuration = itemWidth;
           } else {
-            iterations.push(timespan);
+            iterations.push(itemWidth);
           }
 
+          allocatedTime -= itemWidth;
           iterationCount -= iterationLength;
           iterationLength = Math.min(iterationCount, 1);
-          duration -= timespan;
           firstItem = false;
         }
 
         this.iterations = iterations;
 
-        //Build children.
-        var itemDuration = timedItem.duration / Math.abs(this.playbackRate);
-        var timing = {
-          duration: Math.min(parentTiming.duration, itemDuration),
-          iterationStartTime: (itemDuration * timingInput.iterationStart) + parentTiming.iterationStartTime,
-          playbackRate: this.playbackRate,
-        };
-
-        if (timedItem instanceof ParGroup || timedItem instanceof SeqGroup) {
-          for (var i = 0; i < timedItem.children.length; i++) {
-            var child = document.createElement('wat-timeline-item');
-            child.init(timedItem.children[i], pixelsPerSecond, timing);
-            this.appendChild(child);
-          }
+        // Combine the iteration start of this item and the parent item so the children will adjust themselves.
+        this.iterStartDuration = (duration * timingInput.iterationStart) + this.parentItem.iterStartDuration;
+      },
+      relayout: function() {
+        this.layouting = true;
+        
+        this.performLayout();
+        for (var i = 0; i < this.childNodes.length; i++) {
+          this.childNodes[i].relayout();
+        }
+        
+        this.layouting = false;
+      },
+      detached: function() {
+        // Clean up the event listeners and observers.
+        if (this.timedItem instanceof Animation) {
+          this.timedItem.removeEventListener('start', this.onStart);
+          this.timedItem.removeEventListener('end', this.onEnd);
+        }
+        this.observer.close();
+      },
+      notifyRelayout: function() {
+        if (!this.layouting) {
+          this.fire('on-timeline-relayout', null);
         }
       },
       onSelect: function(e) {
         e.stopPropagation();
-        this.fire('on-timedItem-select', this.timedItem);
-        this.selected = true;
+        this.timeline.selected = this.timedItem;
       },
       onFocus: function(e) {
         this.fire('on-timedItem-focus', this.timedItem);

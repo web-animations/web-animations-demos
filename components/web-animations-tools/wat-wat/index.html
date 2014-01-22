@@ -20,20 +20,29 @@ limitations under the License.
 <title>WAT</title>
 
 <meta charset="utf-8">
-<script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
-<link rel="stylesheet" type="text/css" href="index.css">
 <script src="../../platform/platform.js"></script>
-<link rel="import" href="wat-wat.html">
+<script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
 <script src="../lib/timeditem-serializer.js"></script>
+<link rel="import" href="wat-wat.html">
 
-<header>
-  <nav>
-    <ul>
-      <li><a href="#">New</a></li>
-      <li><a href="#">Load</a></li>
-      <li><a href="#">Save</a></li>
-    </ul>
-  </nav>
-</header>
+<style>
+  @import url('http://fonts.googleapis.com/css?family=Roboto');
+
+  body {
+    display: flex;
+    flex-flow: column;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Roboto, sans-serif;
+  }
+
+  wat-wat {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+</style>
 
 <wat-wat></wat-wat>

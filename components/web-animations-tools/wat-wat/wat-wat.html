@@ -3,6 +3,7 @@
 <link rel="import" href="../wat-code-editor/wat-code-editor.html">
 <link rel="import" href="../wat-timeditem-inspector/wat-timeditem-inspector.html">
 <link rel="import" href="../wat-timeline/wat-timeline.html">
+<link rel="import" href="../wat-github/wat-github.html">
 
 <polymer-element name="wat-wat" noscript>
   <template>
@@ -10,6 +11,51 @@
       :host {
         display: flex;
         flex-flow: column;
+      }
+
+      .paper {
+        box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin: 5px;
+        padding: 5px;
+      }
+
+      header {
+        background: linear-gradient(black, #424342) 0 0 repeat-x;
+        background-size: 100% 40px;
+        min-height: 40px;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        display: block;
+      }
+
+      nav ul {
+        margin: 0;
+        padding: 0;
+        text-indent: 10px;
+      }
+
+      nav ul li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        float: left;
+      }
+
+      nav ul li a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        margin: 0 10px 0 0;
+        color: #ddd;
+        text-shadow: 1px 1px 2px #111;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
       }
 
       #inspector {
@@ -22,22 +68,105 @@
       }
 
       wat-timeditem-inspector {
-        margin: 47px 5px 5px 5px;
-        box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        padding: 5px;
+        margin-top: 47px;
       }
 
       wat-timeline {
         max-height: 30vh;
+        overflow: auto;
       }
     </style>
 
+    <header>
+      <nav>
+        <ul>
+          <li><a on-click="{{newAnimation}}">New</a></li>
+          <li><a on-click="{{saveAnimation}}">Save</a></li>
+          <li><a on-click="{{saveNewAnimation}}">Save As New</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <wat-github id="github"></wat-github>
+
     <div id="inspector">
-      <wat-code-editor timedItem="{{timedItem}}" mode="rows"></wat-code-editor>
-      <wat-timeditem-inspector timedItem="{{timedItem}}"></wat-timeditem-inspector>
+      <wat-code-editor id="code-editor" timedItem="{{timedItem}}" mode="rows"> 
+      </wat-code-editor>
+      <wat-timeditem-inspector class="paper" timedItem="{{timedItem}}">
+      </wat-timeditem-inspector>
     </div>
-    <wat-timeline timedItem="{{timedItem}}"></wat-timeline>
+    <wat-timeline class="paper" timedItem="{{timedItem}}"></wat-timeline>
   </template>
+
+  <script>
+    Polymer('wat-wat', {
+      anonymous: true,
+
+      ready: function() {
+        this.addEventListener('files-loaded', function(event) {
+          var files = event.detail;
+
+          if (files['animation.js']) {
+            this.$['code-editor'].javascript = files['animation.js'].content;
+          }
+          if (files['animation.html']) {
+            this.$['code-editor'].html = files['animation.html'].content;
+          }
+          if (files['animation.css']) {
+            this.$['code-editor'].css = files['animation.css'].content;
+          }
+        });
+
+        if (window.location.hash.length > 0) {
+          var id = window.location.hash.substring(1);
+          this.loadAnimation(id);
+        }
+      },
+
+      newAnimation: function() {
+        window.location.hash = '';
+        this.$['code-editor'].clearAll();
+      },
+
+      save: function(saveAsNew) {
+        var javascript = this.$['code-editor'].javascript;
+        var html = this.$['code-editor'].html;
+        var css = this.$['code-editor'].css;
+        var description = 'wat';
+        var publicGist = false;
+        var files = {};
+
+        if (javascript) {
+          files['animation.js'] = {'content': javascript};
+        }
+        if (html) {
+          files['animation.html'] = {'content': html};
+        }
+        if (css) {
+          files['animation.css'] = {'content': css};
+        }
+        
+        if (!saveAsNew && window.location.hash.length > 0) {
+          var id = window.location.hash.substring(1);
+          this.$.github.update(id, description, publicGist, files);
+        } else {
+          this.$.github.save(description, publicGist, files);
+        }
+      },
+
+      saveAnimation: function() {
+        var saveAsNew = this.anonymous;
+
+        this.save(saveAsNew);
+      },
+
+      saveNewAnimation: function() {
+        this.save(true);
+      },
+
+      loadAnimation: function(id) {
+        this.$.github.load(id);
+      }
+    });
+  </script>
 </polymer-element>

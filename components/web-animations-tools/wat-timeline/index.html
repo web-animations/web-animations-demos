@@ -20,7 +20,7 @@ limitations under the License.
 <head>
   <script src="../../web-animations-js/web-animations.js"></script>
   <script src="../../platform/platform.js"></script>
-  <link rel='import' href='wat-timeline.html'>
+  <link rel="import" href="wat-timeline.html">
   <style>
     select {
       display: block;
@@ -33,8 +33,8 @@ limitations under the License.
 
 <body>
   <select></select>
-  <input id='test_button' type='button' value='+1'>
-  <wat-timeline id='timeline'></wat-timeline>
+  <input id="test_button" type="button" value="+1">
+  <wat-timeline id="timeline"></wat-timeline>
   <script>
     var b = document.querySelector('#test_button');
     var sampleKeyframes = [
@@ -80,11 +80,11 @@ limitations under the License.
     }, {
       name: 'Iteration start with positive delay',
        timedItem: new Animation(b, sampleKeyframes,
-          {delay: 1, duration: 1, iterations: 1, iterationStart: 0.7}),
+          {delay: 1, duration: 1, iterationStart: 0.7}),
     }, {
       name: 'Iteration start with negative delay', 
       timedItem: new Animation(b, sampleKeyframes,
-          {delay: -0.5, duration: 1, iterations: 1, iterationStart: 0.5}),
+          {delay: -0.5, duration: 1, iterationStart: 0.5}),
     }, {
       name: 'Iteration start with fraction', 
       timedItem: new Animation(b, sampleKeyframes,
@@ -113,7 +113,7 @@ limitations under the License.
     }, {
       name: 'Infinite iterations',
       timedItem: new SeqGroup([
-        new Animation(b, sampleKeyframes, {duration:1, iterations: Infinity})
+        new Animation(b, sampleKeyframes, {duration: 1, iterations: Infinity})
       ], {duration: 4}),
     }, {
       name: 'Iteration start and negative delay on group',
@@ -121,7 +121,7 @@ limitations under the License.
         new Animation(b, sampleKeyframes, {duration: 2, iterations: 4}),
         new Animation(b, sampleKeyframes1,
             {delay: 1, duration: 3, iterations: 2, iterationStart: 0.6}),
-      ], {delay: -1, iterations: 1, iterationStart: 0.3}),
+      ], {delay: -1, iterationStart: 0.3}),
     }, {
       name: 'Negative playback rate on group',
       timedItem: new ParGroup([
@@ -135,10 +135,8 @@ limitations under the License.
           new Animation(b, sampleKeyframes1, 
               {
                 delay: -0.5, 
-                duration: 1, 
-                iterations: 1, 
-                iterationStart: 0.2, 
-                playbackRate: 1
+                duration: 1,
+                iterationStart: 0.2,
               }),
         ]),
         new ParGroup([

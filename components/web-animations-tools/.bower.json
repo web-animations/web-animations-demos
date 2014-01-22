@@ -2,17 +2,18 @@
   "name": "web-animations-tools",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#master",
+    "polymer": "Polymer/polymer#0.1.3",
     "polymer-selector": "Polymer/polymer-selector#master",
     "polymer-animation": "Polymer/polymer-animation#master",
-    "web-animations-js": "web-animations/web-animations-js#master"
+    "web-animations-js": "web-animations/web-animations-js#master",
+    "github-js": "michael/github#master"
   },
   "homepage": "https://github.com/web-animations/web-animations-tools",
-  "_release": "86b2f7d1b7",
+  "_release": "67a72929f6",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "86b2f7d1b7e6e749e17220126a35fb846b5da023"
+    "commit": "67a72929f6a656a0eaca1c8e9f2f6e1dd9b360ea"
   },
   "_source": "git://github.com/web-animations/web-animations-tools.git",
   "_target": "master",
