@@ -1,17 +1,24 @@
 Polymer('stick-person', {
   walk: false,
   direction: 'right',
+  height: '300px',
   walkPlayer: null,
 
   ready: function() {
+    this.setupSize();
     this.prepareAnim();
+  },
+
+  setupSize: function() {
+    this.$.bruce.style.height = this.height;
+    this.$.bruce.style.width = 'calc(' + this.height + ' * .0116)';
   },
 
   prepareAnim: function() {
     var anim = new ParGroup([
       new Animation(this.$.bruce, [
-        {transform: 'translateY(15px)', composite: 'add'},
-        {transform: 'translateY(0px)', composite: 'add'}
+        {transform: 'translateY(3%)', composite: 'add'},
+        {transform: 'translateY(0%)', composite: 'add'}
       ], {direction: 'alternate', duration: 0.75, iterations: 4}),
 
       // Arms
@@ -49,5 +56,9 @@ Polymer('stick-person', {
       this.$.bruce.style.webkitTransform = 'scale(-1,1)';
     else if (this.direction == 'right')
       this.$.bruce.style.webkitTransform = 'scale(1,1)';
+  },
+
+  heightChanged: function() {
+    this.setupSize();
   }
 });
