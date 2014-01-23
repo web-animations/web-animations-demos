@@ -12,10 +12,13 @@ var BASE_SPEED = 200;
 var BLOCK_FADE_SPEED = 0.02;
 var BLOCK_HEIGHT = 15;
 var BLOCK_WIDTH = 45;
+var BLOCK_FADE_SPEED = 0.02;
 var GRID_HEIGHT = 10;
 var GRID_WIDTH = 15;
 var MAX_BOUNCES = 5000;
 var PADDING = 20;
+
+var player;
 
 /**
  * Helper function updating all coordinates for an element.
@@ -42,6 +45,10 @@ function setUp() {
   updatePosition(paddle, field.clientWidth / 2 - paddle.clientWidth / 2,
                  paddle.offsetTop);
   paddle.style.webkitTransform = 'translateX(' + paddle['left'] + 'px)';
+
+  var screen = document.getElementById('screen');
+  screen.style.height = field.clientHeight / 2;
+  screen.style.width = field.clientWidth;
 
   return new ParGroup([
       transformAnimation(ball, ['translate(' + ball['left'] + 'px, ' +
@@ -115,7 +122,37 @@ function transformAnimation(target, keyframes, timing) {
  * Precalculates path of the ball and generates the appropriate animations.
  */
 function playAnimation(ball, paddle) {
-  var anim = new SeqGroup([]);
+
+  // Use aabb collision detection to check if two elements overlap.
+  function collides(rect1, rect2) {
+    return !(rect1['left'] > rect2['right'] ||
+             rect1['right'] < rect2['left']);
+  }
+
+  // Event handler to show game over screen if there is a loss.
+  function checkCollision(ball, paddle, win) {
+    if (win) {
+      playNext(gameOver(true));
+    } else {
+      if (collides(paddle, ball)) {
+        currBounceAnim++;
+        playNext(allBounceAnims[currBounceAnim]);
+      } else {
+        playNext(gameOver(false));
+      }
+    }
+  }
+
+  // Copies coordinates of the target at a particular time.
+  function getCoords(target) {
+    return {
+      'left': target['left'],
+      'top': target['top'],
+      'right': target['right'],
+      'bottom': target['bottom']
+    };
+  }
+
   // Generate a random direction for the ball to travel.
   var vertDir = Math.random() < 0.5 ? 1 : -1;
   var horzDir = Math.random() < 0.5 ? 1 : -1;
@@ -123,11 +160,14 @@ function playAnimation(ball, paddle) {
     'dy': vertDir * (Math.random() + 0.5) * BASE_SPEED};
 
   var i = 0;
+  var currBounceAnim = 0;
+  var allBounceAnims = [];
+  var bounceAnim = new SeqGroup([]);
+
   while (document.querySelectorAll('.block.active').length &&
       i++ < MAX_BOUNCES) {
     var parAnim = new ParGroup([]);
     var nextPos = getNextBallMovement(ball, paddle, velocity);
-
     updatePosition(ball, nextPos['x'], nextPos['y']);
 
     var ballAnim = transformAnimation(ball, ['translate(' + ball['left'] +
@@ -137,15 +177,25 @@ function playAnimation(ball, paddle) {
     // Animate block destruction.
     if (nextPos['destroyed']) {
       parAnim.append(new Animation(nextPos['destroyed'],
-          [{backgroundColor: 'transparent'}],
-          {duration: 0, delay: nextPos['dt']}));
+          {visibility: 'hidden'}, {duration: 0, delay: nextPos['dt']}));
     }
 
-    anim.append(parAnim);
+    bounceAnim.append(parAnim);
+    // If the ball is reaching the bottom, check if paddle overlaps.
+    if (nextPos['checkPaddleCollision']) {
+      bounceAnim.addEventListener('end',
+          checkCollision.bind(null, getCoords(ball), paddle, false));
+      allBounceAnims.push(bounceAnim);
+      bounceAnim = new SeqGroup([]);
+    }
 
     velocity = getVelocity(velocity, nextPos['invert']);
   }
-  return anim;
+
+  bounceAnim.addEventListener('end',
+      checkCollision.bind(null, getCoords(ball), paddle, true));
+  allBounceAnims.push(bounceAnim);
+  return allBounceAnims[currBounceAnim];
 }
 
 /*
@@ -293,6 +343,7 @@ function getBlockCollision(ball, velocity) {
 
 function getWallCollision(ball, velocity, paddle) {
   var horzDist, vertDist;
+  var checkPaddleCollision = false;
   if (velocity['dx'] < 0) {
     horzDist = ball['left'];
   } else {
@@ -302,10 +353,12 @@ function getWallCollision(ball, velocity, paddle) {
     vertDist = ball['top'];
   } else {
     vertDist = paddle.offsetTop - ball['bottom'];
+    checkPaddleCollision = true;
   }
   return {
     'horzDist': horzDist,
-    'vertDist': vertDist
+    'vertDist': vertDist,
+    'checkPaddleCollision': checkPaddleCollision
   };
 }
 
@@ -356,42 +409,22 @@ function getNextBallMovement(ball, paddle, velocity) {
     'y': Math.round(ball['top'] + dt * velocity['dy']),
     'dt': dt,
     'invert': invert,
-    'destroyed': destroyed
+    'destroyed': destroyed,
+    'checkPaddleCollision': collision['checkPaddleCollision'] && dt == vertDt
   };
 }
 
 /**
  * Add a game over screen with an option to replay the animation.
  */
-function gameOver() {
-  var ball = document.getElementById('ball');
-  var paddle = document.getElementById('paddle');
-  var field = document.getElementById('field');
-
-  // Add game over screen.
-  var screen = document.createElement('div');
-  screen.classList.add('screen');
-  screen.style.height = (field.clientHeight / 2) + 'px';
-  screen.style.width = field.clientWidth + 'px';
-
-  var text = document.createElement('h2');
-  text.appendChild(document.createTextNode('Game over!'));
-
-  // Button to replay the animation.
-  var replay = document.createElement('button');
-  replay.appendChild(document.createTextNode('Replay Animation?'));
-  replay.classList.add('button');
-  replay.addEventListener('click', function() {
-    cleanUp();
-    document.timeline.play(playGame());
-  });
-
-  screen.appendChild(text);
-  screen.appendChild(replay);
-  field.appendChild(screen);
-
-  return new Animation(screen, [{visibility: 'visible', color: '#333',
-    backgroundColor: '#CCC'}], 1);
+function gameOver(win) {
+  var screen = document.getElementById('screen');
+  if (win) {
+    screen.firstElementChild.textContent = 'You win!';
+  } else {
+    screen.firstElementChild.textContent = 'Game over!';
+  }
+  return new Animation(screen, {opacity: 1}, 0.5);
 }
 
 /**
@@ -404,8 +437,9 @@ function cleanUp() {
   children.forEach(function(child) {
     grid.removeChild(child);
   });
-  var screen = document.querySelector('.screen');
-  screen.remove();
+
+  var screen = document.getElementById('screen');
+  playNext(new Animation(screen, {opacity: 0}, 0.5));
 }
 
 /**
@@ -413,7 +447,7 @@ function cleanUp() {
  */
 function playGame() {
   return new SeqGroup([setUp(), playAnimation(document.getElementById('ball'),
-        document.getElementById('paddle')), gameOver()]);
+        document.getElementById('paddle'))]);
 }
 
 function movePaddle(event) {
@@ -433,6 +467,19 @@ function movePaddle(event) {
   updatePosition(paddle, paddle['left'], paddle['top']);
   paddle.style.webkitTransform = 'translateX(' + paddle['left'] + 'px)';
 };
+
+/**
+ * Plays a new animation after the current one ends.
+ */
+function playNext(animation) {
+  if (player.currentTime < player.source.endTime) {
+    player.source.addEventListener('end', function() {
+      player = document.timeline.play(animation);
+    });
+  } else {
+    player = document.timeline.play(animation);
+  }
+}
 
 window.addEventListener('load', function() {
   var field = document.getElementById('field');
@@ -456,10 +503,17 @@ window.addEventListener('load', function() {
   }
   field.style.width = fieldWidth + 'px';
 
+  // Button to replay the animation.
+  var replay = document.querySelector('.button');
+  replay.addEventListener('click', function() {
+    cleanUp();
+    playNext(playGame());
+  });
+
   // Track touch/mouse pointer movements on the field.
   document.body.addEventListener('pointermove', movePaddle);
   document.body.addEventListener('pointerdown', movePaddle);
-  document.timeline.play(playGame());
+  player = document.timeline.play(playGame());
 });
 
 })();
