@@ -15,9 +15,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!--
+/**
+ * @module Web Animations Tools
+ */
+/**
+ * wat-player-controls can be used to control a Player.
+ *
+ * Example:
+ *
+ *     <wat-player-controls></wat-player-controls>
+ *     <script>
+ *       document.querySelector('wat-player-controls').player = 
+ *           document.timeline.play(new Animation(...));
+ *     </script>
+ *    
+ * @class wat-player-controls
+ */
+-->
+
 <!DOCTYPE html>
 
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../internal/wat-button/wat-button.html">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 <polymer-element name="wat-player-controls" attributes="step">
@@ -25,22 +45,19 @@ limitations under the License.
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
     <style>
-      button {
-        width: 32px;
-        height: 32px;
-        padding: 0px;
-        margin: 2px;
-        text-align: center;
-        vertical-align: middle;
-        outline: none;
-        color: white;
-        background-color: rgba(66,133,244,1);
-        border: 1px solid rgba(66,133,244,0.84);
-        border-radius: 10%;
-        cursor: pointer;
+      :host {
+        display: flex;
+        align-items: center;
+        flex-flow: row wrap;
       }
-      
-      .repeating {
+
+      wat-button {
+        width: 32px;
+        margin: 2px;
+        vertical-align: middle;
+      }
+
+      .repeating ^^ button {
         color: rgba(66,133,244,1);
         background-color: white;
       }
@@ -89,25 +106,25 @@ limitations under the License.
       }
     </style>
 
-    <button on-click="{{playPause}}" title="Play / Pause">
+    <wat-button on-click="{{playPause}}" title="Play / Pause">
       <i class="{{!player || player.paused ? 'fa fa-play' : 'fa fa-pause'}}">
       </i>
-    </button>
-    <button on-click="{{skipToStart}}" title="Skip To Start">
+    </wat-button>
+    <wat-button on-click="{{skipToStart}}" title="Skip To Start">
       <i class="fa fa-fast-backward"></i>
-    </button>
-    <button on-click="{{skipToEnd}}" title="Skip To End">
+    </wat-button>
+    <wat-button on-click="{{skipToEnd}}" title="Skip To End">
       <i class="fa fa-fast-forward"></i>
-    </button>
-    <button class="not-repeating" id="repeatButton" on-click="{{toggleRepeat}}" 
+    </wat-button>
+    <wat-button id="repeatButton" on-click="{{toggleRepeat}}" 
         title="Repeat On / Off">
       <i class="fa fa-repeat"></i>
-    </button>
-    <button id="reverseButton" on-click="{{toggleReversed}}" 
+    </wat-button>
+    <wat-button id="reverseButton" on-click="{{toggleReversed}}" 
         title="Playback Direction">
       <i class="{{!player || player.playbackRate < 0 ? 'fa fa-long-arrow-left' : 'fa fa-long-arrow-right'}}">
       </i>
-    </button>
+    </wat-button>
     <input class="number" type="Number" value="{{player.playbackRate}}"
         step="0.1" title="Playback Rate">
     <input class="scrubber" type="range" value="{{player.currentTime}}" 
@@ -118,6 +135,30 @@ limitations under the License.
   
   <script>
     Polymer('wat-player-controls', {
+      /**
+       * The Player to control.
+       *
+       * Example:
+       *
+       *     document.querySelector(wat-player-controls).player = 
+       *         document.timeline.play(new Animation(...));
+       *  
+       * @attribute player
+       * @type object
+       * @default null
+       */
+      player: null,
+      /**
+       * The step interval for the scrubber.
+       *
+       * Example:
+       *
+       *     <wat-player-controls step="0.0005"></wat-player-controls>
+       *  
+       * @attribute step
+       * @type number
+       * @default 0.001
+       */
       step: 0.001,
       paused: true,
       repeating: false,
@@ -178,7 +219,7 @@ limitations under the License.
         if (this.repeating) {
           this.$.repeatButton.className = 'repeating';
         } else {
-          this.$.repeatButton.className = 'not-repeating';
+          this.$.repeatButton.className = '';
         }
       },
       

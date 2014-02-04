@@ -2,7 +2,7 @@
   "name": "pointerevents-polyfill",
   "repo": "components/pointerevents-polyfill",
   "description": "A standards compliant PointerEvents polyfill",
-  "version": "0.0.20131107",
+  "version": "0.1.4",
   "keywords": [
     "pointerevents",
     "client"

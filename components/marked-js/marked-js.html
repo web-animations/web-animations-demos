@@ -1,0 +1,32 @@
+<!--
+Copyright 2013 The Polymer Authors. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<script src="marked.min.js"></script>
+
+<polymer-element name="marked-js" attributes="text">
+  <script>
+    Polymer('marked-js', {
+      text: '',
+      allowAuthorStyles: true,
+      enteredView: function() {
+
+        marked.setOptions({
+          highlight: this.highlight.bind(this)
+        });
+        if (!this.text) {
+          this.text = this.innerHTML;
+        }
+      },
+      textChanged: function () {
+        this.innerHTML = marked(this.text.replace(/^[^\S\n]+/gm,''));
+      },
+      highlight: function(code, lang) {
+        return this.fire('marked-js-highlight', {code: code, lang: lang}).code || code;
+      }
+    });
+  </script>
+</polymer-element>
+

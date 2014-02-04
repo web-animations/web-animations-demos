@@ -1,7 +1,6 @@
 Polymer('wat-step', {
   steps: 1,
   position: 'end',
-  timedItem: new Animation(null, null, 0),
   preset: 'custom',
   stepEasings: ['step-start', 'step-middle', 'step-end', 'steps'],
   disabled: false,
@@ -16,6 +15,10 @@ Polymer('wat-step', {
     'steps': 'updateTimingFunction',
     'position': 'updateTimingFunction',
     'timedItem.specified.easing': 'timedItemEasingChanged',
+  },
+
+  created: function() {
+    this.timedItem = new Animation(null, null, 0);
   },
   
   ready: function() {

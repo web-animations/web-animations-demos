@@ -1,6 +1,5 @@
 Polymer('wat-bezier', {
   controlPoints: [0, 0, 1, 1], // [P1x, P1y, P2x, P2y]
-  timedItem: new Animation(null, null, 0),
   preset: 'linear',
   bezierEasings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out',],
   disabled: false,
@@ -15,6 +14,10 @@ Polymer('wat-bezier', {
      
   observe: {
     'timedItem.specified.easing': 'timedItemEasingChanged',
+  },
+
+  created: function() {
+    this.timedItem = new Animation(null, null, 0);
   },
   
   ready: function() {

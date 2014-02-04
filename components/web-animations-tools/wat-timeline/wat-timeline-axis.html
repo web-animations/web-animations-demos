@@ -18,12 +18,9 @@ limitations under the License.
 
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="wat-timeline-axis" attributes="width timespan numMarker markersPerSecond minNumMarkers maxNumMarkers">
+<polymer-element name="wat-timeline-axis" attributes="width timespan numMarker minNumMarkers precision">
   <template>
   <style>
-      #svg {
-        overflow: visible;
-      }
       text {
         font-size: 0.8em;
         fill: #000000;
@@ -36,7 +33,7 @@ limitations under the License.
         stroke: black;
       }
     </style>
-    <svg id="svg" xmlns="http://www.w3.org/2000/svg" height="25px">
+    <svg xmlns="http://www.w3.org/2000/svg" height="25px">
       <g id="axis">
         <path d="M 0 24 H {{width}}"></path>
       </g>
@@ -44,13 +41,12 @@ limitations under the License.
   </template>
   <script>
     'use strict';
-
     Polymer('wat-timeline-axis', {
       width: 0,
       timespan: 1,
       numMarkers: 21,
-      markersPerSecond: 10,
-      minNumMarkers: 10,
+      precision: 2,
+      minNumMarkers: 1,
       maxNumMarkers: 50,
 
       observe: {
@@ -60,9 +56,18 @@ limitations under the License.
       },
 
       updateView: function(oldValue, newValue) {
-        this.numMarkers = Math.min(this.timespan * this.markersPerSecond, this.maxNumMarkers);
+        // Determine the number of markers to display by estimating the width of 
+        // the number displayed on top of the marker. the number of digits includes the 
+        // number of digits before the decimal point, the decimal point and the precision.
+        var numDigits = parseInt(this.timespan).toString().length + 0.5 + this.precision;
+        var markerWidth = numDigits * 10;
+        this.numMarkers = parseInt(this.width / markerWidth, 10);
+        // Rounding the number of markers to multiple(s) of 10 so that 
+        // we will have nicer numbers (such as 0.1, 0.2 instead of 0.123124 etc.)
+        if (this.timespan % 1 === 0 && this.numMarkers >= 10) {
+          this.numMarkers = parseInt(this.numMarkers / 10) * 10 + 1;
+        }
         this.numMarkers = Math.max(this.numMarkers, this.minNumMarkers);
-        this.numMarkers++;
 
         var markers = this.$.axis.querySelector('#markers');
         if(markers) {
@@ -76,7 +81,7 @@ limitations under the License.
           var text = document.createElementNS(SVGNS, 'text');
           text.setAttribute('x', textPos);
           text.setAttribute('y', 12);
-          text.textContent = value.toFixed(2);
+          text.textContent = value.toFixed(this.precision);
 
           var line = document.createElementNS(SVGNS, 'line');
           line.setAttribute('x1', linePos);
@@ -87,7 +92,7 @@ limitations under the License.
           group.appendChild(text);
           group.appendChild(line);
           return group;
-        }
+        }.bind(this);
 
         var markers = document.createElementNS(SVGNS, 'g');
         markers.setAttribute('id', 'markers');
@@ -103,9 +108,9 @@ limitations under the License.
 
           // Move the first and last label to prevent svg clipping off the text.
           if (i === 0) {
-            textPos += 11;
+            textPos += 10;
           } else if (i === this.numMarkers - 1) {
-            textPos -= 11;
+            textPos -= 10;
           }
           var marker = createMarker(linePos, textPos, timeInterval * i);
           markers.appendChild(marker);       

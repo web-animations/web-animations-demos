@@ -20,12 +20,12 @@ limitations under the License.
 <head>
   <script src="../../web-animations-js/web-animations.js"></script>
   <script src="../../platform/platform.js"></script>
-  <link rel="import" href="wat-keyframe-editor.html">
+  <link rel="import" href="wat-keyframe-inspector.html">
 </head>
 
 <body>
   <input id="test_button" type="button" value="+1">
-  <wat-keyframe-editor></wat-keyframe-editor>
+  <wat-keyframe-inspector></wat-keyframe-inspector>
   <script>
       var b = document.querySelector('#test_button');
       var timeItem = new Animation(b, [
@@ -38,8 +38,8 @@ limitations under the License.
         document.timeline.play(timeItem);
       }
 
-  	  document.addEventListener('WebComponentsReady', function() {
-        var editor = document.querySelector('wat-keyframe-editor');
+  	  document.addEventListener('polymer-ready', function() {
+        var editor = document.querySelector('wat-keyframe-inspector');
         editor.effect = timeItem.effect;
       });
   </script>

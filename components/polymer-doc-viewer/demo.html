@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <title>polymer-doc-viewer</title>
+  <style>
+    html, body {
+      font-family: Arial, sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  </style>
+  <script src="../platform/platform.js"></script>
+  <link rel="import" href="polymer-doc-viewer.html">
+</head>
+<body>
+  <input style="width: 80%; padding: 12px;" value="/bowertopia/php/git-proxy.php?sjmiles/webaudio-knob/webaudio-knob.html"><button onclick="go()">Go</button>
+  <polymer-doc-viewer style="position: absolute; top: 64px; left: 0; right: 0; bottom: 0;"></polymer-doc-viewer>
+  <script>
+    document.querySelector('polymer-doc-viewer').sources = [
+      '../polymer-ajax/polymer-ajax.html', 
+      '../polymer-collapse/polymer-collapse.html',
+      'polymer-doc-viewer.html'
+    ];
+    function go() {
+      var value = document.querySelector('input').value;
+      document.querySelector('polymer-doc-viewer').url = value;
+    }
+  </script>
+</body>
+</html>

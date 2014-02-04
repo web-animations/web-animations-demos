@@ -1,0 +1,17 @@
+{
+  "name": "polymer-ui-toggle-button",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "homepage": "https://github.com/Polymer/polymer-ui-toggle-button",
+  "_release": "40f5f2fb12",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "40f5f2fb12cb6c248a226a19d2ba195fb1aae7d2"
+  },
+  "_source": "git://github.com/Polymer/polymer-ui-toggle-button.git",
+  "_target": "master",
+  "_originalSource": "Polymer/polymer-ui-toggle-button"
+}

@@ -18,7 +18,7 @@ limitations under the License.
 <!DOCTYPE html>
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="wat-timeline-item" attributes="timedItem">
+<polymer-element name="wat-timeline-item" attributes="timedItem parentItem timeline">
   <template>
   <style>
     #group-container {
@@ -61,7 +61,11 @@ limitations under the License.
                     max-width:{{firstIterDuration * timeline.pixelsPerSecond}}px;"
             on-click="{{onSelect}}" on-dblclick="{{onFocus}}">
         <span>{{timedItem ? (timedItem.type ? timedItem.type + 'Group' : 'animation') : ''}}</span>
-        <content>
+        <template if="{{timedItem.type}}">
+          <template repeat="{{child in timedItem._children}}">
+            <wat-timeline-item parentItem="{{}}" timeline="{{timeline}}" timedItem="{{child}}"></wat-timeline-item>
+          </template>
+        </template>
       </div>
       <template repeat="{{length in iterations}}">
         <!-- FIXME: Not sure why do we need min width here but without it 
@@ -85,21 +89,8 @@ limitations under the License.
       iterStartDuration: 0,
       observer: null,
       layouting: false,
-      init: function(timeline, timedItem, parentItem) {
-        this.timeline = timeline;
-        this.timedItem = timedItem;
-        this.parentItem = parentItem;
-
+      timedItemChanged: function() {
         this.performLayout();
-        
-        // Build children.
-        if (timedItem instanceof ParGroup || timedItem instanceof SeqGroup) {
-          for (var i = 0; i < timedItem.children.length; i++) {
-            var child = document.createElement('wat-timeline-item');
-            child.init(this.timeline, timedItem.children[i], this);
-            this.appendChild(child);
-          }
-        }
 
         // When the animation is playing, toggle the class to change the style.
         // This is limited because if the player is manually adjusted then
@@ -110,7 +101,7 @@ limitations under the License.
         }
 
         // Setup the observer.
-        this.observer = new CompoundObserver(this.notifyRelayout, this);
+        this.observer = new CompoundObserver();
         this.observer.addPath(this, 'timedItem.startTime');
         this.observer.addPath(this, 'timedItem.endTime');
         this.observer.addPath(this, 'timedItem.duration');
@@ -119,7 +110,7 @@ limitations under the License.
         this.observer.addPath(this, 'timedItem.specified.playbackRate');
         this.observer.addPath(this, 'timedItem.specified.iterations');
         this.observer.addPath(this, 'timedItem.specified.iterationStart');
-        this.observer.open();
+        this.observer.open(this.notifyRelayout.bind(this));
       },
       performLayout: function() {
         var timingInput = this.timedItem.specified;

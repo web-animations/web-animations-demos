@@ -15,7 +15,6 @@
  */
 
 Polymer('wat-timeditem-inspector', {
-  timedItem: new Animation(null, null, 0),
   easing: '',
   customEasing: '',
   bezierEasings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out',
@@ -28,12 +27,16 @@ Polymer('wat-timeditem-inspector', {
     'timedItem.specified.easing': 'timedItemEasingChanged',
   },
 
+  created: function() {
+    this.timedItem = new Animation(null, null, 0);
+  },
+  
   ready: function() {
     this.easing = this.timedItem.specified.easing;
   },
 
   easingChanged: function() {
-    if (this.easing != 'custom') {
+    if (this.timedItem && this.easing != 'custom') {
       this.timedItem.specified.easing = this.easing;
     } else {
       this.customEasing = '';
@@ -45,12 +48,20 @@ Polymer('wat-timeditem-inspector', {
   },
 
   timedItemChanged: function() {
-    this.easing = this.timedItem.specified.easing;
-    this.$['wat-bezier'].timedItem = this.timedItem;
-    this.$['wat-step'].timedItem = this.timedItem;
+    if (this.timedItem) {
+      this.easing = this.timedItem.specified.easing;
+      this.$['wat-bezier'].timedItem = this.timedItem;
+      this.$['wat-step'].timedItem = this.timedItem;
+    } else {
+      this.timedItem = new Animation(null, null, 0);
+    }
   },
 
+
   timedItemEasingChanged: function() {
+    if (!this.timedItem) {
+      return;
+    }
     this.easing = this.timedItem.specified.easing;
     if (this.presetEasings.indexOf(this.timedItem.specified.easing) >= 0) {
       this.easing = this.timedItem.specified.easing;

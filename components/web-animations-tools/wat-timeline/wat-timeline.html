@@ -28,30 +28,43 @@ limitations under the License.
   <template>
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <style>
-    #timeline-container {
-      margin-top: 6px;
-      overflow: hidden;
+    :host {
+      display: flex;
+      flex-direction: column;
+    }
+    #axis {
+      /* Flex layout leave no spaces between elements therefore we add spacing in. Using padding 
+         instead of margin because the height of the scrubber line depends on the height of this 
+         component. If margin is used then margin need to be hard coded in the height of scrubber.*/
+      padding-top: 6px;
+      padding-bottom: 6px;
     }
     #back-button {
-      width: 40px;
+      display: {{viewStack.length > 0 ? 'inline-block' : 'none'}};
+      width: 32px;
     }
-    #back-button ^^ button {
-      padding: 0 3px 0 0;
+    .hidden {
+      display: none;
+    }
+    #itemContainer {
+      /* FIXME: Always display the scroll bar to prevent the situation where the axis gets
+         the updated width with the scroll bar displayed but not the timeline view. It will
+         cause alignment issue between axis and the actual timeline view. */
+      overflow-y: scroll;
+      overflow-x: hidden;
     }
   </style>
-  <div id="container">
-    <wat-button id="back-button" title="back" on-click="{{popViewStack}}">
-      <i class="fa fa-reply"></i>
-    </wat-button>
-    <wat-timeline-scrubber id="scrubber"></wat-timeline-scrubber>
-    <wat-timeline-axis id="axis"></wat-timeline-axis>
-    <div id="timeline-container">
-    </div>
-  <div>
+  <wat-button id="back-button" title="back" on-click="{{popViewStack}}">
+    <i class="fa fa-reply"></i>
+  </wat-button>
+  <wat-timeline-scrubber player="{{player}}" pixelsPerSecond="{{pixelsPerSecond}}"
+      height="{{$.itemContainer.clientHeight + $.axis.clientHeight}}">
+  </wat-timeline-scrubber>
+  <wat-timeline-axis id="axis" width="{{$.itemContainer.clientWidth}}"></wat-timeline-axis>
+  <div id="itemContainer"></div>
   </template>
   <script>
     'use strict';
-
     Polymer('wat-timeline', {
       pixelsPerSecond: 1,
       timedItem: null,
@@ -60,9 +73,6 @@ limitations under the License.
       viewStack: [],
       root: null,
       parentForRoot: null,
-      playerChanged: function() {
-        this.$.scrubber.player = this.player;
-      },
       ready: function() {
         this.parentForRoot = {};
 
@@ -89,16 +99,13 @@ limitations under the License.
         this.addEventListener('on-timeline-relayout', this.relayoutTimeline.bind(this));
       },
       updateTimeline: function(timespan) {
-        var timeline = this.$['timeline-container'];
+        var timeline = this.$.itemContainer;
         // Get the visual attributes of the timeline container so that
         // the axis and the scrubber will have the same width with it.
         var containerWidth = timeline.clientWidth; 
         var timespan = Math.max(this.timedItem.endTime - this.timedItem.startTime, 0);
         this.pixelsPerSecond = timespan === 0 ? 0 : containerWidth / timespan;
-
-        this.$.axis.width = containerWidth;
         this.$.axis.timespan = timespan;
-        this.$.scrubber.pixelsPerSecond = this.pixelsPerSecond;
 
         this.parentForRoot.playbackRate = 1;
         this.parentForRoot.firstIterDuration = timespan - Math.min(this.timedItem.specified.delay, 0);
@@ -113,21 +120,22 @@ limitations under the License.
           this.player = this.timedItem.player;
         }
 
-        // Remove all the children and rebuild the view.
-        this.$['timeline-container'].innerHTML = '';
-
+        this.$.itemContainer.innerHTML = '';
         this.updateTimeline();
 
         this.root = document.createElement('wat-timeline-item');
-        this.root.init(this, this.timedItem, this.parentForRoot);
-        this.$['timeline-container'].appendChild(this.root);
+        this.root.parentItem = this.parentForRoot;
+        this.root.timeline = this;
+        this.root.timedItem = this.timedItem;
+        this.$.itemContainer.appendChild(this.root);
+        this.selected = this.timedItem;
       },
       popViewStack: function(e) {
         var item = this.viewStack.pop();
         if (!item) {
           return;
         }
-        // Restore the item.
+
         if (item.prevSibling) {
           item.prevSibling.after(this.timedItem);
         } else {

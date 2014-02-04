@@ -1,0 +1,17 @@
+{
+  "name": "marked-js",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "homepage": "https://github.com/Polymer/marked-js",
+  "_release": "0d86591fa2",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0d86591fa2ed7bb9cfc9265a386271e0ceef2e6f"
+  },
+  "_source": "git://github.com/Polymer/marked-js.git",
+  "_target": "master",
+  "_originalSource": "Polymer/marked-js"
+}

@@ -4,7 +4,12 @@
   "dependencies": {
     "polymer": "Polymer/polymer#0.1.3",
     "polymer-selector": "Polymer/polymer-selector#master",
+    "polymer-ui-toggle-button": "Polymer/polymer-ui-toggle-button#master",
     "polymer-animation": "Polymer/polymer-animation#master",
+    "polymer-docs": "Polymer/polymer-docs#master",
+    "polymer-doc-viewer": "Polymer/polymer-doc-viewer#master",
+    "polymer-home-page": "Polymer/polymer-home-page#master",
+    "marked-js": "Polymer/marked-js#master",
     "web-animations-js": "web-animations/web-animations-js#master",
     "github-js": "michael/github#master"
   }

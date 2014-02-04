@@ -16,7 +16,7 @@
 
 "use strict";
 
-document.addEventListener('WebComponentsReady', function() {
+document.addEventListener('polymer-ready', function() {
   var anim1 = new Animation(document.querySelector('#box1'),
       {left: '500px'},
       {duration: 2.5, easing: 'ease-in'}

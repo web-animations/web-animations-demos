@@ -1,11 +1,11 @@
 {
   "name": "github-js",
   "homepage": "https://github.com/michael/github",
-  "_release": "52830179f8",
+  "_release": "5c9c83fb7f",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "52830179f8d5e4001210e50e2948329daf632f3a"
+    "commit": "5c9c83fb7f86d925f83d26dac192576c48cf12c8"
   },
   "_source": "git://github.com/michael/github.git",
   "_target": "master",

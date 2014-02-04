@@ -19,12 +19,14 @@ limitations under the License.
 
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../polymer-selector/polymer-selector.html">
+<link rel="import" href="../../polymer-ui-toggle-button/polymer-ui-toggle-button.html">
 <link rel="import" href="../wat-player-controls/wat-player-controls.html">
 <link rel="import" href="../internal/wat-ace-editor/wat-ace-editor.html">
 <link rel="import" href="../internal/wat-button/wat-button.html">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-<polymer-element name="wat-code-editor" attributes="timedItem mode">
+<polymer-element name="wat-code-editor" 
+    attributes="timedItem message mode theme showGutter tabSize useWrapMode showPrintMargin">
   <template>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="wat-code-editor.css">
@@ -42,32 +44,70 @@ limitations under the License.
         flex-flow: {{mode == 'rows' ? 'row' : 'column'}};
       }
 
-      .container > *, .container {
+      .container > *,
+      .container {
         flex-grow: 1;
         flex-basis: 0;
       }
 
+      #javascript {
+        display: flex;
+        position: relative;
+      }
+
+      #javascript wat-ace-editor {
+        flex-grow: 1;
+      }
+
+      #javascript #unsaved {
+        top: 3px;
+        left: 3px;
+        height: 3px;
+        width: 3px;
+        background-color: black;
+        border: 1px solid rgba(255,255,255,0.8);
+        border-radius: 50%;
+        position: absolute;
+        z-index: 3;
+      }
+
+      #javascript .buttons {
+        display: flex;
+        right: 20px;
+        bottom: 5px;
+        position: absolute;
+      }
+
+      #update-code,
+      #run {
+        margin: 5px;
+      }
+
+      #top-bar #message {
+        display: {{message == '' ? 'none' : 'flex'}};
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        height: 30px;
+        margin-right: 5px;
+      }
+
       [hidden] {
-        display: none;
+        display: none !important;
       }
     </style>
     
     <div id="top-bar">
+      <content select="#open-menu"></content>
       <polymer-selector selected="{{selected}}" valueattr="value" multi>
+        <div value="javascript">JavaScript</div>
         <div value="html">HTML</div>
         <div value="css">CSS</div>
-        <div value="javascript">JavaScript</div>
       </polymer-selector>
-
-      <wat-button id="toggle-button" on-click="{{toggle}}" title="Toggle Layout">
-        <i class="fa fa-th-large"></i>
-      </wat-button>
-      <wat-button on-click="{{updatePreview}}" title="Update Preview">
-        Update Preview
-      </wat-button>
-      <wat-button on-click="{{updateCode}}" title="Update Code">
-        Update Code
-      </wat-button>
+      <polymer-ui-toggle-button onCaption="ROWS" offCaption="COLUMNS" value="{{rowsMode}}">
+      </polymer-ui-toggle-button>
+      <content select="#github"></content>
+      <div id="message">{{message}}</div>
     </div>
 
     <div id="grid">
@@ -78,16 +118,33 @@ limitations under the License.
             <wat-player-controls id="player-controls"></wat-player-controls>
           </div>
         </div>
-        <wat-ace-editor id="javascript" class="paper" mode="ace/mode/javascript" 
-            value="{{javascript}}">
-        </wat-ace-editor>
+        <div id="javascript" class="paper">
+          <div id="unsaved"></div>
+          <wat-ace-editor mode="ace/mode/javascript" 
+              value="{{javascript}}" label="JavaScript" theme="{{theme}}"
+              showGutter="{{showGutter}}" tabSize="{{tabSize}}"
+              useWrapMode="{{useWrapMode}}" showPrintMargin="{{showPrintMargin}}">
+          </wat-ace-editor>
+          <div class="buttons">
+            <wat-button id="run" on-click="{{updatePreview}}" title="Update Preview">
+              Run
+            </wat-button>
+            <wat-button id="update-code" on-click="{{updateCode}}" title="Update Code">
+              Update Code
+            </wat-button>
+          </div>
+        </div>
       </div>
       <div id="container2" class="container">
         <wat-ace-editor id="html" class="paper" mode="ace/mode/html" 
-            value="{{html}}">
+            value="{{html}}" label="HTML" theme="{{theme}}"
+            showGutter="{{showGutter}}" tabSize="{{tabSize}}"
+            useWrapMode="{{useWrapMode}}" showPrintMargin="{{showPrintMargin}}">
         </wat-ace-editor>
         <wat-ace-editor id="css" class="paper" mode="ace/mode/css" 
-            value="{{css}}">
+            value="{{css}}" label="CSS" theme="{{theme}}"
+            showGutter="{{showGutter}}" tabSize="{{tabSize}}"
+            useWrapMode="{{useWrapMode}}" showPrintMargin="{{showPrintMargin}}">
         </wat-ace-editor>
       </div>
     </div>

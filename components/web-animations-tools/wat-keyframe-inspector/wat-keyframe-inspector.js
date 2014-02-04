@@ -16,7 +16,7 @@
 
 'use strict;'
 
-Polymer('wat-keyframe-editor', {
+Polymer('wat-keyframe-inspector', {
   // This is the keyframe effect object.
   effect: null,
   

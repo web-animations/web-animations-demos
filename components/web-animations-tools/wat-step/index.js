@@ -16,7 +16,7 @@
 
 "use strict";
 
-document.addEventListener('WebComponentsReady', function() {
+document.addEventListener('polymer-ready', function() {
   var linear = new Animation(document.querySelector('#box-linear'),
       {left: '500px'},
       {duration: 2.5, easing: 'linear'}

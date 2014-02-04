@@ -120,6 +120,10 @@ if (typeof WeakMap === 'undefined') {
       while (s.parentNode) {
         s = s.parentNode;
       }
+      // the owner element is expected to be a Document or ShadowRoot
+      if (s.nodeType != Node.DOCUMENT_NODE && s.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
+        s = document;
+      }
       return s;
     },
     findTarget: function(inEvent) {
@@ -259,8 +263,10 @@ if (typeof WeakMap === 'undefined') {
     // is to call initMouseEvent with a buttonArg value of -1.
     //
     // This is fixed with DOM Level 4's use of buttons
-    var buttons = inDict.buttons;
-    if (buttons === undefined) {
+    var buttons;
+    if (inDict.buttons || HAS_BUTTONS) {
+      buttons = inDict.buttons;
+    } else {
       switch (inDict.which) {
         case 1: buttons = 1; break;
         case 2: buttons = 4; break;
@@ -445,7 +451,7 @@ if (typeof WeakMap === 'undefined') {
     0,
     null,
     // DOM Level 3
-    undefined,
+    0,
     // PointerEvent
     0,
     0,
@@ -924,8 +930,13 @@ if (typeof WeakMap === 'undefined') {
   var CLICK_COUNT_TIMEOUT = 200;
   var ATTRIB = 'touch-action';
   var INSTALLER;
-  var HAS_TOUCH_ACTION = (typeof document.head.style.touchAction) === 'string';
-
+  // The presence of touch event handlers blocks scrolling, and so we must be careful to
+  // avoid adding handlers unnecessarily.  Chrome plans to add a touch-action-delay property
+  // (crbug.com/329559) to address this, and once we have that we can opt-in to a simpler
+  // handler registration mechanism.  Rather than try to predict how exactly to opt-in to
+  // that we'll just leave this disabled until there is a build of Chrome to test.
+  var HAS_TOUCH_ACTION_DELAY = false;
+  
   // handler block for native touch events
   var touchEvents = {
     scrollType: new WeakMap(),
@@ -936,14 +947,14 @@ if (typeof WeakMap === 'undefined') {
       'touchcancel'
     ],
     register: function(target) {
-      if (HAS_TOUCH_ACTION) {
+      if (HAS_TOUCH_ACTION_DELAY) {
         dispatcher.listen(target, this.events);
       } else {
         INSTALLER.enableOnSubtree(target);
       }
     },
     unregister: function(target) {
-      if (HAS_TOUCH_ACTION) {
+      if (HAS_TOUCH_ACTION_DELAY) {
         dispatcher.unlisten(target, this.events);
       } else {
         // TODO(dfreedman): is it worth it to disconnect the MO?
@@ -1231,7 +1242,7 @@ if (typeof WeakMap === 'undefined') {
     }
   };
 
-  if (!HAS_TOUCH_ACTION) {
+  if (!HAS_TOUCH_ACTION_DELAY) {
     INSTALLER = new scope.Installer(touchEvents.elementAdded, touchEvents.elementRemoved, touchEvents.elementChanged, touchEvents);
   }
 

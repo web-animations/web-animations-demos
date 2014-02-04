@@ -18,32 +18,43 @@ limitations under the License.
 
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="wat-timeline-scrubber" attributes="player pixelsPerSecond">
+<polymer-element name="wat-timeline-scrubber" attributes="player pixelsPerSecond height">
   <template>
   <style>
-    #svg {
-      width: 120%;
+    :host {
       position: absolute;
+      z-index: 1;
+    }
+    #container {
+      position: relative;
+    }
+    #circle {
+      position: absolute;
+      left: {{x - 5}}px;
+      top: 23px;
+      height: 12px;
+      width: 12px;
+      background-color: black;
+      border-radius: 50%;
+    }
+    #line {
+      position: absolute;
+      left: {{x}}px;
+      height: {{height}}px;
+      border-left:1px solid black;
     }
   </style>
-    <div id="scrubber">
-      <svg id="svg" xmlns="http://www.w3.org/2000/svg">
-        <g on-track="{{onTrack}}">
-          <circle cx="{{x}}px" cy="23px" r="6px"></circle>
-          <line x1="{{x}}px" y1="0" 
-                x2="{{x}}px" y2="100%" 
-                stroke="black">
-          </line>
-        </g>
-      </svg>
+    <div id="container">
+      <div id="circle" on-track="{{onTrack}}"></div>
+      <div id="line" on-track="{{onTrack}}"></div>
     </div>
   </template>
   <script>
     'use strict';
-
     Polymer('wat-timeline-scrubber', {
       player: null,
       x: 0,
+      height: 0,
       pixelsPerSecond: 0,
       observe: {
         'player.currentTime': 'onPlayerTimeChanged',

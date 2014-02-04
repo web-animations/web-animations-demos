@@ -21,12 +21,12 @@
     "test",
     "tests"
   ],
-  "version": "0.1.1",
-  "_release": "0.1.1",
+  "version": "0.1.4",
+  "_release": "0.1.4",
   "_resolution": {
     "type": "version",
-    "tag": "0.1.1",
-    "commit": "31ec02eb468cd5aa93f3c9abc9811ee309853b0a"
+    "tag": "0.1.4",
+    "commit": "33d7b11e94e58426b68ecf5d56e131bba2879266"
   },
   "_source": "git://github.com/components/pointerevents-polyfill.git",
   "_target": "*",

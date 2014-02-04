@@ -15,12 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<meta charset="utf-8">
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../polymer-animation/web-animations.html">
+<link rel="import" href="../internal/wat-button/wat-button.html">
 <link rel="import" href="../wat-bezier/wat-bezier.html">
 <link rel="import" href="../wat-step/wat-step.html">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-<meta charset="utf-8">
 
 <polymer-element name="wat-timeditem-inspector" attributes="timedItem">
   <template>
@@ -60,8 +61,8 @@ limitations under the License.
           </template>
           <option value="custom">custom</option>
         </select>
-        <button id="launch-button" title="Launch Easing Editor"
-            on-click="{{showEasingEditorContainer}}">…</button>
+        <wat-button id="launch-button" title="Launch Easing Editor"
+            on-click="{{showEasingEditorContainer}}">…</wat-button>
       </div>
       <div class="{{easing == 'custom' ? 'property' : 'hidden'}}">
         <label></labeL>
@@ -95,10 +96,10 @@ limitations under the License.
 
     <div id="easing-editor-container" class="hidden">
       <div>
-        <button id="back-button" on-click="{{showPropertyContainer}}" 
+        <wat-button id="back-button" on-click="{{showPropertyContainer}}" 
             title="Back">
           <i class="fa fa-reply"></i>
-        </button>
+        </wat-button>
       </div>
       <wat-bezier id="wat-bezier" class="hidden"></wat-bezier>
       <wat-step id="wat-step" class="hidden"></wat-step>

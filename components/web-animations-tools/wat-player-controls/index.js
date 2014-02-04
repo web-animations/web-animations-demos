@@ -16,7 +16,7 @@
 
 "use strict;"
 
-document.addEventListener('WebComponentsReady', function() {
+document.addEventListener('polymer-ready', function() {
   var str = "COOL!";
   var strLength = str.length;
 
