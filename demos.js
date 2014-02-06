@@ -11,6 +11,7 @@ var demos = {
   rhythm: 'Rhythm',
   starfield: 'Starfield',
   snowfall: 'Snowfall',
+  'components/web-animations-tools/wat-wat': 'wat',
   'components/web-animations-tools/wat-bezier': 'Bezier',
   'components/web-animations-tools/wat-step': 'Step',
   'components/web-animations-tools/wat-keyframe-editor': 'Keyframes',
