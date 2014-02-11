@@ -14,6 +14,8 @@ var demos = {
   'components/web-animations-tools/wat-wat': 'wat',
   'components/web-animations-tools/wat-bezier': 'Bezier',
   'components/web-animations-tools/wat-step': 'Step',
-  'components/web-animations-tools/wat-keyframe-editor': 'Keyframes',
+  'components/web-animations-tools/wat-keyframe-inspector': 'Keyframes',
+  'components/web-animations-tools/wat-tree': 'TreeView',
+  'components/web-animations-tools/wat-timeline': 'Timeline',
   'components/web-animations-tools/wat-player-controls': 'Controls',
 };
