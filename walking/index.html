@@ -2,69 +2,61 @@
 <html>
   <head>
     <title>stick-person demo</title>
+    <script src="../components/web-animations-js/web-animations.js"></script>
     <script src="../components/platform/platform.js"></script>
     <link rel="import" href="stick-person.html">
     <style>
-      #stick1 {
-        background-color: green;
-        -webkit-transform: translate(200px, 200px);
+      body {
+        margin: 0px;
+        overflow: hidden;
       }
-      #stick2 {
-        background: purple;
-        opacity: 0.5;
-        right: 60vw;
-        bottom: 200px;
-        -webkit-transform: scale(1.5);
+      #stage {
+        background: lightblue url(background.jpg) repeat-x bottom;
+        height: 100vh;
+        width: calc(100% + 80px);
+        margin-left: -40px;
       }
-      #stick3 {
-        left: 60vw;
+      #stick {
+        left: 50vw;
+        bottom: 40px;
       }
     </style>
   </head>
   <body>
-    <div>
-      <stick-person id="stick1" height="5vh" walk></stick-person>
-      <stick-person id="stick2"></stick-person>
-      <stick-person id="stick3" height="100px" walk></stick-person>
-    </div>
+    <div id="stage"></div>
+      <stick-person id="stick"></stick-person>
     <script>
-      var stick1 = document.getElementById('stick1');
-      var stick2 = document.getElementById('stick2');
-      var stick3 = document.getElementById('stick3');
-      var enlarge = true;
+      var stick = document.getElementById('stick');
+      var stage = document.getElementById('stage');
+      var stageAnim = new Animation(stage, [
+            {transform: 'translateX(-40px)', composite: 'add'}
+        ],{duration: 0.5, iterations: Infinity});
+      var stagePlayer = document.timeline.play(stageAnim);
+      stagePlayer.paused = true;
 
-      stick1.addEventListener('click', function(e) {
-        var stick = e.currentTarget;
-        stick.walk = !stick.walk;
-        if (stick.walk)
-            stick.style.background = 'green';
-        else
-            stick.style.background = 'red';
-      });
+
 
       document.addEventListener('keydown', function(e) {
-        if (e.keyCode == 39) {
-          stick2.direction = 'right';
-          stick2.walk = true;
+        if (e.keyCode == 39 || e.keyCode == 37) {
+          if (e.keyCode == 39) {
+            stick.direction = 'right';
+            stage.style.webkitTransform = "scale(1,1)";
+          }
+          else {
+            stick.direction = 'left';
+            stage.style.webkitTransform = "scale(-1,1)";
+          }
+          stick.walk = true;
+          stagePlayer.paused = false;
         }
-        else if (e.keyCode == 37) {
-          stick2.direction = 'left';
-          stick2.walk = true;
-        }
+
       });
 
       document.addEventListener('keyup', function(e) {
         if (e.keyCode == 39 || e.keyCode == 37) {
-          stick2.walk = false;
+          stick.walk = false;
+          stagePlayer.paused = true;
         }
-      });
-
-      stick3.addEventListener('click', function(e) {
-        if (enlarge)
-            stick3.height = '400px';
-        else
-            stick3.height = '100px';
-        enlarge = !enlarge;
       });
   </script>
 </body>
