@@ -1,13 +1,14 @@
 window.addEventListener('WebComponentsReady', function() {
   var stick = document.getElementById('stick');
   var stage = document.getElementById('stage');
+  var height = 300;
+  stick.height = height + 'px';
+
   var stageAnim = new Animation(stage, [
         {transform: 'translateX(-40px)', composite: 'add'}
     ], {duration: 0.5, iterations: Infinity});
   var stagePlayer = document.timeline.play(stageAnim);
   stagePlayer.paused = true;
-  var height = 300;
-  stick.height = height + 'px';
 
   document.addEventListener('keydown', function(e) {
     if (e.keyCode == 39 || e.keyCode == 37) {
@@ -39,5 +40,10 @@ window.addEventListener('WebComponentsReady', function() {
       stick.walk = false;
       stagePlayer.paused = true;
     }
+  });
+
+  stick.addEventListener('click', function() {
+    var randomHexColour = (Math.floor(Math.random() * 0xffffff)).toString(16);
+    stick.style.backgroundColor = '#' + randomHexColour;
   });
 });
