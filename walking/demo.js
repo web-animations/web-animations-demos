@@ -1,6 +1,10 @@
 window.addEventListener('WebComponentsReady', function() {
   var stick = document.getElementById('stick');
   var stage = document.getElementById('stage');
+  var rightArrowKey = 39;
+  var leftArrowKey = 37;
+  var upArrowKey = 38;
+  var downArrowKey = 40;
   var height = 300;
   stick.height = height + 'px';
 
@@ -11,8 +15,8 @@ window.addEventListener('WebComponentsReady', function() {
   stagePlayer.paused = true;
 
   document.addEventListener('keydown', function(e) {
-    if (e.keyCode == 39 || e.keyCode == 37) {
-      if (e.keyCode == 39) {
+    if (e.keyCode == rightArrowKey || e.keyCode == leftArrowKey) {
+      if (e.keyCode == rightArrowKey) {
         stick.direction = 'right';
         stage.style.webkitTransform = 'scale(1,1)';
       }
@@ -23,13 +27,13 @@ window.addEventListener('WebComponentsReady', function() {
       stick.walk = true;
       stagePlayer.paused = false;
     }
-    else if (e.keyCode == 38) {
+    else if (e.keyCode == upArrowKey) {
       height *= 1.01;
       stick.height = height + 'px';
       //TODO: Make the speed of the background animation change with
       //      the height of the stick person
     }
-    else if (e.keyCode == 40) {
+    else if (e.keyCode == downArrowKey) {
       height /= 1.01;
       stick.height = height + 'px';
     }
