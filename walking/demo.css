@@ -2,12 +2,39 @@
   margin: 0px;
   overflow: hidden;
 }
+
+#instructions {
+  background-color: #72B56E;
+  border: solid #075A30;
+  border-radius: 30px;
+  color: #075A30;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 1.5em;
+  height: 180px;
+  left: 50%;
+  margin-left: -125px;
+  margin-top: 50px;
+  position: absolute;
+  top: 0px;
+  width: 250px;
+}
+
+#instructions img {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#instructions span {
+  margin-left: 10px;
+}
+
 #stage {
-  background: lightblue url(background.jpg) repeat-x bottom;
+  background: lightblue url(images/background.jpg) repeat-x bottom;
   height: 100vh;
   width: calc(100% + 80px);
   margin-left: -40px;
 }
+
 #stick {
   left: 50vw;
   bottom: 40px;
