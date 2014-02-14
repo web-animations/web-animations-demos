@@ -1,13 +1,13 @@
 :host {
-  position: absolute;
   background-color: black;
+  position: absolute;
   visibility: hidden;
 }
 #bruce {
-  top: inherit;
   bottom: inherit;
   left: inherit;
   right: inherit;
+  top: inherit;
   visibility: hidden;
 }
 div {
@@ -17,24 +17,24 @@ div {
   position: absolute;
 }
 #head {
+  border-radius: 50%;
   height: 15%;
-  width: 1250%;
   /* The margin-left properties move the body parts left to the extent
   of half of their width, making the overall css "left" property correspond
   to the center of the stick-person rather than the left of the head */
   margin-left: -625%;
-  border-radius: 50%;
   visibility: visible;
+  width: 1250%;
 }
 #body {
-  top: 15%;
   height: 85%;
-  width: 100%;
   min-width: 1px;
+  top: 15%;
+  width: 100%;
 }
 #body div {
-  width: 100%;
   -webkit-transform-origin: top;
+  width: 100%;
 }
 #body > div {
   margin-left: -50%;
@@ -44,28 +44,28 @@ div {
   height: 48%;
 }
 .arm {
-  top: 9%;
   height: 24%;
+  top: 9%;
 }
 .forearm {
-  top: 100%;
   height: 107%;
+  top: 100%;
 }
 .leg {
-  top: 48%;
   height: 26%;
+  top: 48%;
 }
 .shin {
-  top: 100%;
   height: 100%;
+  top: 100%;
 }
 .foot {
-  top: 100%;
   height: 33%;
+  top: 100%;
 }
 .joint {
-  top: 100%;
-  margin-top: -50%;
-  height: 5%;
   border-radius: 50%;
+  height: 5%;
+  margin-top: -50%;
+  top: 100%;
 }
