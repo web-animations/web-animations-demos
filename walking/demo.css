@@ -1,0 +1,14 @@
+ body {
+  margin: 0px;
+  overflow: hidden;
+}
+#stage {
+  background: lightblue url(background.jpg) repeat-x bottom;
+  height: 100vh;
+  width: calc(100% + 80px);
+  margin-left: -40px;
+}
+#stick {
+  left: 50vw;
+  bottom: 40px;
+}
