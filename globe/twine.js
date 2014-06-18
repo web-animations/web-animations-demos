@@ -42,8 +42,6 @@ twine = function(context, timing, duration) {
   if (timing.delay)
     timing.startDelay = timing.delay;
 
-  console.log(timing, duration);
-
   var anim = new Animation(null, onsample, timing);
   anim.oniteration = timing.oniteration;
   anim.onstart = timing.onstart;
