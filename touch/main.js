@@ -55,7 +55,7 @@ function onFirstTouchStart(e) {
     visual.remove();
   });
   visuals = [];
-  group = new ParGroup([], {direction: 'alternate', iterations: Infinity});
+  group = new AnimationGroup([], {direction: 'alternate', iterations: Infinity});
   if (player) {
     player.source = null;
   }
@@ -108,9 +108,9 @@ function onTouchEnd(e) {
       visuals.push(visual);
       visualParent.appendChild(visual);
     }
-    var durationS = duration / 1000;
-    var startTimeS = startTime / 1000;
-    group.append(new ParGroup([
+    var durationS = duration
+    var startTimeS = startTime;
+    group.append(new AnimationGroup([
       new Animation(visual, visible, {duration: durationS, fill: 'none'}),
       new Animation(visual, fadeOut, {duration: fadeTime, delay: durationS - fadeTime, fill: 'none'}),
       new Animation(visual, fadeIn, {duration: fadeTime, fill: 'none'}),
