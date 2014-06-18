@@ -353,7 +353,6 @@ var currentPlayer = document.timeline.play(timeline);
 currentPlayer.playbackRate = 0;
 
 document.onkeydown = function (event) {
-  
   var direction;
   if (event.keyCode == 39 && state < numPathSegments) {
     direction = 1;
@@ -379,7 +378,6 @@ document.onkeydown = function (event) {
   currentPlayer.playbackRate = 1;
 
   state += direction;
-
 }
 
 </script>
