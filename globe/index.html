@@ -59,26 +59,26 @@ limitations under the License.
         x: Math.PI * 3 / 2,
         y: Math.PI / 6.0,
         distance: 50000,
-        dwell : 5,
+        dwell : 5000,
 
         last : function() {
           console.log('last');
-          twine(stage, { onend: stage.start }, 2).start();
-          stage.dwell = 1 + Math.random() * 3;
+          twine(stage, { onend: stage.start }, 2000).start();
+          stage.dwell = 1000 + Math.random() * 3000;
         },
 
         right : function() {
           console.log('right');
           var lat = -33 / 180 * Math.PI;
           var lon = 151.559 / 180 * Math.PI - Math.PI / 2;
-          twine(stage, { delay: 2, to: { x: lon, y: lat, distance: 900 }, onupdate: easing, onend: stage.last }, 2).start();
+          twine(stage, { delay: 2, to: { x: lon, y: lat, distance: 900 }, onupdate: easing, onend: stage.last }, 2000).start();
         },
 
         left : function() {
           console.log('left');
           var lat = 47 / 180 * Math.PI;
           var lon = -122 / 180 * Math.PI - Math.PI / 2;
-          twine(stage, { delay: 2, to: { x: lon, y: lat, distance: 700 }, onupdate: easing, onend: stage.right }, 2).start();
+          twine(stage, { delay: 2, to: { x: lon, y: lat, distance: 700 }, onupdate: easing, onend: stage.right }, 2000).start();
         },
 
         next : function() {
@@ -86,7 +86,7 @@ limitations under the License.
           rotation.stop();
           var lat = 54 / 180 * Math.PI;
           var lon = -0.137 / 180 * Math.PI - Math.PI / 2;
-          twine(stage, { delay: 0.5, to: { x: lon, y: lat, distance: 500 }, easing: "cubic-bezier(.12,-0.34,.48,1)", onend: stage.left }, 2).start();
+          twine(stage, { delay: 0.5, to: { x: lon, y: lat, distance: 500 }, easing: "cubic-bezier(.12,-0.34,.48,1)", onend: stage.left }, 2000).start();
         },
 
         first : function() {
@@ -96,7 +96,7 @@ limitations under the License.
 
         start : function() {
           console.log('start');
-          rotation = twine(stage, { to : { x: -Math.PI * 5 } }, stage.dwell + 2).start();
+          rotation = twine(stage, { to : { x: -Math.PI * 5 } }, stage.dwell + 2000).start();
           stage.first();
         },
       };

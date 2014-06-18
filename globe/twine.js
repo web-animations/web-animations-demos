@@ -35,13 +35,16 @@
  */
 
 twine = function(context, timing, duration) {
-  (timing = timing || {}).iterationDuration = duration || "auto";
+  (timing = timing || {});
+  timing.duration = duration || "auto";
   if (timing.easing)
     timing.timingFunction = timing.easing;
   if (timing.delay)
     timing.startDelay = timing.delay;
 
-  var anim = new Animation(context, { sample: onsample }, timing);
+  console.log(timing, duration);
+
+  var anim = new Animation(null, onsample, timing);
   anim.oniteration = timing.oniteration;
   anim.onstart = timing.onstart;
   anim.onend = timing.onend;
@@ -59,10 +62,10 @@ twine = function(context, timing, duration) {
     }; return document.timeline.play(anim), anim;
   };
 
-  function onsample(fraction, iteration, context) {
+  function onsample(fraction) {
     function customize(fraction) { return { ease: fraction } };
     if (typeof timing.onupdate === 'function')
-      fraction = customize(timing.onupdate(fraction, iteration, context)).ease || fraction;
+      fraction = customize(timing.onupdate(fraction, 0, context)).ease || fraction;
     for (property in anim._valuesDelta)
       context[property] = anim._valuesStart[property] + anim._valuesDelta[property] * fraction;
   }
