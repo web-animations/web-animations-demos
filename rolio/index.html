@@ -357,9 +357,7 @@ document.onkeydown = function (event) {
   var direction;
   if (event.keyCode == 39 && state < numPathSegments) {
     direction = 1;
-    console.log('right')
   } else if (event.keyCode == 37 && state > 0) {
-    console.log('left')
     direction = -1;
   } else {
     direction = 0;
@@ -381,8 +379,6 @@ document.onkeydown = function (event) {
   currentPlayer.playbackRate = 1;
 
   state += direction;
-
-  console.log(offsetTime, state, isPlaying)
 
 }
 
