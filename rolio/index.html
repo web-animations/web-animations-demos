@@ -16,31 +16,31 @@ limitations under the License.
 --> 
 <!DOCTYPE html>
 <style>
-body {
-  margin: 0;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-}
+  body {
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
 
-canvas {
-  position: absolute;
-  top: -webkit-calc(100% - 400px);
-}
-
+  canvas {
+    position: absolute;
+    top: -webkit-calc(100% - 400px);
+  }
 </style>
+
 <svg xmlns='http://www.w3.org/2000/svg' version='1.1' style='width: 100%; height: 100%;' viewBox='0 0 800 800'>
-<defs id='defs'>
-</defs>
-<g transform='translate(400, 400) scale(-1, -1)'>
-  <g id='screenPanel'>
-    <g id='contentsPanel' transform='scale(-1, -1)'>
-      <path id='animPath' 
-            stroke='gray' stroke-width='2px' fill='#A99' transform='translate(0, 21)'/>
-      <image id='cursor' x='-25' y='-25' width='50' height='50' xlink:href='ball.png'/>
+  <defs id='defs'>
+  </defs>
+  <g transform='translate(400, 400) scale(-1, -1)'>
+    <g id='screenPanel'>
+      <g id='contentsPanel' transform='scale(-1, -1)'>
+        <path id='animPath' 
+              stroke='gray' stroke-width='2px' fill='#A99' transform='translate(0, 21)'/>
+        <image id='cursor' x='-25' y='-25' width='50' height='50' xlink:href='ball.png'/>
+      </g>
     </g>
   </g>
-</g>
 </svg>
 
 <script src='web-animations.js'></script>
@@ -117,9 +117,9 @@ var state = 0;
 
 // Constructs a path animation for target from the generated path segments.
 function makePathAnimation(target) {
-  return new SeqGroup(pathSegments.map(function(data) {
-    return new Animation(target, new PathAnimationEffect('m 0 0 ' + data, 'none', 0, 'add'), 
-      {duration: 1 / numPathSegments, easing: 'paced'});
+  return new AnimationSequence(pathSegments.map(function(data) {
+    return new Animation(target, new MotionPathEffect('m 0 0 ' + data, 'none', 0, 'add'), 
+      {duration: 1*1000 / numPathSegments, easing: 'paced', fill: 'forwards'});
   }));
 }
 
@@ -129,8 +129,9 @@ var targetAnimation = makePathAnimation(cursor);
 var screenAnimation = makePathAnimation(screenPanel);
 var spinner = new Animation(cursor, [{transform: 'rotate(0deg)', composite: 'add'},
                                      {transform: 'rotate(1800deg)', composite: 'add'}],
-                            1);
-var timeline = new ParGroup([targetAnimation, screenAnimation, spinner]);
+                            1000);
+var timeline = new AnimationGroup([targetAnimation, screenAnimation, spinner]);
+
 
 // Generates the floating spheres.
 // Randomly chooses path segment terminus and position, but
@@ -174,7 +175,7 @@ for (var i = 0; i < numFloaters; i++) {
     var fits = true;
     for (var j = 0; j < exclusionRects[dotPathIndex].length; j++) {
       var er = exclusionRects[dotPathIndex][j];
-      if (x + radius > er[0] && x - radius < er[2] && y + radius > er[1] && y - radius < er[3]) {
+      if (x + radius > er[0] && x - radius < er[2] && y + radius > er[1] && y - radius < er[3]){
         fits = false;
         break;
       }
@@ -203,7 +204,7 @@ for (var i = 0; i < numFloaters; i++) {
   var parallaxAnimation = new Animation(dot, [
       {cx: rightmostParallax, composite: 'add'},
       {cx: leftmostParallax, composite: 'add'}
-    ], 1);
+    ], 1000);
   timeline.append(parallaxAnimation);
 
   var shadowX = x + 4 + zIndex/2;
@@ -246,7 +247,7 @@ for (var i = 0; i < numFloaters; i++) {
   var shadowAnimation = new Animation(shadow, [
       {cx: rightmostParallax * 1.25, composite: 'add'},
       {cx: leftmostParallax * 1.25, composite: 'add'}
-    ], 1);
+    ], 1000);
   timeline.append(shadowAnimation);
 }
 
@@ -293,6 +294,7 @@ function lookupInterp(approximation, t) {
   }
 
   var fst = 0;
+
   while (fst != 100 && t > approximation[fst][0]) {
     fst += 1;
   }
@@ -309,7 +311,6 @@ function updateBezierPoints(t) {
   var interp = result[0];
   var t_in = result[1];
   var t_out = result[2];
-
   // Splits bezier at (t_in, t_out) and uses second half as 
   // initial velocity of new control bezier.
   var cdx = (1 - cx) * interp + cx;
@@ -338,8 +339,9 @@ function makeSlice(animation, start, end) {
     start = tmp;
   }
 
-  var group = new ParGroup([
-    new ParGroup([timeline], 
+
+  var group = new AnimationGroup([
+    new AnimationGroup([timeline], 
         {iterationStart: start, iterations: end - start, 
         playbackRate: playbackRate})
     ], {easing: 'cubic-bezier(' + bx + ', ' + by + ', ' + cx + ', ' + cy + ')'});
@@ -351,28 +353,30 @@ var currentPlayer = document.timeline.play(timeline);
 currentPlayer.playbackRate = 0;
 
 document.onkeydown = function (event) {
+  
   var direction;
   if (event.keyCode == 39 && state < numPathSegments) {
     direction = 1;
   } else if (event.keyCode == 37 && state > 0) {
     direction = -1;
   } else {
+    direction = 0;
     return;
   }
 
   var startTime = timeline.localTime || 0;
   var isPlaying = currentPlayer && currentPlayer.playbackRate > 0 && currentPlayer.source.localTime < currentPlayer.source.endTime;
   if (isPlaying) {
-    updateBezierPoints(currentPlayer.source.localTime);
+    updateBezierPoints(currentPlayer.source.localTime/1000);
   } else {
     initBezierPoints();
   }
-  var anim = makeSlice(timeline, startTime, (state + direction) / numPathSegments);
+  var anim = makeSlice(timeline, startTime / 1000, (state + direction) / numPathSegments);
 
   offsetTime += currentPlayer.currentTime;
+  currentPlayer.source = anim;
   currentPlayer.currentTime = 0;
   currentPlayer.playbackRate = 1;
-  currentPlayer.source = anim;
 
   state += direction;
 }
