@@ -434,7 +434,7 @@
         parameters.appendChild(peakRatioSlider.domContent());
         parameters.appendChild(warning);
 
-        //please note here that the specs implementation of an animation constructor and the actual definition don't coincide...
+        // FIXME: Update web-animations.js to match EffectCallback spec: function(timeFraction, animation, previousTimeFraction) -> function(timeFraction, target, animation)
         var anim = new Animation({easing: timingFunction, slider: slider}, function(timeFraction, target, currentIteration) {
           update(target, timeFraction);
         }, {duration: 7000, iterations: Infinity});
