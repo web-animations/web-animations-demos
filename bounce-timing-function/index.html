@@ -441,7 +441,6 @@
         document.timeline.play(anim);
       }
       function togglePause(button) {
-        document.timeline.pause();
         var player = document.timeline.getCurrentPlayers()[0];
         player.paused = !player.paused;
         button.innerText = player.paused ? 'Play' : 'Pause';
