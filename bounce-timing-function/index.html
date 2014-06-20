@@ -12,6 +12,15 @@
       // - Encode parameters in URL, like cubic-bezier.com
       // - Allow scrubbing of input time
 
+      var createObject = function(proto, obj) {
+        var newObject = Object.create(proto);
+        Object.getOwnPropertyNames(obj).forEach(function(name) {
+          Object.defineProperty(
+              newObject, name, Object.getOwnPropertyDescriptor(obj, name));
+        });
+        return newObject;
+      };
+
       var Range = function(min, max) {
         this._min = min;
         this._max = max;
@@ -388,14 +397,13 @@
         var context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
         var rect = new Rect(20, 20, 400, 800);
-        target.timingFunction.plot(timeFraction, context, rect);
-        target.slider.setPosition(new Range(-1, 1).fraction(target.timingFunction._bounce.evaluate(timeFraction)));
+        target.easing.plot(timeFraction, context, rect);
+        target.slider.setPosition(new Range(-1, 1).fraction(target.easing._bounce.evaluate(timeFraction)));
       }
 
       function go() {
         var overshoot = 0.5;
         var rebounds = 5.0;
-
         var timingFunction = new BounceTimingFunction(overshoot, rebounds);
         var slider = new TargetSlider(800, 40);
         document.getElementById('wrapper').appendChild(slider.domContent());
@@ -426,17 +434,22 @@
         parameters.appendChild(peakRatioSlider.domContent());
         parameters.appendChild(warning);
 
-        document.timeline.play(new Animation({timingFunction: timingFunction, slider: slider}, {sample: function(timeFraction, currentIteration, target) {
-          update(target, timeFraction);
-        }}, {iterationDuration: 7.0, iterationCount: Infinity}));
-
+        // FIXME: Update web-animations.js to match EffectCallback spec: function(timeFraction, animation, previousTimeFraction) -> function(timeFraction, target, animation)
+        document.timeline.play(new Animation({easing: timingFunction, slider: slider}, function(timeFraction, animation) {
+          update(animation.target, timeFraction);
+        }, {duration: 7000, iterations: Infinity}));
       }
+
       function togglePause(button) {
         var player = document.timeline.getCurrentPlayers()[0];
-        player.paused = !player.paused;
+        if (player.paused)
+          player.play();
+        else
+          player.pause();          
         button.innerText = player.paused ? 'Play' : 'Pause';
       }
     </script>
+    
     <style type="text/css">
       body {
         margin: 0px;
