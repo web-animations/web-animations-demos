@@ -439,10 +439,13 @@
           update(animation.target, timeFraction);
         }, {duration: 7000, iterations: Infinity}));
       }
-      
+
       function togglePause(button) {
         var player = document.timeline.getCurrentPlayers()[0];
-        player.paused = !player.paused;
+        if (player.paused)
+          player.play();
+        else
+          player.pause();          
         button.innerText = player.paused ? 'Play' : 'Pause';
       }
     </script>
