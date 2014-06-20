@@ -397,8 +397,8 @@
         var context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
         var rect = new Rect(20, 20, 400, 800);
-        target._target.easing.plot(timeFraction, context, rect);
-        target._target.slider.setPosition(new Range(-1, 1).fraction(target._target.easing._bounce.evaluate(timeFraction)));
+        target.easing.plot(timeFraction, context, rect);
+        target.slider.setPosition(new Range(-1, 1).fraction(target.easing._bounce.evaluate(timeFraction)));
       }
 
       function go() {
@@ -435,8 +435,8 @@
         parameters.appendChild(warning);
 
         // FIXME: Update web-animations.js to match EffectCallback spec: function(timeFraction, animation, previousTimeFraction) -> function(timeFraction, target, animation)
-        var anim = new Animation({easing: timingFunction, slider: slider}, function(timeFraction, target, currentIteration) {
-          update(target, timeFraction);
+        var anim = new Animation({easing: timingFunction, slider: slider}, function(timeFraction, target) {
+          update(anim.target, timeFraction);
         }, {duration: 7000, iterations: Infinity});
         document.timeline.play(anim);
       }
