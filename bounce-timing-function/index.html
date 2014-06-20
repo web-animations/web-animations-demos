@@ -435,11 +435,11 @@
         parameters.appendChild(warning);
 
         // FIXME: Update web-animations.js to match EffectCallback spec: function(timeFraction, animation, previousTimeFraction) -> function(timeFraction, target, animation)
-        var anim = new Animation({easing: timingFunction, slider: slider}, function(timeFraction, target) {
-          update(anim.target, timeFraction);
-        }, {duration: 7000, iterations: Infinity});
-        document.timeline.play(anim);
+        document.timeline.play(new Animation({easing: timingFunction, slider: slider}, function(timeFraction, animation) {
+          update(animation.target, timeFraction);
+        }, {duration: 7000, iterations: Infinity}));
       }
+      
       function togglePause(button) {
         var player = document.timeline.getCurrentPlayers()[0];
         player.paused = !player.paused;
