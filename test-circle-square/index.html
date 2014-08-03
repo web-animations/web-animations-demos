@@ -84,45 +84,45 @@ limitations under the License.
     <script>
       "use strict";
       var around1 = new Animation(document.querySelector("#a"), {left: "450px"},
-          2);
+          {duration: 2000, fill: 'forwards'});
       var around2 = new Animation(document.querySelector("#a"), [
         {"backgroundColor": "lightsteelblue"},
         {"backgroundColor": "red"},
         {"backgroundColor": "green"},
         {"backgroundColor": "lightsteelblue"},
-      ], 8);
+      ], 8000);
       var around3 = new Animation(document.querySelector("#a"), {top: "250px"},
-          {delay: 2, duration: 2});
+          {delay: 2000, duration: 2000, fill: 'forwards'});
       var around4 = new Animation(document.querySelector("#a"), {left: "0px"},
-          {delay: 4, duration: 2});
+          {delay: 4000, duration: 2000, fill: 'forwards'});
       var around5 = new Animation(document.querySelector("#a"), {top: "0px"},
-          {delay: 6, duration: 2});
-      var blueBallMove = new ParGroup(
+          {delay: 6000, duration: 2000, fill: 'forwards'});
+      var blueBallMove = new AnimationGroup(
           [around1, around2, around3, around4, around5],
           {iterations: 2, direction: "alternate"});
 
-      var redBallMove = new SeqGroup([
-        new Animation(document.querySelector("#b"), {top: "0px", left: "0px"}, 2),
-        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2),
-        new Animation(document.querySelector("#b"), {top: "0px", left: "450px"}, 2),
-        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2),
-        new Animation(document.querySelector("#b"), {top: "250px", left: "450px"}, 2),
-        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2),
-        new Animation(document.querySelector("#b"), {top: "250px", left: "0px"}, 2),
-        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2),
+      var redBallMove = new AnimationSequence([
+        new Animation(document.querySelector("#b"), {top: "0px", left: "0px"}, 2000),
+        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2000),
+        new Animation(document.querySelector("#b"), {top: "0px", left: "450px"}, 2000),
+        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2000),
+        new Animation(document.querySelector("#b"), {top: "250px", left: "450px"}, 2000),
+        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2000),
+        new Animation(document.querySelector("#b"), {top: "250px", left: "0px"}, 2000),
+        new Animation(document.querySelector("#b"), {top: "125px", left: "225px"}, 2000),
       ]);
 
-      document.timeline.play(new ParGroup([blueBallMove, redBallMove]));
+      document.timeline.play(new AnimationGroup([blueBallMove, redBallMove]));
 
-      var transformGroup = new ParGroup([
+      var transformGroup = new AnimationGroup([
         new Animation(document.querySelector("#blockA"), [
           {transform: "translate(0px, 0px) rotate(0deg)"},
           {transform: "translate(-450px, 0px) rotate(180deg)"}
-        ] , 4),
+        ] , 4000),
         new Animation(document.querySelector("#blockB"), [
           {transform: "translate(0px, 0px) rotate(0deg)"},
           {transform: "translate(450px, 0px) rotate(270deg)"}
-        ] , 4),
+        ] , 4000),
       ]);
       document.timeline.play(transformGroup);
     </script>

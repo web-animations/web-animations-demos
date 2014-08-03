@@ -10,7 +10,7 @@ window.addEventListener('WebComponentsReady', function() {
 
   var stageAnim = new Animation(stage, [
         {transform: 'translateX(-40px)', composite: 'add'}
-    ], {duration: 0.5, iterations: Infinity});
+    ], {duration: 500, iterations: Infinity});
   var stagePlayer = document.timeline.play(stageAnim);
   stagePlayer.paused = true;
 
