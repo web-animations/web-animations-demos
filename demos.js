@@ -1,16 +1,22 @@
 var demos = {
   rolio: 'Rolio',
   globe: 'Globe',
-  countries: 'Countries',
+  // FIXME: Unknown. Some of the map doesn't render.
+  // countries: 'Countries',
   touch: 'Touch',
-  curtains: 'Curtains',
+  // FIXME: Unknown. Nothing happens.
+  // curtains: 'Curtains',
   'test-circle-square': 'Shapes',
+  // FIXME: Update timing to use milliseconds. Transform iterpolation error.
   walking: 'Walking',
   'bounce-timing-function': 'Bounce',
-  breakout: 'Breakout',
-  rhythm: 'Rhythm',
+  // FIXME: Unknown. Doesn't load any blocks.
+  //breakout: 'Breakout',
+  // FIXME: Polymer issue?
+  // rhythm: 'Rhythm',
   starfield: 'Starfield',
-  snowfall: 'Snowfall',
+  // FIXME: Polymer issues.
+  // snowfall: 'Snowfall',
   'components/web-animations-tools/wat-wat': 'wat',
   'components/web-animations-tools/wat-bezier': 'Bezier',
   'components/web-animations-tools/wat-step': 'Step',

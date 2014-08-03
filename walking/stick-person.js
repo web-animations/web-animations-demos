@@ -15,7 +15,7 @@ Polymer('stick-person', {
   },
 
   prepareAnim: function() {
-    var anim = new ParGroup([
+    var anim = new AnimationGroup([
       new Animation(this.$.bruce, [
         {transform: 'translateY(3%)', composite: 'add'},
         {transform: 'translateY(0%)', composite: 'add'}

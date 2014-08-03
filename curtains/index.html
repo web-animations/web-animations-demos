@@ -55,13 +55,13 @@ var rightCurtain = document.getElementById("rightCurtain");
 var duration = 2.0;
 
 video.addEventListener("loadeddata", function() {
-  document.timeline.play(new SeqGroup([
-    new ParGroup([
+  document.timeline.play(new AnimationSequence([
+    new AnimationGroup([
       new Animation(leftCurtain, {width: "0px"}, {duration: duration}),
       new Animation(rightCurtain, {width: "0px"}, {duration: duration}),
     ]),
     new MediaReference(video, {delay: -duration}),
-    new ParGroup([
+    new AnimationGroup([
       new Animation(leftCurtain, {width: "50%"}, {duration: duration}),
       new Animation(rightCurtain, {width: "50%"}, {duration: duration}),
     ], {delay: -duration}),

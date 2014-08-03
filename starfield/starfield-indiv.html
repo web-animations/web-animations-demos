@@ -54,13 +54,13 @@
   for (var i = 0; i < starCount; ++i) {
     var ypos = Math.round(Math.random() * height);
     var star = document.createElement('div');
-    var speed = Math.random() * maxTime + 1;
+    var speed = 1000 * (Math.random() * maxTime + 1);
     star.setAttribute('class', 'star' + (3 - Math.floor(speed / 8)));
     star.style.backgroundColor = 'white';//rgb(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ')';
     universe.appendChild(star);
     stars.push(star);
     starGroup.push(new Animation(stars[i], [{transform: 'translate3d(' + width + ', ' + ypos + ', 0)'}, {transform: 'translate3d(-' + Math.random() * 256 + 'px, ' + ypos + ', 0)'}], {delay: Math.random() * -speed, duration: speed, iterations: 1000}));
   }
-  var anim = new ParGroup(starGroup, {iterations: Infinity});
+  var anim = new AnimationGroup(starGroup, {iterations: Infinity});
   document.timeline.play(anim);
 </script>

@@ -50,7 +50,7 @@ function setUp() {
   screen.style.height = field.clientHeight / 2;
   screen.style.width = field.clientWidth;
 
-  return new ParGroup([
+  return new AnimationGroup([
       transformAnimation(ball, ['translate(' + ball['left'] + 'px, ' +
                          ball['top'] + 'px)'], 0),
       gridAnimation()
@@ -94,7 +94,7 @@ function gridAnimation() {
   var blocks = Array.prototype.slice.call(
       document.querySelectorAll('.block.active'));
 
-  var fadeIn = new SeqGroup([]);
+  var fadeIn = new AnimationSequence([]);
 
   while (blocks.length) {
     var randBlock = Math.floor(Math.random() * blocks.length);
@@ -162,11 +162,11 @@ function playAnimation(ball, paddle) {
   var i = 0;
   var currBounceAnim = 0;
   var allBounceAnims = [];
-  var bounceAnim = new SeqGroup([]);
+  var bounceAnim = new AnimationSequence([]);
 
   while (document.querySelectorAll('.block.active').length &&
       i++ < MAX_BOUNCES) {
-    var parAnim = new ParGroup([]);
+    var parAnim = new AnimationGroup([]);
     var nextPos = getNextBallMovement(ball, paddle, velocity);
     updatePosition(ball, nextPos['x'], nextPos['y']);
 
@@ -186,7 +186,7 @@ function playAnimation(ball, paddle) {
       bounceAnim.addEventListener('end',
           checkCollision.bind(null, getCoords(ball), paddle, false));
       allBounceAnims.push(bounceAnim);
-      bounceAnim = new SeqGroup([]);
+      bounceAnim = new AnimationSequence([]);
     }
 
     velocity = getVelocity(velocity, nextPos['invert']);
@@ -446,7 +446,7 @@ function cleanUp() {
  * Sets up and returns the entire animation of the breakout game.
  */
 function playGame() {
-  return new SeqGroup([setUp(), playAnimation(document.getElementById('ball'),
+  return new AnimationSequence([setUp(), playAnimation(document.getElementById('ball'),
         document.getElementById('paddle'))]);
 }
 
