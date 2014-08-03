@@ -43,9 +43,6 @@ twine = function(context, timing, duration) {
     timing.startDelay = timing.delay;
 
   var anim = new Animation(null, onsample, timing);
-  anim.oniteration = timing.oniteration;
-  anim.onstart = timing.onstart;
-  anim.onend = timing.onend;
 
   anim._valuesEnd = {};
   for (var property in timing.to)
@@ -57,7 +54,9 @@ twine = function(context, timing, duration) {
     for (var property in anim._valuesEnd) {
       anim._valuesStart[property] = context[property];
       anim._valuesDelta[property] = anim._valuesEnd[property] - context[property];
-    }; return document.timeline.play(anim), anim;
+    }; 
+    var player =  document.timeline.play(anim);
+    return player, anim;
   };
 
   function onsample(fraction) {
