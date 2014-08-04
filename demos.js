@@ -23,7 +23,10 @@ var demos = [
   // countries: 'Countries',
   {
     name: 'Touch',
-    description: "Note: This demo isn't interactive on a mobile device.",
+    description: [
+        "Records touch events then plays them back as a keyframe animation.",
+        "Note: Requires a touch screen.",
+        ],
   },
   {name: 'Walking'},
   {
