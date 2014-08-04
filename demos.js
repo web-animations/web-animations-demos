@@ -12,8 +12,7 @@ var demos = {
   'bounce-timing-function': 'Bounce',
   // FIXME: Unknown. Doesn't load any blocks.
   //breakout: 'Breakout',
-  // FIXME: Polymer issue?
-  // rhythm: 'Rhythm',
+  rhythm: 'Rhythm',
   starfield: 'Starfield',
   snowfall: 'Snowfall',
   'components/web-animations-tools/wat-wat': 'wat',

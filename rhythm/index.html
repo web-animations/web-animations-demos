@@ -104,7 +104,7 @@ function spawnNote() {
   note.color = column.children[0].color;
   note.columnIndex = columnIndex;
   note.column = column;
-  note.dropTime = Math.max(2 - 0.1 * difficulty, 0.1);
+  note.dropTime = Math.max(2 - 0.1 * difficulty, 0.1) * 1000;
 
   column.appendChild(note);
   note.fall();
@@ -166,7 +166,7 @@ document.addEventListener('keyup', function (e) {
   }
 });
 
-document.addEventListener('WebComponentsReady', function() {
+document.addEventListener('polymer-ready', function() {
   startGame();
 });
 </script>
