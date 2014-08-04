@@ -22,6 +22,10 @@ var demos = [
   // FIXME: Unknown. Some of the map doesn't render.
   // countries: 'Countries',
   {
+    name: 'Animate.css',
+    path: 'animate_css',
+  },
+  {
     name: 'Touch',
     description: [
         "Records touch events then plays them back as a keyframe animation.",
