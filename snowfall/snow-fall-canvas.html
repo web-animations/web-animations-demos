@@ -65,7 +65,7 @@ limitations under the License.
             var toX = fromX + Math.random() * (0.3 * width) - (0.15 * width);
             var ctx = this.ctx;
 
-            return new Animation(null, {sample: function(t) {
+            return new Animation(null, function(t) {
               var x = fromX + (toX - fromX) * t;
               var y = 500 * t;
               ctx.globalAlpha = scale;
@@ -73,11 +73,11 @@ limitations under the License.
               ctx.arc(x, y, scale * 4, 0, Math.PI * 2, false);
               ctx.closePath();
               ctx.fill();
-            }}, {
+            }, {
               iterationStart: Math.random(),
               iterations: Infinity,
               playbackRate: 2 - Math.random() * 1.2,
-              duration: 5
+              duration: 5000
             });
           }).call(this);
 
@@ -90,13 +90,13 @@ limitations under the License.
         this.ctx = this.$.snow.getContext('2d');
         this.ctx.fillStyle = '#FFF';
 
-        var clear = new Animation(null, {sample: function(t) {
+        var clear = new Animation(null, function(t) {
           this.ctx.clearRect(0, 0, 1000, 500);
-        }.bind(this)}, {
+        }.bind(this), {
           duration: Infinity
         });
 
-        this.group = new ParGroup([clear]);
+        this.group = new AnimationGroup([clear]);
         this.player = document.timeline.play(this.group);
         this.countChanged();
       },

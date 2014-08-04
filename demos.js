@@ -15,8 +15,7 @@ var demos = {
   // FIXME: Polymer issue?
   // rhythm: 'Rhythm',
   starfield: 'Starfield',
-  // FIXME: Polymer issues.
-  // snowfall: 'Snowfall',
+  snowfall: 'Snowfall',
   'components/web-animations-tools/wat-wat': 'wat',
   'components/web-animations-tools/wat-bezier': 'Bezier',
   'components/web-animations-tools/wat-step': 'Step',

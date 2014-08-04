@@ -59,6 +59,7 @@ limitations under the License.
             snowflake.animation.remove();
         }
         while (this.snowflakes.length < this.count) {
+                                        console.log('add');
             var snowflake = document.createElement('div');
             this.snowflakes.push(snowflake);
             snowflake.classList.add('snowflake');
@@ -69,20 +70,20 @@ limitations under the License.
             var width = 1000;
             var fromX = Math.random() * width;
             var toX = fromX + Math.random() * (0.3 * width) - (0.15 * width);
-            this.group.append(snowflake.animation = snowflake.animate([
+            this.group.append(snowflake.animation = new Animation(snowflake, [
               {transform: 'translate3d(' + fromX + 'px, 0px, 0) scale(' + scale + ')'},
               {transform: 'translate3d(' + toX + 'px, 500px, 0) scale(' + scale + ')'}
             ], {
               iterationStart: Math.random(),
               iterations: Infinity,
               playbackRate: 2 - Math.random() * 1.2,
-              duration: 5
+              duration: 5000
             }));
         }
         this.player.source = this.group;
       },
       enteredView: function() {
-        this.player = document.timeline.play(this.group = new ParGroup());
+        this.player = document.timeline.play(this.group = new AnimationGroup());
         this.countChanged();
       },
       leftView: function() {
