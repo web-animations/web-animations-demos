@@ -1,0 +1,58 @@
+<title>Spinning Dots</title>
+
+<style>
+body {
+  background: navy;
+  color: white;
+  font-family: RobotoDraft;
+  font-weight: 300;
+}
+.circle {
+  background: white;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+}
+a {
+  color: gray;
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
+<script src="../components/web-animations-js/web-animations.js"></script>
+
+<body>
+Inspired by <a href="https://dribbble.com/shots/1660784-Spinning-dots">Spinning Dots</a>
+by <a href="https://dribbble.com/beesandbombs">Dave White</a>
+
+<script>
+var layers = 9;
+var start = 4;
+for (var i = 1; i <= layers; i++) {
+  var n = i * start;
+  for (var j = 0; j < n; j++) {
+    addCircle(i, j / n);
+  }
+}
+
+function addCircle(layer, fraction) {
+  var element = document.createElement('div');
+  element.classList.add('circle');
+  element.layer = i;
+  element.fraction = j / n;
+  var rotate = 'rotate(' + (360 * element.fraction) + 'deg)';
+  var translate = 'translate(' + (element.layer * 20 - 2.5) + 'px)';
+  element.style.transform = rotate + ' ' + translate;
+  element.animate([
+    {transform: rotate + ' rotate(0deg) ' + translate},
+    {transform: rotate + ' rotate(360deg) ' + translate},
+  ], {
+    duration: 1000 * layer,
+    iterations: Infinity,
+  });
+  document.body.appendChild(element);
+}
+</script>
