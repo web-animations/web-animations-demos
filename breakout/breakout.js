@@ -9,16 +9,16 @@ var COLORS = [
   'rgb(0, 153, 57)'
 ];
 var BASE_SPEED = 200;
-var BLOCK_FADE_SPEED = 0.02;
+var BLOCK_FADE_SPEED = 20;
 var BLOCK_HEIGHT = 15;
 var BLOCK_WIDTH = 45;
-var BLOCK_FADE_SPEED = 0.02;
 var GRID_HEIGHT = 10;
 var GRID_WIDTH = 15;
 var MAX_BOUNCES = 5000;
 var PADDING = 20;
 
 var player;
+var paddle;
 
 /**
  * Helper function updating all coordinates for an element.
@@ -41,7 +41,7 @@ function setUp() {
   updatePosition(ball, field.clientWidth / 2 - ball.clientWidth / 2,
       field.clientHeight / 2 - ball.clientHeight / 2);
 
-  var paddle = document.getElementById('paddle');
+  paddle = document.getElementById('paddle');
   updatePosition(paddle, field.clientWidth / 2 - paddle.clientWidth / 2,
                  paddle.offsetTop);
   paddle.style.webkitTransform = 'translateX(' + paddle['left'] + 'px)';
@@ -100,8 +100,9 @@ function gridAnimation() {
     var randBlock = Math.floor(Math.random() * blocks.length);
     var randColor = Math.floor(Math.random() * COLORS.length);
 
-    var animation = new Animation(blocks[randBlock], {visibility: 'visible',
-      backgroundColor: COLORS[randColor]}, {duration: BLOCK_FADE_SPEED});
+    var animation = new Animation(blocks[randBlock],
+        {visibility: 'visible', backgroundColor: COLORS[randColor]},
+        {duration: BLOCK_FADE_SPEED, fill: 'forwards'});
     fadeIn.append(animation);
 
     blocks.splice(randBlock, 1);
@@ -114,34 +115,47 @@ function gridAnimation() {
  * Helper function to create new animations for CSS transforms.
  */
 function transformAnimation(target, keyframes, timing) {
-  return new Animation(target, keyframes.map(
-        function(t) { return {transform: t}; }), timing);
+  return new Animation(target,
+      keyframes.map(function(t) { return {transform: t}; }),
+      {duration: timing, fill: 'forwards'});
 }
+
+// Use aabb collision detection to check if two elements overlap.
+function collides(rect1, rect2) {
+  return !(rect1['left'] > rect2['right'] ||
+           rect1['right'] < rect2['left']);
+}
+
+var currBounceAnim = 0;
+var allBounceAnims = [];
+var ballCoords = []; // Loction of the ball each time it reaches paddle height
+var currentlyPlaying = false; // Protect against repeated clicks
+
+// Event handler to show game over screen if there is a loss.
+function checkCollision() {
+  if (currBounceAnim === ballCoords.length) {
+    // The user has cleared all the blocks.
+    currentlyPlaying = false;
+    playNext(gameOver(true), false);
+  } else {
+    var ball = ballCoords[currBounceAnim];
+    if (collides(paddle, ball)) {
+      // The user has successfully blocked the ball.
+      currBounceAnim++;
+      playNext(allBounceAnims[currBounceAnim], true);
+    } else {
+      // The user has failed to block the ball.
+      currentlyPlaying = false;
+      playNext(gameOver(false), false);
+    }
+  }
+}
+
 
 /**
  * Precalculates path of the ball and generates the appropriate animations.
  */
 function playAnimation(ball, paddle) {
-
-  // Use aabb collision detection to check if two elements overlap.
-  function collides(rect1, rect2) {
-    return !(rect1['left'] > rect2['right'] ||
-             rect1['right'] < rect2['left']);
-  }
-
-  // Event handler to show game over screen if there is a loss.
-  function checkCollision(ball, paddle, win) {
-    if (win) {
-      playNext(gameOver(true));
-    } else {
-      if (collides(paddle, ball)) {
-        currBounceAnim++;
-        playNext(allBounceAnims[currBounceAnim]);
-      } else {
-        playNext(gameOver(false));
-      }
-    }
-  }
 
   // Copies coordinates of the target at a particular time.
   function getCoords(target) {
@@ -160,8 +174,9 @@ function playAnimation(ball, paddle) {
     'dy': vertDir * (Math.random() + 0.5) * BASE_SPEED};
 
   var i = 0;
-  var currBounceAnim = 0;
-  var allBounceAnims = [];
+  currBounceAnim = 0;
+  allBounceAnims = [];
+  ballCoords = [];
   var bounceAnim = new AnimationSequence([]);
 
   while (document.querySelectorAll('.block.active').length &&
@@ -177,14 +192,14 @@ function playAnimation(ball, paddle) {
     // Animate block destruction.
     if (nextPos['destroyed']) {
       parAnim.append(new Animation(nextPos['destroyed'],
-          {visibility: 'hidden'}, {duration: 0, delay: nextPos['dt']}));
+          {visibility: 'hidden'},
+          {duration: 0, delay: nextPos['dt'], fill: 'forwards'}));
     }
 
     bounceAnim.append(parAnim);
     // If the ball is reaching the bottom, check if paddle overlaps.
     if (nextPos['checkPaddleCollision']) {
-      bounceAnim.addEventListener('end',
-          checkCollision.bind(null, getCoords(ball), paddle, false));
+      ballCoords.push(getCoords(ball));
       allBounceAnims.push(bounceAnim);
       bounceAnim = new AnimationSequence([]);
     }
@@ -192,8 +207,7 @@ function playAnimation(ball, paddle) {
     velocity = getVelocity(velocity, nextPos['invert']);
   }
 
-  bounceAnim.addEventListener('end',
-      checkCollision.bind(null, getCoords(ball), paddle, true));
+  // When bounceAnim completes, the user has won.
   allBounceAnims.push(bounceAnim);
   return allBounceAnims[currBounceAnim];
 }
@@ -407,7 +421,7 @@ function getNextBallMovement(ball, paddle, velocity) {
   return {
     'x': Math.round(ball['left'] + dt * velocity['dx']),
     'y': Math.round(ball['top'] + dt * velocity['dy']),
-    'dt': dt,
+    'dt': dt * 1000, // convert seconds to milliseconds
     'invert': invert,
     'destroyed': destroyed,
     'checkPaddleCollision': collision['checkPaddleCollision'] && dt == vertDt
@@ -424,7 +438,9 @@ function gameOver(win) {
   } else {
     screen.firstElementChild.textContent = 'Game over!';
   }
-  return new Animation(screen, {opacity: 1}, 0.5);
+  return new Animation(screen,
+      {opacity: 1},
+      {duration: 500, fill: 'forwards'});
 }
 
 /**
@@ -439,7 +455,9 @@ function cleanUp() {
   });
 
   var screen = document.getElementById('screen');
-  playNext(new Animation(screen, {opacity: 0}, 0.5));
+  playNext(new Animation(screen,
+      {opacity: 0},
+      {duration: 500, fill: 'forwards'}), false);
 }
 
 /**
@@ -471,13 +489,19 @@ function movePaddle(event) {
 /**
  * Plays a new animation after the current one ends.
  */
-function playNext(animation) {
+function playNext(animation, checkCollisionAtFinish) {
   if (player.currentTime < player.source.endTime) {
-    player.source.addEventListener('end', function() {
+    player.addEventListener('finish', function() {
       player = document.timeline.play(animation);
+      if (checkCollisionAtFinish) {
+        player.addEventListener('finish', checkCollision);
+      }
     });
   } else {
     player = document.timeline.play(animation);
+    if (checkCollisionAtFinish) {
+      player.addEventListener('finish', checkCollision);
+    }
   }
 }
 
@@ -506,14 +530,20 @@ window.addEventListener('load', function() {
   // Button to replay the animation.
   var replay = document.querySelector('.button');
   replay.addEventListener('click', function() {
-    cleanUp();
-    playNext(playGame());
+    // Only respond to the first click
+    if (!currentlyPlaying) {
+      currentlyPlaying = true;
+      cleanUp();
+      playNext(playGame(), true);
+    }
   });
 
   // Track touch/mouse pointer movements on the field.
   document.body.addEventListener('pointermove', movePaddle);
   document.body.addEventListener('pointerdown', movePaddle);
+  currentlyPlaying = true;
   player = document.timeline.play(playGame());
+  player.addEventListener('finish', checkCollision);
 });
 
 })();
