@@ -17,8 +17,8 @@ Polymer('stick-person', {
   prepareAnim: function() {
     var anim = new AnimationGroup([
       new Animation(this.$.bruce, [
-        {transform: 'translateY(3%)', composite: 'add'},
-        {transform: 'translateY(0%)', composite: 'add'}
+        {transform: 'translateY(' + 0.03 * this.height + 'px)', composite: 'add'},
+        {transform: 'translateY(0px)', composite: 'add'}
       ], {direction: 'alternate', duration: 0.75, iterations: 4}),
 
       // Arms
@@ -44,7 +44,7 @@ Polymer('stick-person', {
     return new Animation(limb, [
       {transform: 'rotate(' + startDeg + 'deg)'},
       {transform: 'rotate(' + endDeg + 'deg)'}
-    ], {direction: 'alternate', duration: 1.5, iterations: 2});
+    ], {direction: 'alternate', duration: 1500, iterations: 2});
   },
 
   walkChanged: function() {
