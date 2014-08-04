@@ -45,34 +45,33 @@ limitations under the License.
         var fallAnim = new Animation(this, [
           {transform: 'translate(0px, 50px)'},
           {transform: 'translate(0px, 480px)'}
-        ], this.dropTime);
-
+        ], {duration: this.dropTime, fill: 'both' });
         var glowingAnim = new Animation(this, [
           {'boxShadow': '0px 0px 0px ' + this.color},
           {'boxShadow': '0px 0px 80px ' + this.color}
-        ], {iterations: 4.0, duration: 1});
-
-        fallAnim.onend = this.onEnd;
-        document.timeline.play(new ParGroup([fallAnim, glowingAnim]));
+        ], {iterations: 2.0, duration: this.dropTime/2, direction: 'alternate'});
+        var player = document.timeline.play(new AnimationGroup([fallAnim, glowingAnim]));
+        player.onfinish = this.onfinish;
       },
       disappear: function() {
-        var anim = new Animation(this, [{width: (310 - (60 * this.columnIndex)) + 'px'}], 0.3);
-        var disapearingAnim = new Animation(this, [{opacity: '50%'}], 0.3);
-        var group = new ParGroup([anim, disapearingAnim]);
-        group.onend = function(e) {
-          var target = e.target.children[0].target;
+        var anim = new Animation(this, [{width: (310 - (60 * this.columnIndex)) + 'px'}], 300);
+        var disapearingAnim = new Animation(this, [{opacity: '50%'}], 300);
+        var group = new AnimationGroup([anim, disapearingAnim]);
+
+        this.hit = true;
+        var player = document.timeline.play(group);
+
+        player.onfinish = function(e) {
+          var target = e.target.source.children[0].target;
           if (target.parentNode === target.column) {
             target.column.removeChild(target);
           }
         }
-
-        this.hit = true;
-        document.timeline.play(group);
       }, 
-      onEnd: function(e) {
-        var target = e.target.target;
+      onfinish: function(e) {
+        var target = e.target.source.children[0].target;
 
-        if (!target.hit && target.parentNode === target.column) {
+        if (!this.hit && target.parentNode === target.column) {
           target.column.removeChild(target);
         }
       }
