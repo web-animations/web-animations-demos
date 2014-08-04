@@ -18,175 +18,174 @@
 A Web Animations implementationof Animate.css which can be found here http://daneden.github.io/animate.css/
 -->
 <!DOCTYPE html>
-<html>
-  <head>
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
+<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
 
-    <style>
-    #textContainer {
-      position: absolute;
-      top: 20px;
-      left: 530px;
-    }
-  </style>
-    
-    <script>
-      var player = null;
+<style>
+body {
+  display: flex;
+  flex-flow: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  font-family: RobotoDraft,Helvetica,Arial,sans-serif;
+  font-weight: 300;
+}
+#textContainer {
+  align-self: center;
+  font-size: 50px;
+}
+#controls {
+  margin-top: 50px;
+}
+</style>
 
-      // a user must write this function from scratch and can use the others
-      function moveText() {
-        var optionSelected = document.querySelector("#option").value;
-        var textToAnimate = document.querySelector("#text").value;
-        var hold = document.querySelector("#textContainerText");
-        if (textToAnimate != "") {
-          hold.innerHTML = textToAnimate;
-        }
-        console.log(hold.value);
-          var elem = document.querySelector('#textContainer');
-        if (optionSelected === 'Flash') {
-          player = Flash(elem);
-        } else if (optionSelected === 'Pulse') {
-          player = Pulse(elem);
-        } else if (optionSelected === 'Rubber Band') {
-          player = RubberBand(elem);
-        } else if (optionSelected === 'Shake') {
-          player = Shake(elem);
-        } else if (optionSelected === 'Swing') {
-          player = Swing(elem);
-        } else if (optionSelected === 'Ta Da') {
-          player = TaDa(elem);
-        } else if (optionSelected === 'Wobble') {
-          player = Wobble(elem);
-        }
-      }
+<script>
+var player = null;
 
-      function Flash(elem) {
-        if (player != null) {
-          player.cancel();
-        }
-          var dictionary = [
-            {opacity: '1', offset: 0}, 
-            {opacity: '0', offset: 0.25}, 
-            {opacity: '1', offset: 0.5}, 
-            {opacity: '0', offset: 0.75}, 
-            {opacity: '1', offset: 1}];
-          var anim = new Animation(elem, dictionary, 
-            {duration: 900, iterations: Infinity});
-        return document.timeline.play(anim);
-      }
+// a user must write this function from scratch and can use the others
+function moveText() {
+  var optionSelected = document.querySelector("#option").value;
+  var textToAnimate = document.querySelector("#text").value;
+  var hold = document.querySelector("#textContainerText");
+  if (textToAnimate != "") {
+    hold.innerHTML = textToAnimate;
+  }
+  console.log(hold.value);
+    var elem = document.querySelector('#textContainer');
+  if (optionSelected === 'Flash') {
+    player = Flash(elem);
+  } else if (optionSelected === 'Pulse') {
+    player = Pulse(elem);
+  } else if (optionSelected === 'Rubber Band') {
+    player = RubberBand(elem);
+  } else if (optionSelected === 'Shake') {
+    player = Shake(elem);
+  } else if (optionSelected === 'Swing') {
+    player = Swing(elem);
+  } else if (optionSelected === 'Ta Da') {
+    player = TaDa(elem);
+  } else if (optionSelected === 'Wobble') {
+    player = Wobble(elem);
+  }
+}
 
-      function Pulse(elem) {
-        if (player !== null) {
-          player.cancel();
-        }
-          var dictionary = [
-            {transform: 'scale3d(1, 1, 1)', offset: 0}, 
-            {transform: 'scale3d(1.05, 1.05, 1.05)', offset: 0.5}, 
-            {transform: 'scale3d(1, 1, 1)', offset: 1}];
-          var anim = new Animation(elem, dictionary, 
-            {duration: 900, iterations: Infinity});
-        return document.timeline.play(anim);                
-      }
+function Flash(elem) {
+  if (player != null) {
+    player.cancel();
+  }
+  var keyframes = [
+    {opacity: '1', offset: 0}, 
+    {opacity: '0', offset: 0.25}, 
+    {opacity: '1', offset: 0.5}, 
+    {opacity: '0', offset: 0.75}, 
+    {opacity: '1', offset: 1}];
+  return elem.animate(keyframes, {duration: 900, iterations: Infinity});
+}
 
-      function RubberBand(elem) {
-        if (player !== null) {
-          player.cancel();
-        }
-          var dictionary = [
-            {transform: 'scale3d(1, 1, 1)', offset: 0}, 
-            {transform: 'scale3d(1.25, 0.75, 1)', offset: 0.3}, 
-            {transform: 'scale3d(0.75, 1.25, 1)', offset: 0.4}, 
-            {transform: 'scale3d(1.15, 0.85, 1)', offset: 0.5}, 
-            {transform: 'scale3d(.95, 1.05, 1)', offset: 0.65}, 
-            {transform: 'scale3d(1.05, .95, 1)', offset: 0.75}, 
-            {transform: 'scale3d(1, 1, 1)', offset: 1}];
-          var anim = new Animation(elem, dictionary, 
-            {duration: 900, iterations: Infinity});
-        return document.timeline.play(anim);        
-      }
+function Pulse(elem) {
+  if (player !== null) {
+    player.cancel();
+  }
+  var keyframes = [
+    {transform: 'scale3d(1, 1, 1)', offset: 0}, 
+    {transform: 'scale3d(1.05, 1.05, 1.05)', offset: 0.5}, 
+    {transform: 'scale3d(1, 1, 1)', offset: 1}];
+  return elem.animate(keyframes, {duration: 900, iterations: Infinity});
+}
 
-      function Shake(elem) {
-        if (player !== null) {
-          player.cancel();
-        }
-          var dictionary = [
-            {transform: 'translate3d(0, 0, 0)', offset: 0}, 
-            {transform: 'translate3d(-10px, 0, 0)', offset: 0.1}, 
-            {transform: 'translate3d(10px, 0, 0)', offset: 0.2}, 
-            {transform: 'translate3d(-10px, 0, 0)', offset: 0.3}, 
-            {transform: 'translate3d(10px, 0, 0)', offset: 0.4}, 
-            {transform: 'translate3d(-10px, 0, 0)', offset: 0.5}, 
-            {transform: 'translate3d(10px, 0, 0)', offset: 0.6}, 
-            {transform: 'translate3d(-10px, 0, 0)', offset: 0.7}, 
-            {transform: 'translate3d(10px, 0, 0)', offset: 0.8}, 
-            {transform: 'translate3d(-10px, 0, 0)', offset: 0.9}, 
-            {transform: 'translate3d(0, 0, 0)', offset: 1}];
-          var anim = new Animation(elem, dictionary, 
-            {duration: 900, iterations: Infinity});
-        return document.timeline.play(anim);                
-      }
+function RubberBand(elem) {
+  if (player !== null) {
+    player.cancel();
+  }
+  var keyframes = [
+    {transform: 'scale3d(1, 1, 1)', offset: 0}, 
+    {transform: 'scale3d(1.25, 0.75, 1)', offset: 0.3}, 
+    {transform: 'scale3d(0.75, 1.25, 1)', offset: 0.4}, 
+    {transform: 'scale3d(1.15, 0.85, 1)', offset: 0.5}, 
+    {transform: 'scale3d(.95, 1.05, 1)', offset: 0.65}, 
+    {transform: 'scale3d(1.05, .95, 1)', offset: 0.75}, 
+    {transform: 'scale3d(1, 1, 1)', offset: 1}];
+  return elem.animate(keyframes, {duration: 900, iterations: Infinity});
+}
 
-      function Swing(elem) {
-        if (player !== null) {
-          player.cancel();
-        }
-          var dictionary = [
-            {transform: 'translate(0%)', offset: 0}, 
-            {transform: 'rotate3d(0, 0, 1, 15deg)', offset: 0.2}, 
-            {transform: 'rotate3d(0, 0, 1, -10deg)', offset: 0.4}, 
-            {transform: 'rotate3d(0, 0, 1, 5deg)', offset: 0.6}, 
-            {transform: 'rotate3d(0, 0, 1, -5deg)', offset: 0.8}, 
-            {transform: 'rotate3d(0, 0, 1, 0deg)', offset: 1}];
-          var anim = new Animation(elem, dictionary, 
-            {duration: 900, iterations: Infinity});
-        return document.timeline.play(anim);        
-      }
+function Shake(elem) {
+  if (player !== null) {
+    player.cancel();
+  }
+  var keyframes = [
+    {transform: 'translate3d(0, 0, 0)', offset: 0}, 
+    {transform: 'translate3d(-10px, 0, 0)', offset: 0.1}, 
+    {transform: 'translate3d(10px, 0, 0)', offset: 0.2}, 
+    {transform: 'translate3d(-10px, 0, 0)', offset: 0.3}, 
+    {transform: 'translate3d(10px, 0, 0)', offset: 0.4}, 
+    {transform: 'translate3d(-10px, 0, 0)', offset: 0.5}, 
+    {transform: 'translate3d(10px, 0, 0)', offset: 0.6}, 
+    {transform: 'translate3d(-10px, 0, 0)', offset: 0.7}, 
+    {transform: 'translate3d(10px, 0, 0)', offset: 0.8}, 
+    {transform: 'translate3d(-10px, 0, 0)', offset: 0.9}, 
+    {transform: 'translate3d(0, 0, 0)', offset: 1}];
+  return elem.animate(keyframes, {duration: 900, iterations: Infinity});
+}
 
-      function TaDa(elem) {
-        if (player !== null) {
-          player.cancel();
-        }
-          var dictionary = [
-            {transform: 'scale3d(1, 1, 1)', offset: 0}, 
-            {transform: 'scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg)', offset: 0.1}, 
-            {transform: 'scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg)', offset: 0.2}, 
-            {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.3}, 
-            {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)', offset: 0.4}, 
-            {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.5}, 
-            {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)', offset: 0.6}, 
-            {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.7}, 
-            {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)', offset: 0.8}, 
-            {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.9}, 
-            {transform: 'scale3d(1, 1, 1)', offset: 1}];
-          var anim = new Animation(elem, dictionary, 
-            {duration: 900, iterations: Infinity});
-        return document.timeline.play(anim);        
-      }
+function Swing(elem) {
+  if (player !== null) {
+    player.cancel();
+  }
+  var keyframes = [
+    {transform: 'translate(0%)', offset: 0}, 
+    {transform: 'rotate3d(0, 0, 1, 15deg)', offset: 0.2}, 
+    {transform: 'rotate3d(0, 0, 1, -10deg)', offset: 0.4}, 
+    {transform: 'rotate3d(0, 0, 1, 5deg)', offset: 0.6}, 
+    {transform: 'rotate3d(0, 0, 1, -5deg)', offset: 0.8}, 
+    {transform: 'rotate3d(0, 0, 1, 0deg)', offset: 1}];
+  return elem.animate(keyframes, {duration: 900, iterations: Infinity});
+}
 
-      function Wobble(elem) {
-        if (player !== null) {
-          player.cancel();
-        }
-          var dictionary = [
-            {transform: 'translate(0%)', offset: 0}, 
-            {transform: 'translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg)', offset: 0.15}, 
-            {transform: 'translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg)', offset: 0.45}, 
-            {transform: 'translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg)', offset: 0.6}, 
-            {transform: 'translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg)', offset: 0.75}, 
-            {transform: 'translateX(0%)', offset: 1}];
-          var anim = new Animation(elem, dictionary, 
-            {duration: 900, iterations: Infinity});
-        return document.timeline.play(anim);
-      }
+function TaDa(elem) {
+  if (player !== null) {
+    player.cancel();
+  }
+  var keyframes = [
+    {transform: 'scale3d(1, 1, 1)', offset: 0}, 
+    {transform: 'scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg)', offset: 0.1}, 
+    {transform: 'scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg)', offset: 0.2}, 
+    {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.3}, 
+    {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)', offset: 0.4}, 
+    {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.5}, 
+    {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)', offset: 0.6}, 
+    {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.7}, 
+    {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)', offset: 0.8}, 
+    {transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.9}, 
+    {transform: 'scale3d(1, 1, 1)', offset: 1}];
+  return elem.animate(keyframes, {duration: 900, iterations: Infinity});
+}
 
+function Wobble(elem) {
+  if (player !== null) {
+    player.cancel();
+  }
+  var keyframes = [
+    {transform: 'translate(0%)', offset: 0}, 
+    {transform: 'translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg)', offset: 0.15}, 
+    {transform: 'translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg)', offset: 0.45}, 
+    {transform: 'translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg)', offset: 0.6}, 
+    {transform: 'translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg)', offset: 0.75}, 
+    {transform: 'translateX(0%)', offset: 1}];
+  return elem.animate(keyframes, {duration: 900, iterations: Infinity});
+}
+</script>
 
-    </script>
+<body>
+<div id="textContainer">
+  <span id="textContainerText">Animate!</span>
+</div>
 
-  </head>
-
-  <body>
-  <input id="text">
-  </input>
-  <select id="option">
+<div id="controls">
+  <input id="text" onkeyup="moveText()" onchange="moveText()" value="Animate!"></input>
+  <select id="option" onchange="moveText()">
     <option value="Flash">Flash</option>
     <option value="Pulse">Pulse</option>
     <option value="Rubber Band">Rubber Band</option>
@@ -195,13 +194,6 @@ A Web Animations implementationof Animate.css which can be found here http://dan
     <option value="Ta Da">Ta Da</option>
     <option value="Wobble">Wobble</option>
   </select>
-  <br>
-  <input type="submit" value="Submit" onclick="moveText()"/>
+  <p>Based on animations from <a href="http://daneden.github.io/animate.css/">Animate.css</a>
+</div>
 
-    <div id ="textContainer">
-      <p id = "textContainerText" style="font-size:100px; color: red">Text you want to animate</p>
-  </div>
-  <br>
-  </body>
-
-</html>
