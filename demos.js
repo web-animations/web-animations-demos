@@ -24,6 +24,8 @@ var demos = [
   {
     name: 'Animate.css',
     path: 'animate_css',
+    polyfill: ['/?polyfill'],
+    native: ['/'],
   },
   {
     name: 'Touch',
