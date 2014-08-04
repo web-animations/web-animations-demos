@@ -6,6 +6,9 @@
     "polymer": "Polymer/polymer#~0.3.4",
     "web-animations-next": "web-animations/web-animations-next#master",
     "web-animations-tools": "web-animations/web-animations-tools#master",
-    "pointerevents-polyfill": "components/pointerevents-polyfill"
+    "pointerevents-polyfill": "components/pointerevents-polyfill",
+    "core-elements": "Polymer/core-elements#~0.3.4",
+    "paper-button": "Polymer/paper-button#~0.3.4",
+    "core-icons": "Polymer/core-icons#~0.3.4"
   }
 }
