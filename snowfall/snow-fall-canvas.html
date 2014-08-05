@@ -17,18 +17,27 @@ limitations under the License.
 
 <!DOCTYPE html>
 
+<script src="../components/platform/platform.js"></script>
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-animation/web-animations.html">
 
-<polymer-element name="snow-fall-canvas" attributes="count">
+<style>
+body {
+  overflow: hidden;
+  margin: 0;
+}
+</style>
+<polymer-element name="snow-fall-canvas">
   <template>
     <style>
+      :host {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
       #snow {
-        width: 1000px;
-        height: 500px;
         background: #555555;
         overflow: hidden;
-        -webkit-filter: blur(1px);
         filter: blur(1px);
         display: block;
       }
@@ -40,13 +49,16 @@ limitations under the License.
         position: absolute;
       }
     </style>
-    <canvas id="snow" width="1000" height="500"></canvas>
+    <canvas id="snow"></canvas>
   </template>
   <script>
     'use strict';
     Polymer('snow-fall-canvas', {
       snowflakes: [],
-      countChanged: function() {
+      count: 300,
+      start: function() {
+        var width = this.$.snow.width;
+        var height = this.$.snow.height;
         if (!this.player)
             return;
         // FIXME: This works around a performance issue in the polyfill which
@@ -54,20 +66,19 @@ limitations under the License.
         // to a player.
         this.player.source = null;
         while (this.snowflakes.length > this.count) {
-            this.snowflakes.pop().remove();
+          this.snowflakes.pop().remove();
         }
 
         while (this.snowflakes.length < this.count) {
           var snowflake = (function() {
             var scale = 0.35 + Math.random() * 0.65;
-            var width = 1000;
             var fromX = Math.random() * width;
             var toX = fromX + Math.random() * (0.3 * width) - (0.15 * width);
             var ctx = this.ctx;
 
             return new Animation(null, function(t) {
               var x = fromX + (toX - fromX) * t;
-              var y = 500 * t;
+              var y = height * t;
               ctx.globalAlpha = scale;
               ctx.beginPath();
               ctx.arc(x, y, scale * 4, 0, Math.PI * 2, false);
@@ -87,18 +98,20 @@ limitations under the License.
         this.player.source = this.group;
       },
       enteredView: function() {
+        var width = this.$.snow.width = this.clientWidth;
+        var height = this.$.snow.height = this.clientHeight;
         this.ctx = this.$.snow.getContext('2d');
         this.ctx.fillStyle = '#FFF';
 
         var clear = new Animation(null, function(t) {
-          this.ctx.clearRect(0, 0, 1000, 500);
+          this.ctx.clearRect(0, 0, width, height);
         }.bind(this), {
           duration: Infinity
         });
 
         this.group = new AnimationGroup([clear]);
         this.player = document.timeline.play(this.group);
-        this.countChanged();
+        this.start();
       },
       leftView: function() {
         if (!this.player)
@@ -110,3 +123,5 @@ limitations under the License.
     });
   </script>
 </polymer-element>
+
+<snow-fall-canvas></snow-fall-canvas>
