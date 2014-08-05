@@ -1,4 +1,5 @@
 <!doctype html>
+<title>Web Animations Parallax Starfield</title>
 <style>
   body {
     background-color: black;
@@ -53,8 +54,12 @@
   var layerCount = 5;
   var starCount = 100;
   var universe = document.getElementById('universe');
-  var width = document.documentElement.clientWidth;
-  var height = document.documentElement.clientHeight;
+  var w = window;
+  var d = document;
+  var e = d.documentElement;
+  var g = d.getElementsByTagName('body')[0];
+  var width = w.innerWidth || e.clientWidth || g.clientWidth;
+  var height = w.innerHeight|| e.clientHeight|| g.clientHeight;
   for (var l = 0; l < layerCount; ++l) {
     var layer = document.createElement('div');
     layer.setAttribute('id', 'layer' + l);

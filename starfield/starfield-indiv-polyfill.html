@@ -1,5 +1,6 @@
 <!doctype html>
 <title>Web Animations Individual Stars Starfield</title>
+<script src="../components/web-animations-js/web-animations.js"></script>
 <style>
   body {
     background-color: black;
@@ -47,8 +48,14 @@
   var starCount = 500;
   var maxTime = 31;
   var universe = document.getElementById('universe');
-  var width = document.documentElement.clientWidth;
-  var height = document.documentElement.clientHeight;
+  var w = window;
+  var d = document;
+  var e = d.documentElement;
+  var g = d.getElementsByTagName('body')[0];
+  var width = w.innerWidth || e.clientWidth || g.clientWidth;
+  var height = w.innerHeight|| e.clientHeight|| g.clientHeight;
+  var stars = [];
+  var starGroup = [];
   for (var i = 0; i < starCount; ++i) {
     var ypos = Math.round(Math.random() * height);
     var star = document.createElement('div');
@@ -56,6 +63,9 @@
     star.setAttribute('class', 'star' + (3 - Math.floor((speed / 1000) / 8)));
     star.style.backgroundColor = 'white';//rgb(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ')';
     universe.appendChild(star);
-    star.animate([{transform: 'translate3d(' + width + 'px, ' + ypos + 'px, 0px)'}, {transform: 'translate3d(-' + Math.random() * 256 + 'px, ' + ypos + 'px, 0px)'}], {delay: Math.random() * -speed, duration: speed, iterations: Infinity});
+    stars.push(star);
+    starGroup.push(new Animation(stars[i], [{transform: 'translate3d(' + width + ', ' + ypos + ', 0)'}, {transform: 'translate3d(-' + Math.random() * 256 + 'px, ' + ypos + ', 0)'}], {delay: Math.random() * -speed, duration: speed, iterations: 1000}));
   }
+  var anim = new AnimationGroup(starGroup, {iterations: Infinity});
+  document.timeline.play(anim);
 </script>
