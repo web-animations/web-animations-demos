@@ -44,7 +44,13 @@ var demos = [
     name: 'Rhythm',
     description: "Note: This demo isn't interactive on a mobile device.",
   },
-  {name: 'Snowfall'},
+  {
+    name: 'Snowfall',
+    polyfill: [
+      {path: '/snow-fall-canvas.html', name: 'Custom effects painting to a Canvas'},
+      {path: '/snow-fall-dom.html', name: 'Animating DOM Elements'},
+    ],
+  },
   {
     name: 'Spinning Dots',
     path: 'spin',

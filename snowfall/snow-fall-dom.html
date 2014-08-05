@@ -17,19 +17,28 @@ limitations under the License.
 
 <!DOCTYPE html>
 
+<script src="../components/platform/platform.js"></script>
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-animation/web-animations.html">
+
+<style>
+body {
+  overflow: hidden;
+  margin: 0;
+}
+</style>
 
 <polymer-element name="snow-fall-dom" attributes="count">
   <template>
     <style>
+      :host {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
       #snow {
-        width: 1000px;
-        height: 500px;
         background: #555555;
-        overflow: hidden;
-        -webkit-filter: blur(1px);
-        filter: blur(1px);
+        height: 100vh;
       }
       .snowflake {
         width: 8px;
@@ -45,8 +54,11 @@ limitations under the License.
     'use strict';
     Polymer('snow-fall-dom', {
       snowflakes: [],
-      count: 0,
+      count: 300,
       countChanged: function() {
+    console.log('hi');
+        var width = this.clientWidth;
+        var height = this.clientHeight;
         if (!this.player)
             return;
         // FIXME: This works around a performance issue in the polyfill which
@@ -67,12 +79,11 @@ limitations under the License.
 
             var scale = 0.35 + Math.random() * 0.65;
             snowflake.style.opacity = scale;
-            var width = 1000;
             var fromX = Math.random() * width;
             var toX = fromX + Math.random() * (0.3 * width) - (0.15 * width);
             this.group.append(snowflake.animation = new Animation(snowflake, [
               {transform: 'translate3d(' + fromX + 'px, 0px, 0) scale(' + scale + ')'},
-              {transform: 'translate3d(' + toX + 'px, 500px, 0) scale(' + scale + ')'}
+              {transform: 'translate3d(' + toX + 'px, ' + height + 'px, 0) scale(' + scale + ')'}
             ], {
               iterationStart: Math.random(),
               iterations: Infinity,
@@ -95,3 +106,5 @@ limitations under the License.
     });
   </script>
 </polymer-element>
+
+<snow-fall-dom></snow-fall-dom>
