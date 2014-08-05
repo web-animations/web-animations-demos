@@ -72,6 +72,7 @@
         var star = document.createElement('div');
         star.setAttribute('class', 'star' + l);
         star.style.webkitTransform = 'translate(' + (xpos + s * width) + 'px, ' + ypos + 'px)';
+        star.style.transform = 'translate(' + (xpos + s * width) + 'px, ' + ypos + 'px)';
         star.style.backgroundColor = 'white';//rgb(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ')';
         layer.appendChild(star);
       }
