@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<style>
+body {
+  font-family: RobotoDraft;
+  font-weight: 300;
+}
+</style>
+<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
+<script src="../polyfill-loader.js"></script>
+
+<body>
+Inspired by <a href="http://beesandbombs.tumblr.com/post/93404142559/from-the-archive">Bees & Bombs</a>
+by <a href="https://dribbble.com/beesandbombs">Dave White</a>
 <script>
 
 function newBox(width, height, x, y, color) {
@@ -14,6 +26,9 @@ function newBox(width, height, x, y, color) {
 
 var container = newBox(450, 450, 0, 0, 'white');
 container.style.overflow = 'hidden';
+container.style.left = 'calc(50vw - 225px)';
+container.style.top = 'calc(50vh - 225px)';
+container.style.borderRadius = '50%';
 
 function bezToEasing(b) {
   return 'cubic-bezier(' + b[0] + ', ' + b[1] + ', ' + b[2] + ', ' + b[3] + ')';
@@ -71,9 +86,6 @@ for (var y = 0; y < 15; y++) {
           var bez_after = [(x234-x1234)/(1-x1234), (y234-y1234)/(1-y1234),
                            (x34-x1234)/(1-x1234), (y34-y1234)/(1-y1234)]
 
-          console.log(xs, bez_before, bez_after);
-
-
           boxbox.animate([{
                               transform: 'translate(0px, 0px) scale(0.1)',
                               opacity: 0,
@@ -100,6 +112,8 @@ for (var y = 0; y < 15; y++) {
     }
   }
 }
+
+container.animate([{transform: 'rotate(0deg)', easing: 'cubic-bezier(1, 0, 0, 1)'}, {transform: 'rotate(1440deg)'}], {duration: 20000, iterations: Infinity});
 
 document.documentElement.appendChild(container);
 
