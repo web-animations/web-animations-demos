@@ -57,6 +57,15 @@ var demos = [
     polyfill: ['/?polyfill'],
     native: ['/'],
   },
+  {
+    name: 'Expandoboard',
+    path: 'expandoboard',
+    polyfill: ['/?polyfill'],
+    native: ['/'],
+    description: [
+        "This animates like a zillion things and looks kinda bad in the polyfill as a result.",
+    ],
+  },
 
   //'components/web-animations-tools/wat-wat': 'wat',
   //'components/web-animations-tools/wat-bezier': 'Bezier',
