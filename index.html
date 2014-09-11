@@ -69,10 +69,16 @@ body {
 
         <template if="{{selected.polyfill}}">
           <h2>Polyfill demos</h2>
-          <template if="{{selected.polyfill.length == 1}}">This demo uses</template>
-          <template if="{{selected.polyfill.length != 1}}">These demos use</template>
-          the <a href="https://github.com/web-animations/web-animations-js">web-animations.js</a>
-          polyfill.
+
+          <template repeat="{{selected.polyfillNote}}">
+            <p>{{}}</p>
+          </template>
+          <template if="{{!selected.polyfillNote}}">
+            <template if="{{selected.polyfill.length == 1}}">This demo uses</template>
+            <template if="{{selected.polyfill.length != 1}}">These demos use</template>
+            the <a href="https://github.com/web-animations/web-animations-js">web-animations.js</a>
+            polyfill.
+          </template>
 
           <p>
           <template repeat="{{selected.polyfill}}">
@@ -82,12 +88,17 @@ body {
         </template>
 
         <template if="{{selected.native}}">
-          <h2>Native element.animate() demos</h2>
+          <h2>Native demos</h2>
 
-          <template if="{{selected.polyfill.length == 1}}">This demo uses</template>
-          <template if="{{selected.polyfill.length != 1}}">These demos use</template>
-          the Web Animations <a href="http://updates.html5rocks.com/2014/05/Web-Animations---element-animate-is-now-in-Chrome-36">
-          element.animate()</a> function. Chrome 36 or newer is required to run these.
+          <template repeat="{{selected.nativeNote}}">
+            <p>{{}}</p>
+          </template>
+          <template if="{{!selected.nativeNote}}">
+            <template if="{{selected.polyfill.length == 1}}">This demo uses</template>
+            <template if="{{selected.polyfill.length != 1}}">These demos use</template>
+            the Web Animations <a href="http://updates.html5rocks.com/2014/05/Web-Animations---element-animate-is-now-in-Chrome-36">
+            element.animate()</a> function. Chrome 36 or newer is required to run these.
+          </template>
 
           <p>
           <template repeat="{{selected.native}}">
@@ -147,11 +158,17 @@ function normalizeDemo(demo, i) {
   if (!demo.polyfill && !demo.native) {
     demo.polyfill = ['/'];
   }
+  if (typeof demo.polyfillNote == 'string') {
+    demo.polyfillNote = [demo.polyfillNote];
+  }
   if (demo.polyfill)
     demo.polyfill = demo.polyfill.map(normalizeSubdemo.bind(this, demo));
 
   if (demo.native)
     demo.native = demo.native.map(normalizeSubdemo.bind(this, demo));
+  if (typeof demo.nativeNote == 'string') {
+    demo.nativeNote = [demo.nativeNote];
+  }
 }
 function normalizeSubdemo(demo, subdemo) {
   if (typeof subdemo == 'string') {
