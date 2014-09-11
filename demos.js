@@ -66,6 +66,12 @@ var demos = [
         "This animates like a zillion things and looks kinda bad in the polyfill as a result.",
     ],
   },
+  {
+    name: 'Playback Control',
+    path: 'playback-control',
+    polyfill: ['/?polyfill'],
+    native: ['/'],
+  },
 
   //'components/web-animations-tools/wat-wat': 'wat',
   //'components/web-animations-tools/wat-bezier': 'Bezier',
