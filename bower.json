@@ -7,11 +7,14 @@
     "web-animations-next": "web-animations/web-animations-next#master",
     "web-animations-tools": "web-animations/web-animations-tools#master",
     "pointerevents-polyfill": "components/pointerevents-polyfill",
-    "core-elements": "Polymer/core-elements#~0.3.4",
-    "paper-button": "Polymer/paper-button#~0.3.4",
-    "core-icons": "Polymer/core-icons#~0.3.4"
+    "core-elements": "Polymer/core-elements",
+    "paper-elements": "Polymer/paper-elements",
+    "core-icons": "Polymer/core-icons"
   },
   "resolutions": {
+    "polymer": ">=0.4.0 <1.0.0",
+    "platform": ">=0.4.0 <1.0.0",
+    "core-component-page": ">=0.4.0 <1.0.0",
     "web-animations-js": "master"
   }
 }
