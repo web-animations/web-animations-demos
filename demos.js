@@ -71,6 +71,9 @@ var demos = [
     path: 'playback-control',
     polyfill: ['/?polyfill'],
     native: ['/'],
+    nativeNote: [
+        "This demo requires Chrome 39 with the Experimental Web Platform Features flag enabled.",
+    ],
   },
 
   //'components/web-animations-tools/wat-wat': 'wat',
