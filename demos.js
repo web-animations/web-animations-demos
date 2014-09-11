@@ -67,6 +67,12 @@ var demos = [
     ],
   },
   {
+    name: 'Galaxy',
+    path: 'galaxy',
+    polyfill: ['/?polyfill'],
+    native: ['/'],
+  },
+  {
     name: 'Playback Control',
     path: 'playback-control',
     polyfill: ['/?polyfill'],
