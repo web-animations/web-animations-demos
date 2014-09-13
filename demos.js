@@ -44,6 +44,7 @@ var demos = [
     name: 'Rhythm',
     description: "Note: This demo isn't interactive on a mobile device.",
   },
+  {name: 'Globe'},
   {
     name: 'Snowfall',
     polyfill: [
