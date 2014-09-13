@@ -54,8 +54,10 @@ twine = function(context, timing, duration) {
     for (var property in anim._valuesEnd) {
       anim._valuesStart[property] = context[property];
       anim._valuesDelta[property] = anim._valuesEnd[property] - context[property];
-    }; 
+    }
     var player =  document.timeline.play(anim);
+    if (typeof timing.onend === 'function')
+      player.addEventListener('finish', timing.onend);
     return player, anim;
   };
 
