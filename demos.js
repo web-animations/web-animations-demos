@@ -82,6 +82,15 @@ var demos = [
         "This demo requires Chrome 39 with the Experimental Web Platform Features flag enabled.",
     ],
   },
+  {
+    name: 'Hide/Show',
+    path: 'hide-show',
+    polyfill: ['/?polyfill'],
+    polyfillNote: [
+        "Note: This demo isn't currently functionling correctly under the Polyfill.",
+    ],
+    native: ['/'],
+  },
 
   //'components/web-animations-tools/wat-wat': 'wat',
   //'components/web-animations-tools/wat-bezier': 'Bezier',
