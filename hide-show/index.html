@@ -104,6 +104,7 @@ Polymer('hide-show', {
 
 function randomlyAddAndRemoveItems() {
   setTimeout(randomlyAddAndRemoveItems, Math.min(400, Math.random() * 500));
+  var list = document.getElementById('list');
   if (document.visibilityState != 'visible' || !list.model)
     return;
 
