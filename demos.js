@@ -87,7 +87,7 @@ var demos = [
     path: 'hide-show',
     polyfill: ['/?polyfill'],
     polyfillNote: [
-        "Note: This demo isn't currently functionling correctly under the Polyfill.",
+        "Note: This demo isn't currently functioning correctly under the Polyfill.",
     ],
     native: ['/'],
   },
