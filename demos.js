@@ -79,7 +79,7 @@ var demos = [
     polyfill: ['/?polyfill'],
     native: ['/'],
     nativeNote: [
-        "This demo requires Chrome 39 with the Experimental Web Platform Features flag enabled.",
+        "This demo requires Chrome 39.",
     ],
   },
   {
