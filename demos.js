@@ -19,8 +19,10 @@ var demos = [
   },
   // FIXME: Doesn't animate.
   // {name: 'Globe'},
-  // FIXME: Unknown. Some of the map doesn't render.
-  // countries: 'Countries',
+  {
+    name: 'Countries',
+    path: 'countries',
+  },
   {
     name: 'Animate.css',
     path: 'animate_css',
