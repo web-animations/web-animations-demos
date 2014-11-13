@@ -1,6 +1,7 @@
 <!doctype html>
 <title>Web Animations Parallax Starfield</title>
 <meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
+<script src="../polyfill-loader.js"></script>
 <style>
   body {
     background-color: black;
@@ -61,11 +62,14 @@
   var g = d.getElementsByTagName('body')[0];
   var width = w.innerWidth || e.clientWidth || g.clientWidth;
   var height = w.innerHeight|| e.clientHeight|| g.clientHeight;
+  var layers = [];
+  var layerGroup = [];
   for (var l = 0; l < layerCount; ++l) {
     var layer = document.createElement('div');
     layer.setAttribute('id', 'layer' + l);
     layer.setAttribute('class', 'starfield');
     universe.appendChild(layer);
+    layers.push(layer);
     for (var i = 0; i < starCount; ++i) {
       var xpos = Math.round(Math.random() * width);
       var ypos = Math.round(Math.random() * height);
@@ -78,6 +82,8 @@
         layer.appendChild(star);
       }
     }
-    layer.animate([{transform: 'translate3d(0, 0, 0)'}, {transform: 'translate3d(-' + width + 'px, 0, 0)'}], {duration: Math.pow(2, layerCount - l) * 1000, iterations: Infinity});
+    layerGroup.push(new Animation(layers[l], [{transform: 'translate3d(0, 0, 0)'}, {transform: 'translate3d(-' + width + 'px, 0, 0)'}], {duration: Math.pow(2, layerCount - l) * 1000, iterations: Math.pow(2, l)}));
   }
+  var anim = new AnimationGroup(layerGroup, {iterations: Infinity});
+  document.timeline.play(anim);
 </script>

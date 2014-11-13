@@ -7,12 +7,8 @@ var demos = [
   {
     name: 'Starfield',
     polyfill: [
-      {path: '/starfield-planes-polyfill.html', name: 'Parallax Starfield'},
-      {path: '/starfield-indiv-polyfill.html', name: '500 Individual Stars'},
-    ],
-    native: [
-      {path: '/starfield-planes.html', name: 'Parallax Starfield'},
-      {path: '/starfield-indiv.html', name: '500 Individual Stars'},
+      {path: '/starfield-planes.html?polyfill', name: 'Parallax Starfield'},
+      {path: '/starfield-indiv.html?polyfill', name: '500 Individual Stars'},
     ],
   },
   {
