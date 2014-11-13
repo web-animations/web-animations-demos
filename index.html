@@ -21,6 +21,7 @@ limitations under the License.
 <script src="components/webcomponentsjs/webcomponents.js"></script>
 <link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
 <link rel="import" href="components/core-menu/core-menu.html"></link>
+<link rel="import" href="components/core-icon/core-icon.html"></link>
 <link rel="import" href="components/core-item/core-item.html"></link>
 <link rel="import" href="components/core-scaffold/core-scaffold.html"></link>
 <link rel="import" href="components/core-header-panel/core-header-panel.html"></link>
@@ -83,7 +84,7 @@ body {
           <p>
           <template repeat="{{selected.polyfill}}">
           <a href="{{url}}">
-            <paper-button icon="arrow-forward" label="{{name}}"></paper-button></a>
+            <paper-button><core-icon icon="arrow-forward"></core-icon>&nbsp;&nbsp;{{name}}</paper-button></a>
           </template>
         </template>
 
@@ -103,7 +104,7 @@ body {
           <p>
           <template repeat="{{selected.native}}">
           <a href="{{url}}">
-            <paper-button icon="arrow-forward" label="{{name}}"></paper-button></a>
+            <paper-button><core-icon icon="arrow-forward"></core-icon>&nbsp;&nbsp;{{name}}</paper-button></a>
           </template>
         </template>
       </div>
