@@ -11,22 +11,19 @@ var demos = [
       {path: '/starfield-indiv.html?polyfill', name: '500 Individual Stars'},
     ],
   },
-  {
-    name: 'Rolio',
-    description: [
-      "Demonstrates seeking and redirecting a running animation. Press the arrow keys to direct the rolling ball.",
-      "Note: This demo isn't interactive on a mobile device.",
-    ],
-  },
-  // FIXME: Doesn't animate.
-  // {name: 'Globe'},
+  // FIXME: Not ported to web-animations-next.
+  // {
+  //   name: 'Rolio',
+  //   description: [
+  //     "Demonstrates seeking and redirecting a running animation. Press the arrow keys to direct the rolling ball.",
+  //     "Note: This demo isn't interactive on a mobile device.",
+  //   ],
+  // },
   // FIXME: Unknown. Some of the map doesn't render.
   // countries: 'Countries',
   {
     name: 'Animate.css',
     path: 'animate_css',
-    polyfill: ['/?polyfill'],
-    native: ['/'],
   },
   {
     name: 'Touch',
@@ -35,16 +32,19 @@ var demos = [
         "Note: Requires a touch screen.",
         ],
   },
-  {name: 'Walking'},
+  // FIXME: Not ported to web-animations-next.
+  // {name: 'Walking'},
   {
     name: 'Bounce',
     path: 'bounce-timing-function',
   },
-  {name: 'Breakout'},
-  {
-    name: 'Rhythm',
-    description: "Note: This demo isn't interactive on a mobile device.",
-  },
+  // FIXME: Not ported to web-animations-next.
+  // {name: 'Breakout'},
+  // FIXME: Not ported to web-animations-next.
+  // {
+  //   name: 'Rhythm',
+  //   description: "Note: This demo isn't interactive on a mobile device.",
+  // },
   {name: 'Globe'},
   {
     name: 'Snowfall',
@@ -92,12 +92,4 @@ var demos = [
     ],
     native: ['/'],
   },
-
-  //'components/web-animations-tools/wat-wat': 'wat',
-  //'components/web-animations-tools/wat-bezier': 'Bezier',
-  //'components/web-animations-tools/wat-step': 'Step',
-  //'components/web-animations-tools/wat-keyframe-inspector': 'Keyframes',
-  //'components/web-animations-tools/wat-tree': 'TreeView',
-  //'components/web-animations-tools/wat-timeline': 'Timeline',
-  //'components/web-animations-tools/wat-player-controls': 'Controls',
 ];
