@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="web-animations.js"></script>
+    <script src="../polyfill-loader.js"></script>
     <script type="text/javascript">
       // Ideas for future enhancements ...
       // - Investigate fixing inaccuracy in overshoot when envelope is steep
@@ -434,9 +434,11 @@
         parameters.appendChild(peakRatioSlider.domContent());
         parameters.appendChild(warning);
 
-        // FIXME: Update web-animations.js to match EffectCallback spec: function(timeFraction, animation, previousTimeFraction) -> function(timeFraction, target, animation)
-        document.timeline.play(new Animation({easing: timingFunction, slider: slider}, function(timeFraction, animation) {
-          update(animation.target, timeFraction);
+        // FIXME: Working around limitation in polyfill
+        var element = document.createElement('div');
+        var target = {easing: timingFunction, slider: slider};
+        document.timeline.play(new Animation(element, function(timeFraction) {
+          update(target, timeFraction);
         }, {duration: 7000, iterations: Infinity}));
       }
 
