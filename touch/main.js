@@ -45,7 +45,7 @@ var fadeOut = [{opacity: 1}, {opacity: 0}];
 var touchStart;
 var visuals;
 var recordedTouches;
-var group;
+var groups;
 var player;
 
 function onFirstTouchStart(e) {
@@ -55,7 +55,7 @@ function onFirstTouchStart(e) {
     visual.remove();
   });
   visuals = [];
-  group = new AnimationGroup([], {direction: 'alternate', iterations: Infinity});
+  groups = [];
   if (player) {
     player.source = null;
   }
@@ -110,15 +110,14 @@ function onTouchEnd(e) {
     }
     var durationS = duration
     var startTimeS = startTime;
-    group.append(new AnimationGroup([
+    groups.push(new AnimationGroup([
       new Animation(visual, visible, {duration: durationS, fill: 'none'}),
       new Animation(visual, fadeOut, {duration: fadeTime, delay: durationS - fadeTime, fill: 'none'}),
       new Animation(visual, fadeIn, {duration: fadeTime, fill: 'none'}),
       new Animation(visual, frames, {duration: durationS, fill: 'none'}),
     ], {duration: durationS, delay: startTimeS}));
   }
-  
   if (e.touches.length == 0) {
-    player = document.timeline.play(group);
+    player = document.timeline.play(new AnimationGroup(groups, {direction: 'alternate', iterations: Infinity}));
   }
 };
