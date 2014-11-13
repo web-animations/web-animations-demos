@@ -46,24 +46,21 @@ var demos = [
   //   description: "Note: This demo isn't interactive on a mobile device.",
   // },
   {name: 'Globe'},
-  {
-    name: 'Snowfall',
-    polyfill: [
-      {path: '/snow-fall-canvas.html', name: 'Custom effects painting to a Canvas'},
-      {path: '/snow-fall-dom.html', name: 'Animating DOM Elements'},
-    ],
-  },
+  // FIXME: Not ported to web-animations-next.
+  // {
+  //   name: 'Snowfall',
+  //   polyfill: [
+  //     {path: '/snow-fall-canvas.html', name: 'Custom effects painting to a Canvas'},
+  //     {path: '/snow-fall-dom.html', name: 'Animating DOM Elements'},
+  //   ],
+  // },
   {
     name: 'Spinning Dots',
     path: 'spin',
-    polyfill: ['/?polyfill'],
-    native: ['/'],
   },
   {
     name: 'Expandoboard',
     path: 'expandoboard',
-    polyfill: ['/?polyfill'],
-    native: ['/'],
     description: [
         "This animates like a zillion things and looks kinda bad in the polyfill as a result.",
     ],
@@ -71,25 +68,13 @@ var demos = [
   {
     name: 'Galaxy',
     path: 'galaxy',
-    polyfill: ['/?polyfill'],
-    native: ['/'],
   },
   {
     name: 'Playback Control',
     path: 'playback-control',
-    polyfill: ['/?polyfill'],
-    native: ['/'],
-    nativeNote: [
-        "This demo requires Chrome 39.",
-    ],
   },
   {
     name: 'Hide/Show',
     path: 'hide-show',
-    polyfill: ['/?polyfill'],
-    polyfillNote: [
-        "Note: This demo isn't currently functioning correctly under the Polyfill.",
-    ],
-    native: ['/'],
   },
 ];
