@@ -6,7 +6,7 @@ var demos = [
   },
   {
     name: 'Starfield',
-    polyfill: [
+    demos: [
       {path: '/starfield-planes.html?polyfill', name: 'Parallax Starfield'},
       {path: '/starfield-indiv.html?polyfill', name: '500 Individual Stars'},
     ],
