@@ -64,11 +64,16 @@ body {
       <div tool>{{selected.name}}</div>
       <div style="padding-left: 20px; padding-right: 20px;">
 
-        <p>
-        <template if="{{selected.demos.length == 1}}">This demo uses</template>
-        <template if="{{selected.demos.length != 1}}">These demos use</template>
-        the <a href="https://github.com/web-animations/web-animations-js">web-animations.js</a>
-        polyfill.
+        <template repeat="{{selected.header}}">
+          <p>{{}}</p>
+        </template>
+        <template if="{{!selected.header}}">
+          <p>
+          <template if="{{selected.demos.length == 1}}">This demo uses</template>
+          <template if="{{selected.demos.length != 1}}">These demos use</template>
+          the <a href="https://github.com/web-animations/web-animations-js">web-animations-js</a>
+          polyfill.
+        </template>
 
         <template repeat="{{selected.description}}">
           <p>{{}}</p>
@@ -127,6 +132,9 @@ function normalizeDemo(demo, i) {
   demo.hash = '#' + demo.path;
   if (typeof demo.description == 'string') {
     demo.description = [demo.description];
+  }
+  if (typeof demo.header == 'string') {
+    demo.header = [demo.header];
   }
   if (!demo.demos) {
     demo.demos = ['/'];

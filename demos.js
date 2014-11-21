@@ -1,10 +1,5 @@
 var demos = [
   {
-    name: 'Additive Color',
-    path: 'additive-color',
-    polyfill: ['/?polyfill'],
-  },
-  {
     name: 'Starfield',
     demos: [
       {path: '/starfield-planes.html?polyfill', name: 'Parallax Starfield'},
@@ -76,5 +71,10 @@ var demos = [
   {
     name: 'Hide/Show',
     path: 'hide-show',
+  },
+  {
+    header: 'This demo uses the web-animations-js-legacy polyfill.',
+    name: 'Additive Color',
+    path: 'additive-color',
   },
 ];
