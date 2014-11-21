@@ -3,18 +3,12 @@
   "description": "Web Animations Demos",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.3.4",
-    "web-animations-next": "web-animations/web-animations-next#master",
-    "web-animations-tools": "web-animations/web-animations-tools#master",
+    "polymer": "Polymer/polymer#~0.5.1",
+    "web-animations-js": "web-animations/web-animations-js#master",
+    "web-animations-js-legacy": "web-animations/web-animations-js-legacy#master",
     "pointerevents-polyfill": "components/pointerevents-polyfill",
     "core-elements": "Polymer/core-elements",
     "paper-elements": "Polymer/paper-elements",
     "core-icons": "Polymer/core-icons"
-  },
-  "resolutions": {
-    "polymer": ">=0.4.0 <1.0.0",
-    "platform": ">=0.4.0 <1.0.0",
-    "core-component-page": ">=0.4.0 <1.0.0",
-    "web-animations-js": "master"
   }
 }

@@ -1,3 +1,3 @@
-if (window.location.search.indexOf('polyfill') >= 0) {
-  document.write('<script src="../components/web-animations-js/web-animations.js"></script>');
+if (window.location.search.indexOf('nopolyfill') < 0) {
+  document.write('<script src="../components/web-animations-js/web-animations-next.min.js"></script>');
 }

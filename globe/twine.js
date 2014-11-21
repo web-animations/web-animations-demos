@@ -42,7 +42,9 @@ twine = function(context, timing, duration) {
   if (timing.delay)
     timing.startDelay = timing.delay;
 
-  var anim = new Animation(null, onsample, timing);
+  // FIXME: Working around limitation in polyfill.
+  var dummyElement = document.createElement('div');
+  var anim = new Animation(dummyElement, onsample, timing);
 
   anim._valuesEnd = {};
   for (var property in timing.to)
