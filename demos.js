@@ -1,5 +1,10 @@
 var demos = [
   {
+    name: 'Additive Color',
+    path: 'additive-color',
+    polyfill: ['/?polyfill'],
+  },
+  {
     name: 'Starfield',
     polyfill: [
       {path: '/starfield-planes-polyfill.html', name: 'Parallax Starfield'},
