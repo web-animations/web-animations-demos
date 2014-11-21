@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<script src="../polyfill-loader.js"></script>
+<style>
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+}
+h1 {
+  position: absolute;
+  left: 1em;
+  color: white;
+  font-family: sans-serif;
+  font-size: 50px;
+  z-index: 1;
+}
+block {
+  background: black;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+}
+</style>
+<h1>Move your mouse or fingers around the screen!</h1>
+<script>
+'use strict'
+var blockSize = 64;
+var gridWidth = Math.ceil(innerWidth / blockSize);
+var gridHeight = Math.ceil(innerHeight / blockSize);
+var blockGrid = [];
+var prevX = {};
+var prevY = {};
+
+function main() {
+  for (var x = 0; x < gridWidth; x++) {
+    blockGrid[x] = [];
+    for (var y = 0; y < gridHeight; y++) {
+      var block = document.createElement('block');
+      blockGrid[x][y] = block;
+      block.style.transform = 'translate(' + (x * blockSize) + 'px, ' + (y * blockSize) + 'px)';
+      document.body.appendChild(block);
+    }
+  }
+  document.body.addEventListener('mousemove', pointEvent);
+  document.body.addEventListener('touchmove', function(event) {
+    [].forEach.call(event.touches, pointEvent);
+    event.preventDefault();
+  });
+  document.body.addEventListener('touchend', function(event) {
+    [].forEach.call(event.touches, function(touch) {
+      delete prevX[touch.identifier];
+      delete prevY[touch.identifier];
+    });
+  });
+}
+
+function pointEvent(event) {
+  var id = event.identifier;
+  var x = Math.trunc(event.clientX / blockSize);
+  var y = Math.trunc(event.clientY / blockSize);
+  if (prevX[id] !== x || prevY[id] !== y) {
+    animateColor(blockGrid[x][y], id);
+    animateTransform(blockGrid[x][y]);
+  }
+  prevX[id] = x;
+  prevY[id] = y;
+};
+
+function animateColor(element, c) {
+  c = c || 0;
+  var rgb = [0, 0, 0];
+  rgb[Math.floor((Date.now() / 1000 + c) % 3)] = 255;
+  element.animate({
+    offset: 0.5,
+    composite: 'add',
+    backgroundColor: 'rgb(' + rgb.join(', ') + ')',
+  }, 4000);
+}
+
+function animateTransform(element) {
+  element.animate({
+    offset: 0.5,
+    composite: 'add',
+    transform: 'scale(0.5)',
+  }, 500);
+  element.animate({
+    composite: 'add',
+    transform: 'rotate(90deg)',
+  }, 500);
+}
+
+window.addEventListener('load', main);
+</script>
