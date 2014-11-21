@@ -62,7 +62,7 @@ var demos = [
     name: 'Expandoboard',
     path: 'expandoboard',
     description: [
-        "This animates like a zillion things and looks kinda bad in the polyfill as a result.",
+        "This animates like a zillion things and looks kinda bad in browsers without native support.",
     ],
   },
   {
