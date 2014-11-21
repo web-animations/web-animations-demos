@@ -5,7 +5,6 @@
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.1",
     "web-animations-js": "web-animations/web-animations-js#master",
-    "web-animations-js-staging": "web-animations/web-animations-js-staging#master",
     "pointerevents-polyfill": "components/pointerevents-polyfill",
     "core-elements": "Polymer/core-elements",
     "paper-elements": "Polymer/paper-elements",
