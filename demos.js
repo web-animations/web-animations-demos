@@ -1,3 +1,4 @@
+var legacyHeader = 'This demo uses the web-animations-js-legacy polyfill.';
 var demos = [
   {
     name: 'Starfield',
@@ -6,16 +7,6 @@ var demos = [
       {path: '/starfield-indiv.html?polyfill', name: '500 Individual Stars'},
     ],
   },
-  // FIXME: Not ported to web-animations-next.
-  // {
-  //   name: 'Rolio',
-  //   description: [
-  //     "Demonstrates seeking and redirecting a running animation. Press the arrow keys to direct the rolling ball.",
-  //     "Note: This demo isn't interactive on a mobile device.",
-  //   ],
-  // },
-  // FIXME: Unknown. Some of the map doesn't render.
-  // countries: 'Countries',
   {
     name: 'Animate.css',
     path: 'animate_css',
@@ -27,28 +18,11 @@ var demos = [
         "Note: Requires a touch screen.",
         ],
   },
-  // FIXME: Not ported to web-animations-next.
-  // {name: 'Walking'},
   {
     name: 'Bounce',
     path: 'bounce-timing-function',
   },
-  // FIXME: Not ported to web-animations-next.
-  // {name: 'Breakout'},
-  // FIXME: Not ported to web-animations-next.
-  // {
-  //   name: 'Rhythm',
-  //   description: "Note: This demo isn't interactive on a mobile device.",
-  // },
   {name: 'Globe'},
-  // FIXME: Not ported to web-animations-next.
-  // {
-  //   name: 'Snowfall',
-  //   polyfill: [
-  //     {path: '/snow-fall-canvas.html', name: 'Custom effects painting to a Canvas'},
-  //     {path: '/snow-fall-dom.html', name: 'Animating DOM Elements'},
-  //   ],
-  // },
   {
     name: 'Spinning Dots',
     path: 'spin',
@@ -73,8 +47,43 @@ var demos = [
     path: 'hide-show',
   },
   {
-    header: 'This demo uses the web-animations-js-legacy polyfill.',
+    header: legacyHeader,
     name: 'Additive Color',
     path: 'additive-color',
+  },
+  {
+    header: legacyHeader,
+    name: 'Rolio',
+    description: [
+      "Demonstrates seeking and redirecting a running animation. Press the arrow keys to direct the rolling ball.",
+      "Note: This demo isn't interactive on a mobile device.",
+    ],
+  },
+  // FIXME: Unknown. Nothing happens.
+  // {
+  //   header: legacyHeader,
+  //   name: 'Snowfall',
+  //   demos: [
+  //     {path: '/snow-fall-canvas.html', name: 'Custom effects painting to a Canvas'},
+  //     {path: '/snow-fall-dom.html', name: 'Animating DOM Elements'},
+  //   ],
+  // },
+  // FIXME: Unknown. Most of the map doesn't render.
+  // {
+  //   name: 'Countries',
+  //   path: 'countries',
+  // },
+  // FIXME: Not finished.
+  // {
+  //   name: 'Rhythm',
+  //   description: "Note: This demo isn't interactive on a mobile device.",
+  // },
+  // },
+  // FIXME: Needs polish.
+  // {name: 'Walking'},
+  // FIXME: Not ported to web-animations-next.
+  {
+    header: legacyHeader,
+    name: 'Breakout',
   },
 ];
