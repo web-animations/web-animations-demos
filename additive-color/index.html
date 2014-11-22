@@ -22,7 +22,7 @@ block {
   height: 64px;
 }
 </style>
-<h1>Move your mouse or fingers around the screen!</h1>
+<h1 id="text">Move your mouse or fingers around the screen!</h1>
 <script>
 'use strict'
 var blockSize = 64;
@@ -31,6 +31,7 @@ var gridHeight = Math.ceil(innerHeight / blockSize);
 var blockGrid = [];
 var prevX = {};
 var prevY = {};
+var firstInteraction = true;
 
 function main() {
   for (var x = 0; x < gridWidth; x++) {
@@ -56,6 +57,10 @@ function main() {
 }
 
 function pointEvent(event) {
+  if (firstInteraction) {
+    fadeText();
+    firstInteraction = false;
+  }
   var id = event.identifier;
   var x = Math.trunc(event.clientX / blockSize);
   var y = Math.trunc(event.clientY / blockSize);
@@ -66,6 +71,14 @@ function pointEvent(event) {
   prevX[id] = x;
   prevY[id] = y;
 };
+
+function fadeText() {
+  text.animate({opacity: 0}, {
+    duration: 1000,
+    delay: 4000,
+    fill: 'forwards',
+  });
+}
 
 function animateColor(element, c) {
   c = c || 0;
