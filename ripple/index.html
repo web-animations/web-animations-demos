@@ -1,0 +1,68 @@
+<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
+<script src="../components/polymer/polymer.js"></script>
+<script src="../polyfill-loader.js"></script>
+<style>
+body {
+  overflow: hidden;
+}
+div {
+  border-radius: 50%;
+  background: black;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  opacity: 0.25;
+}
+</style>
+<body touch-action="none">
+<script>
+var waves = [];
+var duration = 450;
+
+function Wave(x, y) {
+  waves.push(this);
+  this.element = document.createElement('div');
+  this.element.style.left = 'calc(' + x + 'px - 150px)';
+  this.element.style.top = 'calc(' + y + 'px - 150px)';
+  this.element.setAttribute('touch-action', 'none');
+  this.element.addEventListener('up', up);
+  document.body.appendChild(this.element);
+
+  this.scale = this.element.animate([
+    {transform: 'scale(0)'},
+    {transform: 'scale(1)'},
+  ], {
+    duration: duration,
+    easing: 'cubic-bezier(.22,.67,.52,.92)',
+    fill: 'forwards',
+  });
+}
+
+Wave.prototype = {
+  up: function() {
+    this.up = function() {};
+    this.opacity = this.element.animate([
+      {opacity: 0.25},
+      {opacity: 0},
+    ], {
+      duration: duration,
+      fill: 'forwards',
+    });
+    this.opacity.onfinish = function() {
+      this.element.remove();
+      waves.splice(waves.indexOf(this), 1);
+    }.bind(this);
+  }
+};
+
+document.body.addEventListener('down', function(e) {
+  waves.forEach(function(wave) { wave.up(); });
+  new Wave(e.clientX, e.clientY);
+});
+
+function up() {
+  waves.forEach(function(wave) { wave.up(); });
+}
+
+document.body.addEventListener('up', up);
+</script>

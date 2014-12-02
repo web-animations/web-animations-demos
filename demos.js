@@ -47,6 +47,10 @@ var demos = [
     path: 'hide-show',
   },
   {
+    name: 'Ripple',
+    path: 'ripple',
+  },
+  {
     header: legacyHeader,
     name: 'Additive Color',
     path: 'additive-color',
