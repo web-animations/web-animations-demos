@@ -1,11 +1,12 @@
 var legacyHeader = 'This demo uses the web-animations-js-legacy polyfill.';
 var demos = [
   {
-    name: 'Starfield',
-    demos: [
-      {path: '/starfield-planes.html?polyfill', name: 'Parallax Starfield'},
-      {path: '/starfield-indiv.html?polyfill', name: '500 Individual Stars'},
-    ],
+    name: 'Parallax Starfield',
+    path: 'starfield/starfield-planes.html',
+  },
+  {
+    name: '500 Individual Stars',
+    path: 'starfield/starfield-indiv.html',
   },
   {
     name: 'Animate.css',

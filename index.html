@@ -35,6 +35,27 @@ body {
 }
 </style>
 
+<polymer-element name="web-animations-demo-card" attributes="demo" noscript>
+  <template>
+    <style>
+    :host {
+      display: block;
+      position: relative;
+      width: 300px;
+      height: 200px;
+      flex-grow: 1;
+    }
+    h3 {
+      position: absolute;
+      bottom: 0;
+      left: 16px;
+      font-weight: 300;
+    }
+    </style>
+    <h3>{{demo.name}}</h3>
+  </template>
+</polymer-element>
+
 <polymer-element name="web-animations-demos" attributes="model">
   <template>
     <style>
@@ -54,6 +75,10 @@ body {
     core-item.core-selected {
       color: #0092f3;
     }
+    core-selector {
+      display: flex;
+      flex-wrap: wrap;
+    }
     </style>
     <core-scaffold id="scaffold">
       <core-header-panel navigation flex mode="seamed">
@@ -66,30 +91,31 @@ body {
           </template>
         </core-menu>
       </core-header-panel>
+
       <div tool>{{selected.name}}</div>
-      <div style="padding-left: 20px; padding-right: 20px;">
+      <template if="{{selected}}">
+        <div style="padding-left: 20px; padding-right: 20px;">
 
-        <template repeat="{{selected.header}}">
-          <p>{{}}</p>
-        </template>
-        <template if="{{!selected.header}}">
+          <template repeat="{{selected.header}}">
+            <p>{{}}</p>
+          </template>
+          <template repeat="{{selected.description}}">
+            <p>{{}}</p>
+          </template>
+
           <p>
-          <template if="{{selected.demos.length == 1}}">This demo uses</template>
-          <template if="{{selected.demos.length != 1}}">These demos use</template>
-          the <a href="https://github.com/web-animations/web-animations-js">web-animations-js</a>
-          polyfill.
-        </template>
-
-        <template repeat="{{selected.description}}">
-          <p>{{}}</p>
-        </template>
-
-        <p>
-        <template repeat="{{selected.demos}}">
-        <a href="{{url}}">
-          <paper-button><core-icon icon="arrow-forward"></core-icon>&nbsp;&nbsp;{{name}}</paper-button></a>
-        </template>
-      </div>
+          <a href="{{selected.path}}">
+            <paper-button><core-icon icon="arrow-forward"></core-icon>&nbsp;&nbsp;{{selected.name}}</paper-button></a>
+        </div>
+      </template>
+      <template if="{{!selected}}">
+        <core-selector on-core-select={{selectAction}}>
+          <template repeat="{{model}}">
+            <web-animations-demo-card data-hash="{{hash}}" demo="{{}}" style="background: {{shade}}">
+            </web-animations-demo-card>
+          </template>
+        </core-selector>
+      </template>
     </core-scaffold>
   </template>
 </polymer-element>
@@ -115,8 +141,9 @@ Polymer('web-animations-demos', {
       }
     }
     if (!this.selected) {
-      this.selected = this.model[0];
-      this.selectedIndex = 0;
+      // TODO: Allow selection of a master page option that showcases all
+      // demos.
+      this.selectedIndex = null;
     }
   },
   ready: function() {
@@ -141,22 +168,9 @@ function normalizeDemo(demo, i) {
   if (typeof demo.header == 'string') {
     demo.header = [demo.header];
   }
-  if (!demo.demos) {
-    demo.demos = ['/'];
-  }
-  demo.demos = demo.demos.map(normalizeSubdemo.bind(this, demo));
-}
-function normalizeSubdemo(demo, subdemo) {
-  if (typeof subdemo == 'string') {
-    subdemo = {path: subdemo};
-  }
-  if (!subdemo.url) {
-    subdemo.url = demo.path + subdemo.path;
-  }
-  if (!subdemo.name) {
-    subdemo.name = demo.name;
-  }
-  return subdemo;
+
+  var opacity = Math.random() / 2;
+  demo.shade = 'rgba(0, 0, 0, ' + opacity + ')';
 }
 demos.forEach(normalizeDemo);
 
