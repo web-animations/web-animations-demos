@@ -19,7 +19,7 @@ limitations under the License.
 <meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
 
 <script src="components/webcomponentsjs/webcomponents.js"></script>
-<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400" rel="stylesheet" type="text/css">
 <link rel="import" href="components/core-menu/core-menu.html"></link>
 <link rel="import" href="components/core-icon/core-icon.html"></link>
 <link rel="import" href="components/core-item/core-item.html"></link>
@@ -72,8 +72,22 @@ body {
       background: #fff;
       box-shadow: 0px 4px 10px 0 rgba(0,0,0,0.1),0px 2px 10px 0px rgba(0,0,0,0.1)
     }
+    core-menu {
+      margin: 12px 0;
+    }
+    core-item {
+      padding: 0 20px;
+      font-weight: 400;
+      color: #666;
+      font-size: 16px;
+      line-height: 32px;
+    }
+    core-item paper-ripple {
+      color: #666;
+    }
     core-item.core-selected {
       color: #0092f3;
+      font-weight: initial;
     }
     core-selector {
       display: flex;
