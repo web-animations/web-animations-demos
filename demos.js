@@ -3,10 +3,12 @@ var demos = [
   {
     name: 'Parallax Starfield',
     path: 'starfield/starfield-planes.html',
+    darkTheme: true,
   },
   {
     name: '500 Individual Stars',
     path: 'starfield/starfield-indiv.html',
+    darkTheme: true,
   },
   {
     name: 'Animate.css',
@@ -23,10 +25,14 @@ var demos = [
     name: 'Bounce',
     path: 'bounce-timing-function',
   },
-  {name: 'Globe'},
+  {
+    name: 'Globe',
+    darkTheme: true,
+  },
   {
     name: 'Spinning Dots',
     path: 'spin',
+    darkTheme: true,
   },
   {
     name: 'Expandoboard',
@@ -38,6 +44,7 @@ var demos = [
   {
     name: 'Galaxy',
     path: 'galaxy',
+    darkTheme: true,
   },
   {
     name: 'Playback Control',
@@ -55,6 +62,7 @@ var demos = [
     header: legacyHeader,
     name: 'Additive Color',
     path: 'additive-color',
+    darkTheme: true,
   },
   {
     header: legacyHeader,
