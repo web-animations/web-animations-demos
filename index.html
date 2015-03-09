@@ -19,7 +19,8 @@ limitations under the License.
 <meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
 
 <script src="components/webcomponentsjs/webcomponents.js"></script>
-<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400|Inconsolata" rel="stylesheet" type="text/css">
+<link rel="import" href="components/core-ajax/core-ajax.html"></link>
 <link rel="import" href="components/core-menu/core-menu.html"></link>
 <link rel="import" href="components/core-icon/core-icon.html"></link>
 <link rel="import" href="components/core-item/core-item.html"></link>
@@ -45,14 +46,21 @@ body {
       height: 200px;
       flex-grow: 1;
     }
-    h3 {
+    #card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    #card h3 {
       position: absolute;
       bottom: 0;
       left: 16px;
       font-weight: 300;
     }
     </style>
-    <h3>{{demo.name}}</h3>
+    <div id="card">
+      <h3>{{demo.name}}</h3>
+    </div>
   </template>
 </polymer-element>
 
@@ -63,14 +71,6 @@ body {
       color: #3367d6;
       font-size: 24px;
       font-weight: 300;
-    }
-    paper-button {
-      color: #666;
-    }
-    paper-button:hover,paper-button.active {
-      text-decoration: none;
-      background: #fff;
-      box-shadow: 0px 4px 10px 0 rgba(0,0,0,0.1),0px 2px 10px 0px rgba(0,0,0,0.1)
     }
     core-menu {
       margin: 12px 0;
@@ -93,6 +93,37 @@ body {
       display: flex;
       flex-wrap: wrap;
     }
+    #display {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border: 0;
+    }
+    paper-button {
+      background: rgba(0, 0, 0, 0.1);
+      font-weight: 400;
+      min-width: 100px;
+      color: #222;
+      z-index: 1;
+    }
+    paper-button.dark {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ccc;
+    }
+    paper-button#switch {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 24px;
+    }
+    div[fit] {
+      overflow: scroll;
+    }
+    pre {
+      margin: 0;
+      padding: 16px 24px;
+      font-family: "Inconsolata", monospace;
+    }
     </style>
     <core-scaffold id="scaffold">
       <core-header-panel navigation flex mode="seamed">
@@ -107,35 +138,74 @@ body {
       </core-header-panel>
 
       <div tool>{{selected.name}}</div>
+
       <template if="{{selected}}">
-        <div style="padding-left: 20px; padding-right: 20px;">
-
-          <template repeat="{{selected.header}}">
-            <p>{{}}</p>
+        <paper-button id="switch" on-tap="{{handleSwitch}}" class="{{ {dark: selected.darkTheme && !showCode} | tokenList }}">
+          <template if="{{showCode}}">
+            Demo
           </template>
-          <template repeat="{{selected.description}}">
-            <p>{{}}</p>
+          <template if="{{!showCode}}">
+            Code
           </template>
-
-          <p>
-          <a href="{{selected.path}}">
-            <paper-button><core-icon icon="arrow-forward"></core-icon>&nbsp;&nbsp;{{selected.name}}</paper-button></a>
-        </div>
+        </paper-button>
       </template>
-      <template if="{{!selected}}">
-        <core-selector on-core-select={{selectAction}}>
-          <template repeat="{{model}}">
-            <web-animations-demo-card data-hash="{{hash}}" demo="{{}}" style="background: {{shade}}">
-            </web-animations-demo-card>
+
+      <div fit>
+        <template if="{{selected}}">
+          <template if="{{showCode}}">
+            <core-ajax url="{{selected.path}}" handleAs="text" response="{{sampleCode}}" auto></core-ajax>
+            <pre>{{sampleCode}}</pre>
           </template>
-        </core-selector>
-      </template>
+          <template if="{{!showCode}}">
+            <!-- TODO: iframe doesn't autofocus -->
+            <iframe id="display" src="{{selected.path}}"></iframe>
+          </template>
+
+          <div hidden>
+            <template repeat="{{selected.header}}">
+              <p>{{}}</p>
+            </template>
+            <template repeat="{{selected.description}}">
+              <p>{{}}</p>
+            </template>
+          </div>
+
+        </template>
+
+        <template if="{{!selected}}">
+          <core-selector on-core-select={{selectAction}}>
+            <template repeat="{{model}}">
+              <web-animations-demo-card data-hash="{{hash}}" demo="{{}}" style="background: {{shade}}">
+              </web-animations-demo-card>
+            </template>
+          </core-selector>
+        </template>
+
+      </div><!-- div fit -->
     </core-scaffold>
   </template>
 </polymer-element>
 
 <script>
 Polymer('web-animations-demos', {
+  /**
+   * Whether to show code (as opposed to the demo).
+   *
+   * @attribute showCode
+   * @type boolean
+   * @default false
+   */
+  showCode: false,
+
+  /**
+   * The selected sample's HTML.
+   *
+   * @attribute sampleCode
+   * @type String
+   * @default null
+   */
+  sampleCode: null,
+
   selected: null,
   selectedIndex: null,
   selectAction: function(e, detail) {
@@ -163,6 +233,9 @@ Polymer('web-animations-demos', {
   ready: function() {
     window.addEventListener('hashchange', this.hashchange.bind(this));
     this.hashchange();
+  },
+  handleSwitch: function() {
+    this.showCode = !this.showCode;
   }
 });
 </script>
