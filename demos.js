@@ -13,6 +13,8 @@ var demos = [
   {
     name: 'Animate.css',
     path: 'animate_css',
+    preview: 'resources/icons/animate_css.png',
+    shade: '#c0dfe0',
   },
   {
     name: 'Touch',
@@ -20,6 +22,9 @@ var demos = [
         "Records touch events then plays them back as a keyframe animation.",
         "Note: Requires a touch screen.",
         ],
+    preview: 'resources/icons/touch.png',
+    shade: '#dc0062',
+    darkTheme: true,
   },
   {
     name: 'Bounce',
