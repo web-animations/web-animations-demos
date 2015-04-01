@@ -128,7 +128,7 @@ body {
     <core-scaffold id="scaffold">
       <core-header-panel navigation flex mode="seamed">
         <core-toolbar>Web Animations</core-toolbar>
-        <core-menu theme="core-light-theme" selected={{selectedIndex}} on-core-select={{selectAction}}>
+        <core-menu theme="core-light-theme" selected={{selectedHash}} valueattr="label" on-core-select={{selectAction}}>
           <template repeat={{model}}>
             <core-item label={{name}} data-hash="{{hash}}">
               <paper-ripple class="menu" fit=""></paper-ripple>
@@ -207,7 +207,7 @@ Polymer('web-animations-demos', {
   sampleCode: null,
 
   selected: null,
-  selectedIndex: null,
+  selectedHash: null,
   selectAction: function(e, detail) {
     if (detail.isSelected) {
       window.location.hash = detail.item.dataset.hash;
@@ -216,18 +216,21 @@ Polymer('web-animations-demos', {
   },
   hashchange: function() {
     var hash = window.location.hash;
-    this.selected = null;
+
     for (var i = 0; i < this.model.length; i++) {
-      if (this.model[i].hash == hash) {
-        this.selected = this.model[i];
-        this.selectedIndex = this.selected.index;
+      var demo = this.model[i];
+      if (demo.hash == hash) {
+        this.selected = demo;
+        this.selectedHash = demo.hash;
         return;
       }
     }
+
     if (!this.selected) {
       // TODO: Allow selection of a master page option that showcases all
       // demos.
-      this.selectedIndex = null;
+      this.selected = null;
+      this.selectedHash = null;
     }
   },
   ready: function() {
@@ -243,8 +246,7 @@ Polymer('web-animations-demos', {
 <web-animations-demos></web-animations-demos>
 <script src="demos.js"></script>
 <script>
-function normalizeDemo(demo, i) {
-  demo.index = i;
+function normalizeDemo(demo) {
   if (!demo.path) {
     demo.path = demo.name.toLowerCase();
   }
