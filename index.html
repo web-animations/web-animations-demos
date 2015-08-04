@@ -19,7 +19,7 @@ limitations under the License.
 <meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
 
 <script src="components/webcomponentsjs/webcomponents.js"></script>
-<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400|Inconsolata" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500|Inconsolata" rel="stylesheet" type="text/css">
 <link rel="import" href="components/core-ajax/core-ajax.html"></link>
 <link rel="import" href="components/core-menu/core-menu.html"></link>
 <link rel="import" href="components/core-icon/core-icon.html"></link>
@@ -36,32 +36,83 @@ body {
 }
 </style>
 
-<polymer-element name="web-animations-demo-card" attributes="demo" noscript>
+<polymer-element name="web-animations-demo-card" attributes="demo">
   <template>
     <style>
     :host {
       display: block;
       position: relative;
       width: 300px;
-      height: 200px;
+      height: 230px;
       flex-grow: 1;
     }
     #card {
       width: 100%;
       height: 100%;
       position: relative;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 300px auto;
+
+      /** force layer */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: transform;
+
+      /** fade out card unless hovered */
+      -webkit-filter: grayscale(1);
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      filter: gray;
+      filter: grayscale(100%);
     }
     #card h3 {
+      visibility: hidden;
       position: absolute;
-      bottom: 0;
+      margin: 0;
+      bottom: 12px;
       left: 16px;
-      font-weight: 300;
+      font-weight: 500;
+      color: black;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+      -webkit-user-select: none;
+      user-select: none;
     }
+    #card.dark h3 {
+      color: white;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    }
+    #card:hover {
+      -webkit-filter: none;
+      -moz-filter: none;
+      filter: none;
+    }
+    #card:hover h3 {
+      visibility: visible;
+    }
+
     </style>
     <div id="card">
       <h3>{{demo.name}}</h3>
     </div>
   </template>
+  <script>
+Polymer('web-animations-demo-card', {
+  demo: null,
+
+  updateShade: function() {
+    var card = this.$.card;
+    card.style.backgroundColor = this.demo.shade;
+    card.style.backgroundImage = this.demo.preview ? 'url(' + this.demo.preview + ')' : null;
+    card.classList.toggle('dark', this.demo.darkTheme);
+  },
+
+  ready: function() {
+    // TODO: listen to 'demo' attribute change
+    this.updateShade();
+  }
+});
+  </script>
 </polymer-element>
 
 <polymer-element name="web-animations-demos" attributes="model">
@@ -175,7 +226,7 @@ body {
         <template if="{{!selected}}">
           <core-selector on-core-select={{selectAction}}>
             <template repeat="{{model}}">
-              <web-animations-demo-card data-hash="{{hash}}" demo="{{}}" style="background: {{shade}}">
+              <web-animations-demo-card data-hash="{{hash}}" demo="{{}}">
               </web-animations-demo-card>
             </template>
           </core-selector>
@@ -258,8 +309,10 @@ function normalizeDemo(demo) {
     demo.header = [demo.header];
   }
 
-  var opacity = Math.random() / 2;
-  demo.shade = 'rgba(0, 0, 0, ' + opacity + ')';
+  if (!demo.shade) {
+    var hue = Math.random() * 360;
+    demo.shade = 'hsl(' + hue + ', 85%, 67%)';
+  }
 }
 demos.forEach(normalizeDemo);
 
