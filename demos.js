@@ -4,11 +4,15 @@ var demos = [
     name: 'Parallax Starfield',
     path: 'starfield/starfield-planes.html',
     darkTheme: true,
+    preview: 'resources/icons/starfield_planes.png',
+    shade: '#333',
   },
   {
     name: '500 Individual Stars',
     path: 'starfield/starfield-indiv.html',
     darkTheme: true,
+    preview: 'resources/icons/starfield_indiv.png',
+    shade: '#333',
   },
   {
     name: 'Animate.css',
