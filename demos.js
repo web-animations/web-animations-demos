@@ -57,7 +57,8 @@ var demos = [
   {
     name: 'Galaxy',
     path: 'galaxy',
-    darkTheme: true,
+    preview: 'resources/icons/galaxy.png',
+    shade: '#e0c7f1',
   },
   {
     name: 'Playback Control',
