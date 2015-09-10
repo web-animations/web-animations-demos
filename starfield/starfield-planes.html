@@ -1,6 +1,6 @@
 <!doctype html>
 <title>Web Animations Parallax Starfield</title>
-<meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
 <script src="../polyfill-loader.js"></script>
 <style>
   body {
@@ -82,8 +82,8 @@
         layer.appendChild(star);
       }
     }
-    layerGroup.push(new Animation(layers[l], [{transform: 'translate3d(0, 0, 0)'}, {transform: 'translate3d(-' + width + 'px, 0, 0)'}], {duration: Math.pow(2, layerCount - l) * 1000, iterations: Math.pow(2, l)}));
+    layerGroup.push(new KeyframeEffect(layers[l], [{transform: 'translate3d(0, 0, 0)'}, {transform: 'translate3d(-' + width + 'px, 0, 0)'}], {duration: Math.pow(2, layerCount - l) * 1000, iterations: Math.pow(2, l)}));
   }
-  var anim = new AnimationGroup(layerGroup, {iterations: Infinity});
+  var anim = new GroupEffect(layerGroup, {iterations: Infinity});
   document.timeline.play(anim);
 </script>

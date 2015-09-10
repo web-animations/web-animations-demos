@@ -434,21 +434,26 @@
         parameters.appendChild(peakRatioSlider.domContent());
         parameters.appendChild(warning);
 
-        // FIXME: Working around limitation in polyfill
         var element = document.createElement('div');
         var target = {easing: timingFunction, slider: slider};
-        document.timeline.play(new Animation(element, function(timeFraction) {
+
+        var effect = new KeyframeEffect(element, [], {duration: 7000, iterations: Infinity});
+        effect.onsample = function(timeFraction) {
+          // Use the timeFraction to adjust the position of the timing function.
           update(target, timeFraction);
-        }, {duration: 7000, iterations: Infinity}));
+        };
+        document.timeline.play(effect);
       }
 
       function togglePause(button) {
-        var player = document.timeline.getCurrentPlayers()[0];
-        if (player.paused)
+        var player = document.timeline.getAnimations()[0];
+        var paused = !(player.playState == 'running');
+        if (paused) {
           player.play();
-        else
-          player.pause();          
-        button.innerText = player.paused ? 'Play' : 'Pause';
+        } else {
+          player.pause();
+        }
+        button.textContent = paused ? 'Play' : 'Pause';
       }
     </script>
     
@@ -515,7 +520,7 @@
   <body onload="go()">
     <div id="wrapper">
       <canvas width="440px" height="840px" id="canvas"></canvas>
-      <form id ="parameters"></form>
+      <form id="parameters"></form>
       <button onclick="togglePause(this)">Pause</button>
     </div>
   <body>

@@ -44,7 +44,8 @@ twine = function(context, timing, duration) {
 
   // FIXME: Working around limitation in polyfill.
   var dummyElement = document.createElement('div');
-  var anim = new Animation(dummyElement, onsample, timing);
+  var anim = new KeyframeEffect(dummyElement, [], timing);
+  anim.onsample = onsample;
 
   anim._valuesEnd = {};
   for (var property in timing.to)
@@ -70,10 +71,6 @@ twine = function(context, timing, duration) {
     for (property in anim._valuesDelta)
       context[property] = anim._valuesStart[property] + anim._valuesDelta[property] * fraction;
   }
-
-  anim.stop = function() {
-    return anim.player && (anim.player.paused = true), anim;
-  };
 
   return anim;
 };

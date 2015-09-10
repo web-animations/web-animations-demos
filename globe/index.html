@@ -82,7 +82,6 @@ limitations under the License.
 
         next : function() {
           console.log('next');
-          rotation.stop();
           var lat = 54 / 180 * Math.PI;
           var lon = -0.137 / 180 * Math.PI - Math.PI / 2;
           twine(stage, { delay: 0.5, to: { x: lon, y: lat, distance: 500 }, easing: "cubic-bezier(.12,-0.34,.48,1)", onend: stage.left }, 2000).start();
