@@ -33,6 +33,9 @@ var demos = [
   {
     name: 'Bounce',
     path: 'bounce-timing-function',
+    preview: 'resources/icons/bounce.png',
+    shade: '#303aa5',
+    darkTheme: true,
   },
   {
     name: 'Globe',
