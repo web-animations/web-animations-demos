@@ -19,46 +19,52 @@ A Web Animations implementation of Animate.css which can be found here http://da
 -->
 <!DOCTYPE html>
 <html>
-  <head>
-   <meta name="viewport" content="width=device-width, height=device-height, user-scalable=false">
-    <link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
-    <script src="../polyfill-loader.js"></script>
-    <style>
-    body {
-      display: flex;
-      flex-flow: column;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      align-items: center;
-      justify-content: center;
-      font-family: RobotoDraft,Helvetica,Arial,sans-serif;
-      font-weight: 300;
-    }
-    #textContainer {
-      align-self: center;
-      font-size: 50px;
-    }
-    #controls {
-      margin-top: 50px;
-    }
-    </style>
+<head>
+  <title>Animate.css &mdash; Web Animations Demos</title>
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+  <link href="../resources/demo.css" rel="stylesheet" type="text/css" />
+  <script src="../polyfill-loader.js"></script>
+  <style>
 
-    
-    <script>
+body {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  background: #b4d8d9;
+}
+
+#controls {
+  margin-top: 50px;
+  text-align: center;
+}
+
+#box {
+  background: #363ca1;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.25);
+  width: 25vw;
+  height: 25vw;
+  min-width: 160px;
+  min-height: 160px;
+  will-change: transform;
+}
+
+  </style>
+  <script>
 
       // a user must write this function from scratch and can use the others
       function moveText() {
         var optionSelected = document.querySelector("#option").value;
-        var textToAnimate = document.querySelector("#text").value;
-        var hold = document.querySelector("#textContainerText");
-        if (textToAnimate != "") {
-          hold.innerHTML = textToAnimate;
-        }
-        var elem = document.querySelector('#textContainer');
+        var elem = document.querySelector('#boxContainer');
         var iterations = 1;
         window[optionSelected](elem, iterations);
       }
+
+      window.addEventListener('load', function() {
+        document.getElementById('option').addEventListener('change', moveText);
+      });
 
       function bounce(elem, iterations) {
         var keyframes = [
@@ -641,32 +647,32 @@ A Web Animations implementation of Animate.css which can be found here http://da
 
       function rotateOutDownLeft(elem, iterations) {
         var transformOrigin = elem.style['transform-origin'];
-        var keyframes = [{transform: 'rotate3d(0, 0, 1, 45deg)', opacity: '0', transformOrigin: 'left bottom', offset: 1}, 
-          {transform: 'none', opacity: '1', transformOrigin: 'left bottom', offset: 0}];
+        var keyframes = [{transform: 'none', opacity: '1', transformOrigin: 'left bottom', offset: 0},
+          {transform: 'rotate3d(0, 0, 1, 45deg)', opacity: '0', transformOrigin: 'left bottom', offset: 1}];
         var timing = {duration: 900, iterations: iterations};
         return elem.animate(keyframes, timing);        
       } 
 
       function rotateOutDownRight(elem, iterations) {
         var transformOrigin = elem.style['transform-origin'];
-        var keyframes = [{transform: 'rotate3d(0, 0, 1, -45deg)', opacity: '0', transformOrigin: 'right bottom', offset: 1}, 
-          {transform: 'none', opacity: '1', transformOrigin: 'right bottom', offset: 0}];
+        var keyframes = [{transform: 'none', opacity: '1', transformOrigin: 'right bottom', offset: 0},
+          {transform: 'rotate3d(0, 0, 1, -45deg)', opacity: '0', transformOrigin: 'right bottom', offset: 1}];
         var timing = {duration: 900, iterations: iterations};
         return elem.animate(keyframes, timing);        
       } 
 
       function rotateOutUpLeft(elem, iterations) {
         var transformOrigin = elem.style['transform-origin'];
-        var keyframes = [{transform: 'rotate3d(0, 0, 1, -45deg)', opacity: '0', transformOrigin: 'left bottom', offset: 1}, 
-          {transform: 'none', opacity: '1', transformOrigin: 'left bottom', offset: 0}];
+        var keyframes = [{transform: 'none', opacity: '1', transformOrigin: 'left bottom', offset: 0},
+          {transform: 'rotate3d(0, 0, 1, -45deg)', opacity: '0', transformOrigin: 'left bottom', offset: 1}];
         var timing = {duration: 900, iterations: iterations};
         return elem.animate(keyframes, timing);        
       } 
 
       function rotateOutUpRight(elem, iterations) {
         var transformOrigin = elem.style['transform-origin'];
-        var keyframes = [{transform: 'rotate3d(0, 0, 1, 45deg)', opacity: '0', transformOrigin: 'right bottom', offset: 1}, 
-          {transform: 'none', opacity: '1', transformOrigin: 'right bottom', offset: 0}];
+        var keyframes = [{transform: 'none', opacity: '1', transformOrigin: 'right bottom', offset: 0},
+          {transform: 'rotate3d(0, 0, 1, 45deg)', opacity: '0', transformOrigin: 'right bottom', offset: 1}];
         var timing = {duration: 900, iterations: iterations};
         return elem.animate(keyframes, timing);        
       } 
@@ -679,21 +685,17 @@ A Web Animations implementation of Animate.css which can be found here http://da
         return elem.animate(keyframes, timing);        
 
       } 
-    </script>
-
-  </head>
+  </script>
+</head>
 
   <body>
-  <div id="textContainer">
-    <span id="textContainerText">Animate!</span>
+
+  <div id="boxContainer">
+    <div id="box"></div>
   </div>
 
-  <br>
-
   <div id="controls">
-    <input id="text" onkeyup="moveText()" onchange="moveText()" value="Animate!"></input>
-    </input>
-    <select id="option" onchange = 'moveText()'>
+    <select id="option">
       <optgroup label="Attention Seekers">
         <option value="bounce">bounce</option>
         <option value="flash">flash</option>
@@ -797,7 +799,7 @@ A Web Animations implementation of Animate.css which can be found here http://da
         <option value="zoomOutUp">zoomOutUp</option>
       </optgroup>
     </select>
-    <br>
+
     <p>Based on animations from <a href="http://daneden.github.io/animate.css/">Animate.css</a>
   </div>
 
