@@ -37,10 +37,12 @@ target.addEventListener('touchend', function(e) {
   }
 });
 
-var fadeTime = 0.085;
+var fadeTime = 125;  // ms
 var visible = [{opacity: 1}, {opacity: 1}];
 var fadeIn = [{opacity: 0}, {opacity: 1}];
 var fadeOut = [{opacity: 1}, {opacity: 0}];
+
+var playbackRate = 0.5;
 
 var touchStart;
 var visuals;
@@ -51,14 +53,10 @@ var player;
 function onFirstTouchStart(e) {
   touchStart = e.timeStamp;
   recordedTouches = {};
-  visuals && visuals.forEach(function(visual) {
-    visual.remove();
-  });
+  player && player.cancel();
+  visualParent.textContent = '';  // clear visuals
   visuals = [];
   groups = [];
-  if (player) {
-    player.source = null;
-  }
   onTouchMove(e);
 }
 
@@ -84,7 +82,8 @@ function onTouchEnd(e) {
       continue;
     }
     var startTime = recordedTouches[id][0].time;
-    var duration = recordedTouches[id][recordedTouches[id].length - 1].time - startTime;
+    var duration =
+        (recordedTouches[id][recordedTouches[id].length - 1].time - startTime);
     var endTime = startTime + duration;
     var frames = recordedTouches[id].map(function(touch) {
       return {
@@ -108,16 +107,19 @@ function onTouchEnd(e) {
       visuals.push(visual);
       visualParent.appendChild(visual);
     }
-    var durationS = duration
-    var startTimeS = startTime;
-    groups.push(new AnimationGroup([
-      new Animation(visual, visible, {duration: durationS, fill: 'none'}),
-      new Animation(visual, fadeOut, {duration: fadeTime, delay: durationS - fadeTime, fill: 'none'}),
-      new Animation(visual, fadeIn, {duration: fadeTime, fill: 'none'}),
-      new Animation(visual, frames, {duration: durationS, fill: 'none'}),
-    ], {duration: durationS, delay: startTimeS}));
+
+    groups.push(new GroupEffect([
+      new KeyframeEffect(visual, visible, {duration: duration}),
+      new KeyframeEffect(visual, fadeIn, {duration: fadeTime}),
+      new KeyframeEffect(visual, fadeOut, {duration: fadeTime, delay: duration - fadeTime}),
+      new KeyframeEffect(visual, frames, {duration: duration}),
+    ], {duration: duration, delay: startTime}));
   }
   if (e.touches.length == 0) {
-    player = document.timeline.play(new AnimationGroup(groups, {direction: 'alternate', iterations: Infinity}));
+    player = document.timeline.play(new GroupEffect(groups, {}));
+    player.playbackRate = playbackRate;
+    player.onfinish = function() {
+      player.reverse();
+    };
   }
 };
