@@ -36,7 +36,8 @@ var demos = [
   },
   {
     name: 'Globe',
-    darkTheme: true,
+    preview: 'resources/icons/globe.png',
+    shade: '#eee',
   },
   {
     name: 'Spinning Dots',
