@@ -70,6 +70,8 @@ var demos = [
   {
     name: 'Hide/Show',
     path: 'hide-show',
+    shade: '#eef',
+    preview: 'resources/icons/hide-show.png',
   },
   {
     name: 'Ripple',
