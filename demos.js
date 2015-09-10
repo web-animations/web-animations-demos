@@ -63,6 +63,9 @@ var demos = [
   {
     name: 'Playback Control',
     path: 'playback-control',
+    preview: 'resources/icons/playback.png',
+    shade: '#4e6cef',
+    darkTheme: true,
   },
   {
     name: 'Hide/Show',
