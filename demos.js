@@ -4,11 +4,15 @@ var demos = [
     name: 'Parallax Starfield',
     path: 'starfield/starfield-planes.html',
     darkTheme: true,
+    preview: 'resources/icons/starfield_planes.png',
+    shade: '#333',
   },
   {
     name: '500 Individual Stars',
     path: 'starfield/starfield-indiv.html',
     darkTheme: true,
+    preview: 'resources/icons/starfield_indiv.png',
+    shade: '#333',
   },
   {
     name: 'Animate.css',
@@ -29,10 +33,14 @@ var demos = [
   {
     name: 'Bounce',
     path: 'bounce-timing-function',
+    preview: 'resources/icons/bounce.png',
+    shade: '#303aa5',
+    darkTheme: true,
   },
   {
     name: 'Globe',
-    darkTheme: true,
+    preview: 'resources/icons/globe.png',
+    shade: '#eee',
   },
   {
     name: 'Spinning Dots',
@@ -49,15 +57,21 @@ var demos = [
   {
     name: 'Galaxy',
     path: 'galaxy',
-    darkTheme: true,
+    preview: 'resources/icons/galaxy.png',
+    shade: '#e0c7f1',
   },
   {
     name: 'Playback Control',
     path: 'playback-control',
+    preview: 'resources/icons/playback.png',
+    shade: '#4e6cef',
+    darkTheme: true,
   },
   {
     name: 'Hide/Show',
     path: 'hide-show',
+    shade: '#eef',
+    preview: 'resources/icons/hide-show.png',
   },
   {
     name: 'Ripple',
@@ -76,6 +90,9 @@ var demos = [
       "Demonstrates seeking and redirecting a running animation. Press the arrow keys to direct the rolling ball.",
       "Note: This demo isn't interactive on a mobile device.",
     ],
+    preview: 'resources/icons/rolio.png',
+    shade: '#178f46',
+    darkTheme: true,
   },
   // FIXME: Unknown. Nothing happens.
   // {

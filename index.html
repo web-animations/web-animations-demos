@@ -52,7 +52,7 @@ body {
       position: relative;
       background-position: center;
       background-repeat: no-repeat;
-      background-size: 300px auto;
+      background-size: auto 100%;
       cursor: pointer;
 
       /** force layer */
@@ -61,11 +61,11 @@ body {
       will-change: transform;
 
       /** fade out card unless hovered */
-      -webkit-filter: grayscale(1);
-      -webkit-filter: grayscale(100%);
-      -moz-filter: grayscale(100%);
+      -webkit-filter: grayscale(1) contrast(0.75);
+      -webkit-filter: grayscale(100%) contrast(75%);
+      -moz-filter: grayscale(100%) contrast(75%);
       filter: gray;
-      filter: grayscale(100%);
+      filter: grayscale(100%) contrast(75%);
     }
     #card h3 {
       visibility: hidden;
@@ -74,12 +74,12 @@ body {
       bottom: 12px;
       left: 16px;
       font-weight: 500;
-      color: black;
+      color: #111;
       -webkit-user-select: none;
       user-select: none;
     }
     #card.dark h3 {
-      color: white;
+      color: #eee;
     }
     #card:hover {
       -webkit-filter: none;
