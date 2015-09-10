@@ -90,6 +90,9 @@ var demos = [
       "Demonstrates seeking and redirecting a running animation. Press the arrow keys to direct the rolling ball.",
       "Note: This demo isn't interactive on a mobile device.",
     ],
+    preview: 'resources/icons/rolio.png',
+    shade: '#178f46',
+    darkTheme: true,
   },
   // FIXME: Unknown. Nothing happens.
   // {
