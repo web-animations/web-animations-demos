@@ -15,26 +15,28 @@ limitations under the License.
 -->
 
 <!DOCTYPE html>
-
-<meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
-
-<script src="components/webcomponentsjs/webcomponents.js"></script>
-<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500|Inconsolata" rel="stylesheet" type="text/css">
-<link rel="import" href="components/core-ajax/core-ajax.html"></link>
-<link rel="import" href="components/core-menu/core-menu.html"></link>
-<link rel="import" href="components/core-icon/core-icon.html"></link>
-<link rel="import" href="components/core-item/core-item.html"></link>
-<link rel="import" href="components/core-scaffold/core-scaffold.html"></link>
-<link rel="import" href="components/core-header-panel/core-header-panel.html"></link>
-<link rel="import" href="components/paper-button/paper-button.html"></link>
-
-<style>
+<html>
+<head>
+  <title>Web Animations Demos</title>
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Inconsolata" rel="stylesheet" type="text/css" />
+  <script src="components/webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="components/core-ajax/core-ajax.html" />
+  <link rel="import" href="components/core-menu/core-menu.html" />
+  <link rel="import" href="components/core-icon/core-icon.html" />
+  <link rel="import" href="components/core-item/core-item.html" />
+  <link rel="import" href="components/core-scaffold/core-scaffold.html" />
+  <link rel="import" href="components/core-header-panel/core-header-panel.html" />
+  <link rel="import" href="components/paper-button/paper-button.html" />
+  <style>
 body {
-  font-family: RobotoDraft,Helvetica,Arial,sans-serif;
+  font-family: Roboto, Helvetica, Arial, Sans-Serif;
   font-size: 16px;
   font-weight: 300;
 }
-</style>
+  </style>
+</head>
+<body>
 
 <polymer-element name="web-animations-demo-card" attributes="demo">
   <template>
@@ -375,4 +377,5 @@ demos.forEach(normalizeDemo);
 
 document.querySelector('web-animations-demos').model = demos;
 </script>
+</body>
 </html>
