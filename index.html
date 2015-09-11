@@ -122,8 +122,12 @@ Polymer('web-animations-demo-card', {
       font-size: 24px;
       font-weight: 300;
     }
+    /** TODO: Replace /deep/ alongside Polymer 1.0 update */
+    core-scaffold /deep/ core-toolbar {
+      display: none;
+    }
     core-menu {
-      margin: 12px 0;
+      margin: 0;
     }
     core-item {
       padding: 0 20px;
@@ -134,6 +138,12 @@ Polymer('web-animations-demo-card', {
     }
     core-item paper-ripple {
       color: #666;
+    }
+    core-item.main {
+      font-weight: 500 !important;
+      font-size: 24px;
+      line-height: 64px;
+      color: #333;
     }
     core-item.core-selected {
       color: #0092f3;
@@ -177,8 +187,10 @@ Polymer('web-animations-demo-card', {
     </style>
     <core-scaffold id="scaffold">
       <core-header-panel navigation flex mode="seamed">
-        <core-toolbar>Web Animations</core-toolbar>
-        <core-menu theme="core-light-theme" selected={{selectedHash}} valueattr="label" on-core-select={{selectAction}}>
+        <core-menu theme="core-light-theme" selected={{selectedHash}} valueattr="data-hash" on-core-select={{selectAction}}>
+          <core-item label="Web Animations" data-hash="" class="main">
+            <paper-ripple class="menu" fit=""></paper-ripple>
+          </core-item>
           <template repeat={{model}}>
             <core-item label={{name}} data-hash="{{hash}}">
               <paper-ripple class="menu" fit=""></paper-ripple>
@@ -186,8 +198,6 @@ Polymer('web-animations-demo-card', {
           </template>
         </core-menu>
       </core-header-panel>
-
-      <div tool>{{selected.name}}</div>
 
       <template if="{{selected}}">
         <paper-button id="switch" on-tap="{{handleSwitch}}" class="{{ {dark: selected.darkTheme && !showCode} | tokenList }}">
@@ -206,12 +216,13 @@ Polymer('web-animations-demo-card', {
             <core-ajax url="{{selected.path}}" handleAs="text" response="{{sampleCode}}" auto></core-ajax>
             <pre>{{sampleCode}}</pre>
           </template>
-          <template if="{{!showCode}}">
+          <div hidden?="{{showCode}}">
             <!-- TODO: iframe doesn't autofocus -->
-            <iframe id="display" src="{{selected.path}}"></iframe>
-          </template>
+            <iframe id="iframe"></iframe>
+          </div>
 
           <div hidden>
+            <!-- TODO: show elsewhere -->
             <template repeat="{{selected.header}}">
               <p>{{}}</p>
             </template>
@@ -221,7 +232,6 @@ Polymer('web-animations-demo-card', {
           </div>
 
         </template>
-
         <template if="{{!selected}}">
           <core-selector on-core-select={{selectAction}}>
             <template repeat="{{model}}">
@@ -230,7 +240,6 @@ Polymer('web-animations-demo-card', {
             </template>
           </core-selector>
         </template>
-
       </div><!-- div fit -->
     </core-scaffold>
   </template>
@@ -258,34 +267,50 @@ Polymer('web-animations-demos', {
 
   selected: null,
   selectedHash: null,
+
   selectAction: function(e, detail) {
     if (detail.isSelected) {
-      window.location.hash = detail.item.dataset.hash;
+      var hash = detail.item.dataset.hash || '';
+      if (!hash && 'pushState' in history) {
+        // Use the HTML5 History API to clear the hash symbol itself '#'.
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+      } else {
+        window.location.hash = hash;
+      }
+      this.hashchange();
     }
-    this.$.scaffold.closeDrawer()
+    this.$.scaffold.closeDrawer();
   },
   hashchange: function() {
     var hash = window.location.hash;
-
-    for (var i = 0; i < this.model.length; i++) {
-      var demo = this.model[i];
-      if (demo.hash == hash) {
-        this.selected = demo;
-        this.selectedHash = demo.hash;
-        return;
+    if (hash) {
+      for (var i = 0; i < this.model.length; i++) {
+        var demo = this.model[i];
+        if (demo.hash == hash) {
+          this.selected = demo;
+          this.selectedHash = demo.hash;
+          this.updateFrameURL(demo.path);
+          return;
+        }
       }
     }
 
-    if (!this.selected) {
-      // TODO: Allow selection of a master page option that showcases all
-      // demos.
-      this.selected = null;
-      this.selectedHash = null;
+    this.selected = null;
+    this.selectedHash = '';
+    this.updateFrameURL('');
+  },
+  updateFrameURL: function(url) {
+    var iframe = this.$.scaffold.querySelector('#iframe');
+    if (iframe) {
+      iframe.contentWindow.location.replace(url);
+    } else {
+      // It's possible that there's no iframe on early load, ignore.
     }
   },
   ready: function() {
-    window.addEventListener('hashchange', this.hashchange.bind(this));
-    this.hashchange();
+    this.hashchange = this.hashchange.bind(this);
+    window.addEventListener('hashchange', this.hashchange);
+    window.setTimeout(this.hashchange, 0);
   },
   handleSwitch: function() {
     this.showCode = !this.showCode;
