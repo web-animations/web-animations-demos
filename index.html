@@ -89,7 +89,6 @@ body {
     #card:hover h3 {
       visibility: visible;
     }
-
     </style>
     <div id="card">
       <h3>{{demo.name}}</h3>
@@ -182,7 +181,21 @@ Polymer('web-animations-demo-card', {
     pre {
       margin: 0;
       padding: 16px 24px;
+      font-size: 14px;
       font-family: "Inconsolata", monospace;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 800px) {
+      pre {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+    }
+    @media (max-width: 500px) {
+      pre {
+        padding: 4px 6px;
+        font-size: 10px;
+      }
     }
     </style>
     <core-scaffold id="scaffold">
