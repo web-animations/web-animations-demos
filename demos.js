@@ -75,7 +75,7 @@ var demos = [
   {
     name: 'Hide/Show',
     path: 'hide-show',
-    shade: '#eef',
+    shade: '#f0f0f0',
     preview: 'resources/icons/hide-show.png',
   },
   {
@@ -88,6 +88,8 @@ var demos = [
     header: legacyHeader,
     name: 'Additive Color',
     path: 'additive-color',
+    preview: 'resources/icons/additive.png',
+    shade: '#544d73',
     darkTheme: true,
   },
   {
