@@ -175,6 +175,19 @@ Polymer('web-animations-demo-card', {
       right: 0;
       margin: 24px;
     }
+    paper-button#samples {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 24px;
+      display: none;
+    }
+    @media (max-width: 600px) {
+      /** Only show when sidebar is hidden. */
+      paper-button#samples {
+        display: block;
+      }
+    }
     div[fit] {
       overflow: scroll;
     }
@@ -211,6 +224,10 @@ Polymer('web-animations-demo-card', {
           </template>
         </core-menu>
       </core-header-panel>
+
+      <paper-button id="samples" on-tap="{{handleCode}}" class="{{ {dark: selected.darkTheme && !showCode} | tokenList }}">
+        Samples
+      </paper-button>
 
       <template if="{{selected}}">
         <paper-button id="switch" on-tap="{{handleSwitch}}" class="{{ {dark: selected.darkTheme && !showCode} | tokenList }}">
@@ -327,6 +344,9 @@ Polymer('web-animations-demos', {
   },
   handleSwitch: function() {
     this.showCode = !this.showCode;
+  },
+  handleCode: function() {
+    this.$.scaffold.togglePanel();
   }
 });
 </script>
