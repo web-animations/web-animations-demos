@@ -15,8 +15,7 @@
  */
 
 body {
-  width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
   margin: 0;
   font-family: Roboto, Helvetica, Arial, Sans-Serif;
@@ -26,10 +25,9 @@ body {
 
 a {
   color: #1496f1;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 a:hover {
-  color: #6e14f1;
-  text-decoration: underline;
+  text-decoration: none;
 }
