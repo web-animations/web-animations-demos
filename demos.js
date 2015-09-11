@@ -45,20 +45,25 @@ var demos = [
   {
     name: 'Spinning Dots',
     path: 'spin',
+    preview: 'resources/icons/spin.png',
     darkTheme: true,
+    shade: '#0e7cf0',
   },
   {
     name: 'Expandoboard',
     path: 'expandoboard',
+    preview: 'resources/icons/expandoboard.png',
     description: [
         "This animates like a zillion things and looks kinda bad in browsers without native support.",
     ],
+    darkTheme: 'true',
+    shade: '#6a6a6a',
   },
   {
     name: 'Galaxy',
     path: 'galaxy',
     preview: 'resources/icons/galaxy.png',
-    shade: '#e0c7f1',
+    shade: '#b7c7d8',
   },
   {
     name: 'Playback Control',
@@ -76,6 +81,8 @@ var demos = [
   {
     name: 'Ripple',
     path: 'ripple',
+    shade: '#2ebcfc',
+    preview: 'resources/icons/ripple.png',
   },
   {
     header: legacyHeader,
@@ -120,5 +127,7 @@ var demos = [
   {
     header: legacyHeader,
     name: 'Breakout',
+    preview: 'resources/icons/breakout.png',
+    shade: '#eee',
   },
 ];
