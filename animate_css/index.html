@@ -49,6 +49,7 @@ body {
   min-width: 160px;
   min-height: 160px;
   will-change: transform;
+  cursor: pointer;
 }
 
   </style>
@@ -64,6 +65,7 @@ body {
 
       window.addEventListener('load', function() {
         document.getElementById('option').addEventListener('change', moveText);
+        document.getElementById('box').addEventListener('click', moveText);
       });
 
       function bounce(elem, iterations) {
