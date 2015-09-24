@@ -92,6 +92,33 @@ body {
     #card:hover h3 {
       visibility: visible;
     }
+
+    /**
+     * For devices without hover (i.e., phones or tablets), just show all cards
+     * as active.
+     */
+
+    @media (hover: none) {
+      #card {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+      }
+      #card h3 {
+        visibility: visible;
+      }
+    }
+    @media (hover: on-demand) {
+      #card {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+      }
+      #card h3 {
+        visibility: visible;
+      }
+    }
+
     </style>
     <div id="card">
       <h3>{{demo.name}}</h3>
