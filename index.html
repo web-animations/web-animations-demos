@@ -298,6 +298,11 @@ Polymer('web-animations-demos', {
    */
   sampleCode: null,
 
+  /**
+   * Used as the document title prefix.
+   */
+  defaultTitle_: document.title,
+
   selected: null,
   selectedHash: null,
 
@@ -323,6 +328,7 @@ Polymer('web-animations-demos', {
           this.selected = demo;
           this.selectedHash = demo.hash;
           this.updateFrameURL(demo.path);
+          this.setTitle(demo);
           return;
         }
       }
@@ -331,6 +337,15 @@ Polymer('web-animations-demos', {
     this.selected = null;
     this.selectedHash = '';
     this.updateFrameURL('');
+    this.setTitle(null);
+  },
+  setTitle: function(demo) {
+    if (demo) {
+      // NB: Uses an unencoded en dash, not a hyphen.
+      document.title = demo.name + ' – ' + this.defaultTitle_;
+    } else {
+      document.title = this.defaultTitle_;
+    }
   },
   updateFrameURL: function(url) {
     var iframe = this.$.scaffold.querySelector('#iframe');
