@@ -4,11 +4,15 @@
   "private": true,
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.1",
-    "web-animations-js": "web-animations/web-animations-js#master",
+    "web-animations-js": "web-animations/web-animations-js#~2",
     "web-animations-js-legacy": "web-animations/web-animations-js-legacy#master",
     "pointerevents-polyfill": "components/pointerevents-polyfill",
     "core-elements": "Polymer/core-elements",
     "paper-elements": "Polymer/paper-elements",
     "core-icons": "Polymer/core-icons"
+  },
+  "resolutions": {
+    "web-animations-js": "~2",
+    "webcomponentsjs": "^0.5"
   }
 }
