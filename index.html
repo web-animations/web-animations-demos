@@ -148,7 +148,8 @@ Polymer('web-animations-demo-card', {
   },
 
   ready: function() {
-    // TODO: listen to 'demo' attribute change
+    // TODO: This element refreshes itself initially, but it should instead
+    // observe the 'demo' attribute.
     this.updateShade();
   }
 });
@@ -257,6 +258,9 @@ Polymer('web-animations-demo-card', {
     #infobox p {
       margin: 4px 0;
     }
+    #infobox p.header {
+      font-weight: 400;
+    }
     #infobox a {
       text-decoration: underline;
     }
@@ -303,7 +307,10 @@ Polymer('web-animations-demo-card', {
       </core-header-panel>
 
       <div hidden?="{{showCode}}">
-        <div id="infobox" hidden?="{{!selected.description}}">
+        <div id="infobox" hidden?="{{!selected.description && !selected.header}}">
+          <template repeat="{{selected.header}}">
+            <p class="header">{{}}</p>
+          </template>
           <template repeat="{{selected.description}}">
             <p>{{}}</p>
           </template>
@@ -332,18 +339,7 @@ Polymer('web-animations-demo-card', {
             <pre>{{sampleCode}}</pre>
           </template>
           <div hidden?="{{showCode}}">
-            <!-- TODO: iframe doesn't autofocus -->
             <iframe id="iframe"></iframe>
-          </div>
-
-          <div hidden>
-            <!-- TODO: show elsewhere -->
-            <template repeat="{{selected.header}}">
-              <p>{{}}</p>
-            </template>
-            <template repeat="{{selected.description}}">
-              <p>{{}}</p>
-            </template>
           </div>
 
         </template>
