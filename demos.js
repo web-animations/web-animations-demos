@@ -83,6 +83,9 @@ var demos = [
     path: 'ripple',
     shade: '#2ebcfc',
     preview: 'resources/icons/ripple.png',
+    description: [
+      "Touch or click the screen!"
+    ],
   },
   {
     header: legacyHeader,
