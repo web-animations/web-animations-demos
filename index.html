@@ -39,7 +39,7 @@ body {
 </head>
 <body>
 
-<polymer-element name="web-animations-demo-card" attributes="demo">
+<polymer-element name="web-animations-demo-card" attributes="demo href">
   <template>
     <style>
     :host {
@@ -93,6 +93,14 @@ body {
       visibility: visible;
     }
 
+    a#all {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
     /**
      * For devices without hover (i.e., phones or tablets), just show all cards
      * as active.
@@ -122,17 +130,21 @@ body {
     </style>
     <div id="card">
       <h3>{{demo.name}}</h3>
+      <a id="all" hidden?="{{!href}}" href="{{href}}"></a>
     </div>
   </template>
   <script>
 Polymer('web-animations-demo-card', {
   demo: null,
+  href: null,
 
   updateShade: function() {
     var card = this.$.card;
-    card.style.backgroundColor = this.demo.shade;
-    card.style.backgroundImage = this.demo.preview ? 'url(' + this.demo.preview + ')' : null;
-    card.classList.toggle('dark', this.demo.darkTheme);
+    if (this.demo) {
+      card.style.backgroundColor = this.demo.shade;
+      card.style.backgroundImage = this.demo.preview ? 'url(' + this.demo.preview + ')' : null;
+      card.classList.toggle('dark', this.demo.darkTheme);
+    }
   },
 
   ready: function() {
@@ -154,6 +166,9 @@ Polymer('web-animations-demo-card', {
     /** TODO: Replace /deep/ alongside Polymer 1.0 update */
     core-scaffold /deep/ core-toolbar {
       display: none;
+    }
+    core-header-panel {
+      z-index: 2;
     }
     core-menu {
       margin: 0;
@@ -191,7 +206,7 @@ Polymer('web-animations-demo-card', {
     paper-button {
       background: rgba(0, 0, 0, 0.1);
       font-weight: 400;
-      min-width: 100px;
+      min-width: 52px;
       color: #222;
       z-index: 1;
     }
@@ -204,6 +219,7 @@ Polymer('web-animations-demo-card', {
       top: 0;
       right: 0;
       margin: 24px;
+      min-width: 100px;
     }
     paper-button#samples {
       position: absolute;
@@ -221,6 +237,34 @@ Polymer('web-animations-demo-card', {
     div[fit] {
       overflow: scroll;
     }
+
+    #infobox {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 4px 10px;
+      z-index: 100;
+      margin: 12px;
+      border-radius: 4px;
+      background: rgba(0, 146, 243, 0.75);
+      color: white;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      max-width: 600px;
+    }
+    #infobox p {
+      margin: 4px 0;
+    }
+    #infobox a {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      /** Fit whole screen when sidebar is hidden. */
+      #infobox {
+        right: 0;
+        max-width: none;
+      }
+    }
+
     pre {
       margin: 0;
       padding: 16px 24px;
@@ -255,8 +299,16 @@ Polymer('web-animations-demo-card', {
         </core-menu>
       </core-header-panel>
 
+      <div hidden?="{{showCode}}">
+        <div id="infobox" hidden?="{{!selected.description}}">
+          <template repeat="{{selected.description}}">
+            <p>{{}}</p>
+          </template>
+        </div>
+      </div>
+
       <paper-button id="samples" on-tap="{{handleCode}}" class="{{ {dark: selected.darkTheme && !showCode} | tokenList }}">
-        Samples
+        <core-icon icon="menu"></core-icon>
       </paper-button>
 
       <template if="{{selected}}">
@@ -294,6 +346,7 @@ Polymer('web-animations-demo-card', {
         </template>
         <template if="{{!selected}}">
           <core-selector on-core-select={{selectAction}}>
+            <web-animations-demo-card demo="{{infoDemo}}" href="https://github.com/web-animations"></web-animations-demo-card>
             <template repeat="{{model}}">
               <web-animations-demo-card data-hash="{{hash}}" demo="{{}}">
               </web-animations-demo-card>
@@ -329,6 +382,16 @@ Polymer('web-animations-demos', {
    * Used as the document title prefix.
    */
   defaultTitle_: document.title,
+
+  /**
+   * Fake 'demo' for information.
+   */
+  infoDemo: {
+    shade: 'black',
+    darkTheme: true,
+    preview: 'resources/icons/github.png',
+    name: 'Web Animations on GitHub',
+  },
 
   selected: null,
   selectedHash: null,

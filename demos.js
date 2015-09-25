@@ -23,9 +23,9 @@ var demos = [
   {
     name: 'Touch',
     description: [
-        "Records touch events then plays them back as a keyframe animation.",
-        "Note: Requires a touch screen.",
-        ],
+      "Touch the screen to record events and have them played back as keyframe animations.",
+      "Note: Requires a touch screen.",
+    ],
     preview: 'resources/icons/touch.png',
     shade: '#dc0062',
     darkTheme: true,
@@ -54,7 +54,7 @@ var demos = [
     path: 'expandoboard',
     preview: 'resources/icons/expandoboard.png',
     description: [
-        "This animates like a zillion things and looks kinda bad in browsers without native support.",
+      "This animates like a zillion things and looks kinda bad in browsers without native support.",
     ],
     darkTheme: 'true',
     shade: '#6a6a6a',
@@ -91,6 +91,9 @@ var demos = [
     preview: 'resources/icons/additive.png',
     shade: '#544d73',
     darkTheme: true,
+    description: [
+      "Move your mouse or fingers around the screen!",
+    ],
   },
   {
     header: legacyHeader,
