@@ -15,28 +15,31 @@ limitations under the License.
 -->
 
 <!DOCTYPE html>
-
-<meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
-
-<script src="components/webcomponentsjs/webcomponents.js"></script>
-<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500|Inconsolata" rel="stylesheet" type="text/css">
-<link rel="import" href="components/core-ajax/core-ajax.html"></link>
-<link rel="import" href="components/core-menu/core-menu.html"></link>
-<link rel="import" href="components/core-icon/core-icon.html"></link>
-<link rel="import" href="components/core-item/core-item.html"></link>
-<link rel="import" href="components/core-scaffold/core-scaffold.html"></link>
-<link rel="import" href="components/core-header-panel/core-header-panel.html"></link>
-<link rel="import" href="components/paper-button/paper-button.html"></link>
-
-<style>
+<html>
+<head>
+  <title>Web Animations Demos</title>
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Inconsolata" rel="stylesheet" type="text/css" />
+  <script src="components/webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="components/core-ajax/core-ajax.html" />
+  <link rel="import" href="components/core-menu/core-menu.html" />
+  <link rel="import" href="components/core-icon/core-icon.html" />
+  <link rel="import" href="components/core-item/core-item.html" />
+  <link rel="import" href="components/core-scaffold/core-scaffold.html" />
+  <link rel="import" href="components/core-header-panel/core-header-panel.html" />
+  <link rel="import" href="components/paper-button/paper-button.html" />
+  <style>
 body {
-  font-family: RobotoDraft,Helvetica,Arial,sans-serif;
+  font-family: Roboto, Helvetica, Arial, Sans-Serif;
   font-size: 16px;
   font-weight: 300;
+  overflow-y: hidden;  /* disables pull-to-refresh */
 }
-</style>
+  </style>
+</head>
+<body>
 
-<polymer-element name="web-animations-demo-card" attributes="demo">
+<polymer-element name="web-animations-demo-card" attributes="demo href">
   <template>
     <style>
     :host {
@@ -90,24 +93,63 @@ body {
       visibility: visible;
     }
 
+    a#all {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    /**
+     * For devices without hover (i.e., phones or tablets), just show all cards
+     * as active.
+     */
+
+    @media (hover: none) {
+      #card {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+      }
+      #card h3 {
+        visibility: visible;
+      }
+    }
+    @media (hover: on-demand) {
+      #card {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+      }
+      #card h3 {
+        visibility: visible;
+      }
+    }
+
     </style>
     <div id="card">
       <h3>{{demo.name}}</h3>
+      <a id="all" hidden?="{{!href}}" href="{{href}}"></a>
     </div>
   </template>
   <script>
 Polymer('web-animations-demo-card', {
   demo: null,
+  href: null,
 
   updateShade: function() {
     var card = this.$.card;
-    card.style.backgroundColor = this.demo.shade;
-    card.style.backgroundImage = this.demo.preview ? 'url(' + this.demo.preview + ')' : null;
-    card.classList.toggle('dark', this.demo.darkTheme);
+    if (this.demo) {
+      card.style.backgroundColor = this.demo.shade;
+      card.style.backgroundImage = this.demo.preview ? 'url(' + this.demo.preview + ')' : null;
+      card.classList.toggle('dark', this.demo.darkTheme);
+    }
   },
 
   ready: function() {
-    // TODO: listen to 'demo' attribute change
+    // TODO: This element refreshes itself initially, but it should instead
+    // observe the 'demo' attribute.
     this.updateShade();
   }
 });
@@ -122,8 +164,15 @@ Polymer('web-animations-demo-card', {
       font-size: 24px;
       font-weight: 300;
     }
+    /** TODO: Replace /deep/ alongside Polymer 1.0 update */
+    core-scaffold /deep/ core-toolbar {
+      display: none;
+    }
+    core-header-panel {
+      z-index: 2;
+    }
     core-menu {
-      margin: 12px 0;
+      margin: 0;
     }
     core-item {
       padding: 0 20px;
@@ -134,6 +183,12 @@ Polymer('web-animations-demo-card', {
     }
     core-item paper-ripple {
       color: #666;
+    }
+    core-item.main {
+      font-weight: 500 !important;
+      font-size: 24px;
+      line-height: 64px;
+      color: #333;
     }
     core-item.core-selected {
       color: #0092f3;
@@ -152,9 +207,12 @@ Polymer('web-animations-demo-card', {
     paper-button {
       background: rgba(0, 0, 0, 0.1);
       font-weight: 400;
-      min-width: 100px;
+      min-width: 52px;
       color: #222;
       z-index: 1;
+    }
+    paper-button core-icon {
+      height: 19px !important;  /** fit inside button */
     }
     paper-button.dark {
       background: rgba(255, 255, 255, 0.1);
@@ -165,20 +223,81 @@ Polymer('web-animations-demo-card', {
       top: 0;
       right: 0;
       margin: 24px;
+      min-width: 100px;
+    }
+    paper-button#samples {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 24px;
+      display: none;
+    }
+    @media (max-width: 600px) {
+      /** Only show when sidebar is hidden. */
+      paper-button#samples {
+        display: block;
+      }
     }
     div[fit] {
       overflow: scroll;
     }
+
+    #infobox {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 4px 10px;
+      z-index: 100;
+      margin: 12px;
+      border-radius: 4px;
+      background: rgba(0, 146, 243, 0.75);
+      color: white;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      max-width: 600px;
+    }
+    #infobox p {
+      margin: 4px 0;
+    }
+    #infobox p.header {
+      font-weight: 400;
+    }
+    #infobox a {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      /** Fit whole screen when sidebar is hidden. */
+      #infobox {
+        right: 0;
+        max-width: none;
+      }
+    }
+
     pre {
       margin: 0;
       padding: 16px 24px;
+      font-size: 14px;
       font-family: "Inconsolata", monospace;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 800px) {
+      pre {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+    }
+    @media (max-width: 500px) {
+      pre {
+        padding: 4px 6px;
+        font-size: 10px;
+      }
     }
     </style>
     <core-scaffold id="scaffold">
       <core-header-panel navigation flex mode="seamed">
-        <core-toolbar>Web Animations</core-toolbar>
-        <core-menu theme="core-light-theme" selected={{selectedHash}} valueattr="label" on-core-select={{selectAction}}>
+        <core-menu theme="core-light-theme" selected={{selectedHash}} valueattr="data-hash" on-core-select={{selectAction}}>
+          <core-item label="Web Animations" data-hash="" class="main">
+            <paper-ripple class="menu" fit=""></paper-ripple>
+          </core-item>
           <template repeat={{model}}>
             <core-item label={{name}} data-hash="{{hash}}">
               <paper-ripple class="menu" fit=""></paper-ripple>
@@ -187,7 +306,20 @@ Polymer('web-animations-demo-card', {
         </core-menu>
       </core-header-panel>
 
-      <div tool>{{selected.name}}</div>
+      <div hidden?="{{showCode}}">
+        <div id="infobox" hidden?="{{!selected.description && !selected.header}}">
+          <template repeat="{{selected.header}}">
+            <p class="header">{{}}</p>
+          </template>
+          <template repeat="{{selected.description}}">
+            <p>{{}}</p>
+          </template>
+        </div>
+      </div>
+
+      <paper-button id="samples" on-tap="{{handleCode}}" class="{{ {dark: selected.darkTheme && !showCode} | tokenList }}">
+        <core-icon icon="menu"></core-icon>
+      </paper-button>
 
       <template if="{{selected}}">
         <paper-button id="switch" on-tap="{{handleSwitch}}" class="{{ {dark: selected.darkTheme && !showCode} | tokenList }}">
@@ -206,31 +338,20 @@ Polymer('web-animations-demo-card', {
             <core-ajax url="{{selected.path}}" handleAs="text" response="{{sampleCode}}" auto></core-ajax>
             <pre>{{sampleCode}}</pre>
           </template>
-          <template if="{{!showCode}}">
-            <!-- TODO: iframe doesn't autofocus -->
-            <iframe id="display" src="{{selected.path}}"></iframe>
-          </template>
-
-          <div hidden>
-            <template repeat="{{selected.header}}">
-              <p>{{}}</p>
-            </template>
-            <template repeat="{{selected.description}}">
-              <p>{{}}</p>
-            </template>
+          <div hidden?="{{showCode}}">
+            <iframe id="iframe"></iframe>
           </div>
 
         </template>
-
         <template if="{{!selected}}">
           <core-selector on-core-select={{selectAction}}>
+            <web-animations-demo-card demo="{{infoDemo}}" href="https://github.com/web-animations"></web-animations-demo-card>
             <template repeat="{{model}}">
               <web-animations-demo-card data-hash="{{hash}}" demo="{{}}">
               </web-animations-demo-card>
             </template>
           </core-selector>
         </template>
-
       </div><!-- div fit -->
     </core-scaffold>
   </template>
@@ -256,39 +377,83 @@ Polymer('web-animations-demos', {
    */
   sampleCode: null,
 
+  /**
+   * Used as the document title prefix.
+   */
+  defaultTitle_: document.title,
+
+  /**
+   * Fake 'demo' for information.
+   */
+  infoDemo: {
+    shade: 'black',
+    darkTheme: true,
+    preview: 'resources/icons/github.png',
+    name: 'Web Animations on GitHub',
+  },
+
   selected: null,
   selectedHash: null,
+
   selectAction: function(e, detail) {
     if (detail.isSelected) {
-      window.location.hash = detail.item.dataset.hash;
+      var hash = detail.item.dataset.hash || '';
+      if (!hash && 'pushState' in history) {
+        // Use the HTML5 History API to clear the hash symbol itself '#'.
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+      } else {
+        window.location.hash = hash;
+      }
+      this.hashchange();
     }
-    this.$.scaffold.closeDrawer()
+    this.$.scaffold.closeDrawer();
   },
   hashchange: function() {
     var hash = window.location.hash;
-
-    for (var i = 0; i < this.model.length; i++) {
-      var demo = this.model[i];
-      if (demo.hash == hash) {
-        this.selected = demo;
-        this.selectedHash = demo.hash;
-        return;
+    if (hash) {
+      for (var i = 0; i < this.model.length; i++) {
+        var demo = this.model[i];
+        if (demo.hash == hash) {
+          this.selected = demo;
+          this.selectedHash = demo.hash;
+          this.updateFrameURL(demo.path);
+          this.setTitle(demo);
+          return;
+        }
       }
     }
 
-    if (!this.selected) {
-      // TODO: Allow selection of a master page option that showcases all
-      // demos.
-      this.selected = null;
-      this.selectedHash = null;
+    this.selected = null;
+    this.selectedHash = '';
+    this.updateFrameURL('');
+    this.setTitle(null);
+  },
+  setTitle: function(demo) {
+    if (demo) {
+      // NB: Uses an unencoded en dash, not a hyphen.
+      document.title = demo.name + ' – ' + this.defaultTitle_;
+    } else {
+      document.title = this.defaultTitle_;
+    }
+  },
+  updateFrameURL: function(url) {
+    var iframe = this.$.scaffold.querySelector('#iframe');
+    if (iframe) {
+      iframe.contentWindow.location.replace(url);
+    } else {
+      // It's possible that there's no iframe on early load, ignore.
     }
   },
   ready: function() {
-    window.addEventListener('hashchange', this.hashchange.bind(this));
-    this.hashchange();
+    this.hashchange = this.hashchange.bind(this);
+    window.addEventListener('hashchange', this.hashchange);
+    window.setTimeout(this.hashchange, 0);
   },
   handleSwitch: function() {
     this.showCode = !this.showCode;
+  },
+  handleCode: function() {
+    this.$.scaffold.togglePanel();
   }
 });
 </script>
@@ -317,4 +482,5 @@ demos.forEach(normalizeDemo);
 
 document.querySelector('web-animations-demos').model = demos;
 </script>
+</body>
 </html>

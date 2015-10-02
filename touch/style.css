@@ -35,6 +35,6 @@ body {
 }
 
 .visual:nth-child(1n) { background: #f5a33f; }
-.visual:nth-child(2n) { background: #DB4437; }
-.visual:nth-child(3n) { background: #F4B400; }
-.visual:nth-child(4n) { background: #0F9D58; }
+.visual:nth-child(2n) { background: #3683d1; }
+.visual:nth-child(3n) { background: #53d537; }
+.visual:nth-child(4n) { background: #ec3d4b; }

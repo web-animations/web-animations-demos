@@ -23,9 +23,9 @@ var demos = [
   {
     name: 'Touch',
     description: [
-        "Records touch events then plays them back as a keyframe animation.",
-        "Note: Requires a touch screen.",
-        ],
+      "Touch the screen to record events and have them played back as keyframe animations.",
+      "Note: Requires a touch screen.",
+    ],
     preview: 'resources/icons/touch.png',
     shade: '#dc0062',
     darkTheme: true,
@@ -45,20 +45,25 @@ var demos = [
   {
     name: 'Spinning Dots',
     path: 'spin',
+    preview: 'resources/icons/spin.png',
     darkTheme: true,
+    shade: '#0e7cf0',
   },
   {
     name: 'Expandoboard',
     path: 'expandoboard',
+    preview: 'resources/icons/expandoboard.png',
     description: [
-        "This animates like a zillion things and looks kinda bad in browsers without native support.",
+      "This animates like a zillion things and looks kinda bad in browsers without native support.",
     ],
+    darkTheme: 'true',
+    shade: '#6a6a6a',
   },
   {
     name: 'Galaxy',
     path: 'galaxy',
     preview: 'resources/icons/galaxy.png',
-    shade: '#e0c7f1',
+    shade: '#b7c7d8',
   },
   {
     name: 'Playback Control',
@@ -70,18 +75,28 @@ var demos = [
   {
     name: 'Hide/Show',
     path: 'hide-show',
-    shade: '#eef',
+    shade: '#f0f0f0',
     preview: 'resources/icons/hide-show.png',
   },
   {
     name: 'Ripple',
     path: 'ripple',
+    shade: '#2ebcfc',
+    preview: 'resources/icons/ripple.png',
+    description: [
+      "Touch or click the screen!"
+    ],
   },
   {
     header: legacyHeader,
     name: 'Additive Color',
     path: 'additive-color',
+    preview: 'resources/icons/additive.png',
+    shade: '#544d73',
     darkTheme: true,
+    description: [
+      "Move your mouse or fingers around the screen!",
+    ],
   },
   {
     header: legacyHeader,
@@ -120,5 +135,7 @@ var demos = [
   {
     header: legacyHeader,
     name: 'Breakout',
+    preview: 'resources/icons/breakout.png',
+    shade: '#eee',
   },
 ];

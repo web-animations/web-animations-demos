@@ -1,14 +1,21 @@
-<title>Spinning Dots</title>
-
-<style>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+  <link href="../resources/demo.css" rel="stylesheet" type="text/css" />
+  <script src="../polyfill-loader.js"></script>
+  <style>
 body {
-  background: navy;
+  background: #0e7cf0;
+  margin: 16px;
   color: white;
-  font-family: RobotoDraft;
-  font-weight: 300;
+}
+a {
+  color: #6db0f7;
 }
 .circle {
-  background: white;
+  background: #2a2a2a;
   border-radius: 50%;
   width: 10px;
   height: 10px;
@@ -16,14 +23,9 @@ body {
   top: 50vh;
   left: 50vw;
 }
-a, a:visited {
-  color: gray;
-}
-</style>
-
-<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
-<script src="../polyfill-loader.js"></script>
-
+  </style>
+  <base target="_blank" />
+</head>
 <body>
 Inspired by <a href="https://dribbble.com/shots/1660784-Spinning-dots">Spinning Dots</a>
 by <a href="https://dribbble.com/beesandbombs">Dave Whyte</a>
@@ -56,3 +58,5 @@ function addCircle(layer, fraction) {
   document.body.appendChild(element);
 }
 </script>
+</body>
+</html>

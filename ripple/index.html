@@ -1,9 +1,15 @@
-<link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
-<script src="../components/polymer/polymer.js"></script>
-<script src="../polyfill-loader.js"></script>
-<style>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+  <link href="../resources/demo.css" rel="stylesheet" type="text/css" />
+  <script src="../components/polymer/polymer.js"></script><!-- down/up events -->
+  <script src="../polyfill-loader.js"></script>
+  <style>
 body {
   overflow: hidden;
+  background: #2ebcfc;
 }
 div {
   border-radius: 50%;
@@ -11,9 +17,12 @@ div {
   width: 300px;
   height: 300px;
   position: absolute;
-  opacity: 0.25;
+  opacity: 0.66;
+  -webkit-user-select: none;
+  user-select: none;
 }
-</style>
+  </style>
+</head>
 <body touch-action="none">
 <script>
 var waves = [];
@@ -26,6 +35,10 @@ function Wave(x, y) {
   this.element.style.top = 'calc(' + y + 'px - 150px)';
   this.element.setAttribute('touch-action', 'none');
   this.element.addEventListener('up', up);
+
+  var hue = Math.random() * 360;
+  this.element.style.backgroundColor = 'hsl(' + hue + ', 85%, 67%)';
+
   document.body.appendChild(this.element);
 
   this.scale = this.element.animate([
@@ -42,7 +55,7 @@ Wave.prototype = {
   up: function() {
     this.up = function() {};
     this.opacity = this.element.animate([
-      {opacity: 0.25},
+      {opacity: 0.66},
       {opacity: 0},
     ], {
       duration: duration,
@@ -66,3 +79,5 @@ function up() {
 
 document.body.addEventListener('up', up);
 </script>
+</body>
+</html>
