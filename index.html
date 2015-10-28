@@ -204,6 +204,9 @@ Polymer('web-animations-demo-card', {
       width: 100%;
       border: 0;
     }
+    iframe.hidden {
+      visibility: hidden;  /** don't use display: none: iframe should always have real size */
+    }
     paper-button {
       background: rgba(0, 0, 0, 0.1);
       font-weight: 400;
@@ -338,9 +341,7 @@ Polymer('web-animations-demo-card', {
             <core-ajax url="{{selected.path}}" handleAs="text" response="{{sampleCode}}" auto></core-ajax>
             <pre>{{sampleCode}}</pre>
           </template>
-          <div hidden?="{{showCode}}">
-            <iframe id="iframe"></iframe>
-          </div>
+          <iframe id="iframe" class="{{ {hidden: showCode} | tokenList }}">></iframe>
 
         </template>
         <template if="{{!selected}}">
