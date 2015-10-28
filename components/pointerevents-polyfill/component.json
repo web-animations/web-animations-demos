@@ -1,0 +1,15 @@
+{
+  "name": "pointerevents-polyfill",
+  "repo": "components/pointerevents-polyfill",
+  "description": "A standards compliant PointerEvents polyfill",
+  "version": "0.2.0",
+  "keywords": [
+    "pointerevents",
+    "client"
+  ],
+  "license": "MIT",
+  "main": "pointerevents.min.js",
+  "scripts": [
+    "pointerevents.min.js"
+  ]
+}
