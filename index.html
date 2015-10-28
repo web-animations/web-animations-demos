@@ -437,6 +437,12 @@ Polymer('web-animations-demos', {
     }
   },
   updateFrameURL: function(url) {
+    if (!/\.html$/.test(url)) {
+      // When loading a plain string, e.g. "galaxy", Chrome will attempt to
+      // load the http version even if the site is loaded on https. Specifying
+      // the index page seems to fix this.
+      url += '/index.html';
+    }
     var iframe = this.$.scaffold.querySelector('#iframe');
     if (iframe) {
       iframe.contentWindow.location.replace(url);
