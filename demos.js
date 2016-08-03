@@ -1,4 +1,3 @@
-var legacyHeader = 'This demo uses the web-animations-js-legacy polyfill.';
 var demos = [
   {
     name: 'Parallax Starfield',
@@ -87,55 +86,6 @@ var demos = [
       "Touch or click the screen!"
     ],
   },
-  {
-    header: legacyHeader,
-    name: 'Additive Color',
-    path: 'additive-color',
-    preview: 'resources/icons/additive.png',
-    shade: '#544d73',
-    darkTheme: true,
-    description: [
-      "Move your mouse or fingers around the screen!",
-    ],
-  },
-  {
-    header: legacyHeader,
-    name: 'Rolio',
-    description: [
-      "Demonstrates seeking and redirecting a running animation. Press the arrow keys to direct the rolling ball.",
-      "Note: This demo isn't interactive on a mobile device.",
-    ],
-    preview: 'resources/icons/rolio.png',
-    shade: '#178f46',
-    darkTheme: true,
-  },
-  // FIXME: Unknown. Nothing happens.
-  // {
-  //   header: legacyHeader,
-  //   name: 'Snowfall',
-  //   demos: [
-  //     {path: '/snow-fall-canvas.html', name: 'Custom effects painting to a Canvas'},
-  //     {path: '/snow-fall-dom.html', name: 'Animating DOM Elements'},
-  //   ],
-  // },
-  // FIXME: Unknown. Most of the map doesn't render.
-  // {
-  //   name: 'Countries',
-  //   path: 'countries',
-  // },
-  // FIXME: Not finished.
-  // {
-  //   name: 'Rhythm',
-  //   description: "Note: This demo isn't interactive on a mobile device.",
-  // },
-  // },
-  // FIXME: Needs polish.
-  // {name: 'Walking'},
-  // FIXME: Not ported to web-animations-next.
-  {
-    header: legacyHeader,
-    name: 'Breakout',
-    preview: 'resources/icons/breakout.png',
-    shade: '#eee',
-  },
+  // TODO: Port legacy demos to use current Web Animations API.
+  // See https://github.com/web-animations/web-animations-demos/pull/74
 ];
