@@ -19,28 +19,35 @@ var demos = [
     preview: 'resources/icons/animate_css.png',
     shade: '#c0dfe0',
   },
-  {
-    name: 'Touch',
-    description: [
-      "Touch the screen to record events and have them played back as keyframe animations.",
-      "Note: Requires a touch screen.",
-    ],
-    preview: 'resources/icons/touch.png',
-    shade: '#dc0062',
-    darkTheme: true,
-  },
-  {
-    name: 'Bounce',
-    path: 'bounce-timing-function/',
-    preview: 'resources/icons/bounce.png',
-    shade: '#303aa5',
-    darkTheme: true,
-  },
-  {
-    name: 'Globe',
-    preview: 'resources/icons/globe.png',
-    shade: '#eee',
-  },
+
+  // Doesn't work for non-touch screens, not a good experience.
+  // {
+  //   name: 'Touch',
+  //   description: [
+  //     "Touch the screen to record events and have them played back as keyframe animations.",
+  //     "Note: Requires a touch screen.",
+  //   ],
+  //   preview: 'resources/icons/touch.png',
+  //   shade: '#dc0062',
+  //   darkTheme: true,
+  // },
+
+  // Uses non-standard onsample API that we shouldn't be promoting.
+  // {
+  //   name: 'Bounce',
+  //   path: 'bounce-timing-function/',
+  //   preview: 'resources/icons/bounce.png',
+  //   shade: '#303aa5',
+  //   darkTheme: true,
+  // },
+
+  // This doesn't load properly in Firefox/Safari.
+  // {
+  //   name: 'Globe',
+  //   preview: 'resources/icons/globe.png',
+  //   shade: '#eee',
+  // },
+
   {
     name: 'Spinning Dots',
     path: 'spin/',
@@ -71,12 +78,15 @@ var demos = [
     shade: '#4e6cef',
     darkTheme: true,
   },
-  {
-    name: 'Hide/Show',
-    path: 'hide-show/',
-    shade: '#f0f0f0',
-    preview: 'resources/icons/hide-show.png',
-  },
+
+  // Doesn't work on all browsers, movement is not smooth on Chrome.
+  // {
+  //   name: 'Hide/Show',
+  //   path: 'hide-show/',
+  //   shade: '#f0f0f0',
+  //   preview: 'resources/icons/hide-show.png',
+  // },
+
   {
     name: 'Ripple',
     path: 'ripple/',
@@ -86,6 +96,14 @@ var demos = [
       "Touch or click the screen!"
     ],
   },
+  {
+    name: 'Waves',
+    path: 'waves/',
+    shade: 'blue',
+    preview: 'resources/icons/waves.png',
+    darkTheme: true,
+  },
+
   // TODO: Port legacy demos to use current Web Animations API.
   // See https://github.com/web-animations/web-animations-demos/pull/74
 ];

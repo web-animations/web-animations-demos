@@ -429,8 +429,7 @@ Polymer('web-animations-demos', {
   },
   setTitle: function(demo) {
     if (demo) {
-      // NB: Uses an unencoded en dash, not a hyphen.
-      document.title = demo.name + ' – ' + this.defaultTitle_;
+      document.title = demo.name + ' - ' + this.defaultTitle_;
     } else {
       document.title = this.defaultTitle_;
     }
