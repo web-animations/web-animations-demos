@@ -96,6 +96,13 @@ var demos = [
       "Touch or click the screen!"
     ],
   },
+  {
+    name: 'Waves',
+    path: 'waves/',
+    shade: 'blue',
+    preview: 'resources/icons/waves.png',
+    darkTheme: true,
+  },
 
   // TODO: Port legacy demos to use current Web Animations API.
   // See https://github.com/web-animations/web-animations-demos/pull/74
