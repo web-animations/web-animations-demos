@@ -18,7 +18,7 @@ limitations under the License.
 
 <meta name="viewport" content="width=device-width">
 
-<script src="../polyfill-loader.js"></script>
+<script src="../components/web-animations-js/web-animations.min.js"></script>
 <script src="../components/webcomponentsjs/webcomponents.js"></script>
 <link href="https://fonts.googleapis.com/css?family=RobotoDraft:300" rel="stylesheet" type="text/css">
 <link rel="import" href="../components/core-icon-button/core-icon-button.html"></link>
@@ -120,28 +120,28 @@ var duration = 1000;
 var iterations = 3;
 Polymer('playback-demo', {
   error: '',
-  player: null,
+  animation: null,
   progress: 0,
   play: function() {
-    this.player.play();
+    this.animation.play();
   },
   pause: function() {
-    this.player.pause();
+    this.animation.pause();
   },
   reverse: function() {
-    this.player.reverse();
+    this.animation.reverse();
   },
   finish: function() {
-    this.player.finish();
+    this.animation.finish();
   },
   trackstart: function() {
-    this.player.pause();
+    this.animation.pause();
   },
   track: function(e) {
-    if (this.player.playState == 'paused') {
-      var currentTime = this.player.currentTime += 3 * e.ddx;
+    if (this.animation.playState == 'paused') {
+      var currentTime = this.animation.currentTime += 3 * e.ddx;
       currentTime = Math.min(duration * iterations, Math.max(0, currentTime));
-      this.player.currentTime = currentTime;
+      this.animation.currentTime = currentTime;
       this.progress = currentTime / (duration * iterations);
     }
   },
@@ -166,7 +166,7 @@ Polymer('playback-demo', {
       iterations: Infinity,
     });
 
-    this.player = this.$.target.animate([
+    this.animation = this.$.target.animate([
       {transform: 'rotate(-45deg) scale(1)'},
       {transform: 'rotate(0) scale(2)'},
       {transform: 'rotate(45deg) scale(1)'},
@@ -178,7 +178,7 @@ Polymer('playback-demo', {
       fill: 'both',
     });
 
-    if (!this.player.play) {
+    if (!this.animation.play) {
       this.error = "Sorry, your browser doesn't support playback control.";
       return;
     }

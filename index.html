@@ -338,7 +338,7 @@ Polymer('web-animations-demo-card', {
             <core-ajax url="{{selected.path}}" handleAs="text" response="{{sampleCode}}" auto></core-ajax>
             <pre>{{sampleCode}}</pre>
           </template>
-          <iframe id="iframe" class="{{ {hidden: showCode} | tokenList }}">></iframe>
+          <iframe class="{{ {hidden: showCode} | tokenList }}" src="{{iframeURL}}">></iframe>
 
         </template>
         <template if="{{!selected}}">
@@ -392,6 +392,7 @@ Polymer('web-animations-demos', {
 
   selected: null,
   selectedHash: null,
+  iframeURL: '',
 
   selectAction: function(e, detail) {
     if (detail.isSelected) {
@@ -414,7 +415,7 @@ Polymer('web-animations-demos', {
         if (demo.hash == hash) {
           this.selected = demo;
           this.selectedHash = demo.hash;
-          this.updateFrameURL(demo.path);
+          this.iframeURL = demo.path;
           this.setTitle(demo);
           return;
         }
@@ -423,7 +424,7 @@ Polymer('web-animations-demos', {
 
     this.selected = null;
     this.selectedHash = '';
-    this.updateFrameURL('');
+    this.iframeUrl = '';
     this.setTitle(null);
   },
   setTitle: function(demo) {
@@ -432,20 +433,6 @@ Polymer('web-animations-demos', {
       document.title = demo.name + ' – ' + this.defaultTitle_;
     } else {
       document.title = this.defaultTitle_;
-    }
-  },
-  updateFrameURL: function(url) {
-    if (!/\.html$/.test(url)) {
-      // When loading a plain string, e.g. "galaxy", Chrome will attempt to
-      // load the http version even if the site is loaded on https. Specifying
-      // the index page seems to fix this.
-      url += '/index.html';
-    }
-    var iframe = this.$.scaffold.querySelector('#iframe');
-    if (iframe) {
-      iframe.contentWindow.location.replace(url);
-    } else {
-      // It's possible that there's no iframe on early load, ignore.
     }
   },
   ready: function() {
