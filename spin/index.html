@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
   <link href="../resources/demo.css" rel="stylesheet" type="text/css" />
-  <script src="../polyfill-loader.js"></script>
+  <script src="../components/web-animations-js/web-animations.min.js"></script>
   <style>
 body {
   background: #0e7cf0;
@@ -31,6 +31,7 @@ Inspired by <a href="https://dribbble.com/shots/1660784-Spinning-dots">Spinning 
 by <a href="https://dribbble.com/beesandbombs">Dave Whyte</a>
 
 <script>
+'use strict';
 var layers = 9;
 var start = 4;
 for (var i = 1; i <= layers; i++) {
