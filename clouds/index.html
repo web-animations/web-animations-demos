@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../components/web-animations-js/web-animations.min.js"></script>
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(#3b0097, #e03a85);
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.holder {
+  position: absolute;
+}
+
+.cloud {
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 24px black;
+}
+
+.cloud::before, .cloud::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  top: 15%;
+  height: 80%;
+  background: currentColor;
+  border-radius: 50%;
+}
+.cloud::before {
+  left: -1em;
+}
+.cloud::after {
+  right: -1em;
+}
+
+</style>
+</head>
+<body>
+<script>
+
+function createCloud() {
+  var cloud = document.createElement('div');
+  cloud.className = 'cloud';
+  cloud.style.fontSize = Math.floor(Math.random() * 12) + 4 + 'px';
+
+  var scale = (1.0 - Math.random() / 2);
+  cloud.style.transform = 'scale(' + scale + ')';
+
+  var container = document.createElement('div');
+  container.className = 'holder';
+  container.appendChild(cloud);
+  container.style.top = (Math.random() * 100) + '%';
+  container.style.zIndex = Math.floor(scale * 1000);
+  return container;
+}
+
+function animateCloud(cloud) {
+  var scale = 1.0 + Math.random() / 5;
+  var player = cloud.animate([
+    {transform: 'translate(-20vw)'},
+    {transform: 'translate(50vw) scale(' + scale + ')'},
+    {transform: 'translate(120vw)'},
+  ], {
+    duration: (Math.random() * 5000) + 40000,
+    easing: 'cubic-bezier(0.42, 0, 0.58, 1)',
+    iterations: Infinity,
+    fill: 'both',
+    delay: (Math.random() * 50000) - 50000,  // always -ve, so anim starts already playing
+  });
+  return player;
+}
+
+var cloudCount = 100;
+var players = [];
+for (var i = 0; i < cloudCount; ++i) {
+  var cloud = createCloud();
+  document.body.appendChild(cloud);
+  var player = animateCloud(cloud);
+  players.push(player);
+}
+
+var playbackRate = 1;
+var maxPlaybackRate = 10;
+
+document.body.addEventListener('wheel', function(ev) {
+  ev.preventDefault();
+
+  var amount = (ev.deltaY + ev.deltaX);
+  var delta = amount / 1000;
+
+  playbackRate += delta;
+  
+  if (playbackRate < 0) {
+    playbackRate = 0;
+  } else if (playbackRate > +maxPlaybackRate) {
+    playbackRate = +maxPlaybackRate;
+  }
+
+  players.forEach(function(player) {
+    player.playbackRate = playbackRate;
+  });
+});
+
+</script>
+</body>
