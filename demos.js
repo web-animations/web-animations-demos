@@ -103,6 +103,16 @@ var demos = [
     preview: 'resources/icons/waves.png',
     darkTheme: true,
   },
+  {
+    name: 'Clouds',
+    path: 'clouds/',
+    shade: '#D73786',
+    preview: 'resources/icons/clouds.png',
+    darkTheme: true,
+    description: [
+      "Use your touchpad or mousewheel to change the speed"
+    ],
+  },
 
   // TODO: Port legacy demos to use current Web Animations API.
   // See https://github.com/web-animations/web-animations-demos/pull/74
