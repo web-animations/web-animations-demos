@@ -1,0 +1,9 @@
+{
+  "name": "Web Animations Demos",
+  "short_name": "Demos",
+  "display": "browser",
+  "scope": "/web-animations-demos/",
+  "start_url": "/web-animations-demos/",
+  "theme_color": "#0092f3",
+  "background_color": "#eee"
+}
