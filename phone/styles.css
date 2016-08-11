@@ -1,0 +1,85 @@
+
+body {
+  margin: 0;
+  background: #333;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#phone {
+  width: 320px;
+  height: 480px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 0 2px rgba(0, 0, 0, 0.2) inset;
+  position: relative;
+  overflow: hidden;
+  background: #8db6ff;
+  -webkit-user-select: none;
+  user-select: none;
+  box-shadow: 0 0 1px inset rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+}
+
+/** When the screen is small, go full-screen */
+@media (max-width: 600px) {
+  #phone {
+    width: 100vw;
+    height: 100vh;
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+.ball {
+  border-radius: 1000px;
+  background: #f44336;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.33);
+  height: 64px;
+  width: 64px;
+  color: white;
+  position: relative;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.ball i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  line-height: 64px !important;
+  font-size: 38px !important;
+}
+
+.icons {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.icons .ball {
+  margin: 16px 12px;
+}
+
+#main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+#cover {
+  position: absolute;
+  top: calc(100% - (64px + 16px + 16px));
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.125);
+  cursor: n-resize;
+  will-change: transform;
+  transform: translateZ(0);
+}
