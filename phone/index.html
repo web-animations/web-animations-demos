@@ -33,7 +33,7 @@ function createBall(opt_icon, opt_color) {
 }
 
 // Create icons on the home screen.
-var total = randomInt(4, 12);
+var total = randomInt(7, 12);
 for (var i = 0; i < total; ++i) {
   main.appendChild(createBall());
 }
@@ -50,7 +50,7 @@ var duration = 1200;
 
 // Creates an array of players that represent a phone toolbar moving upwards. Moves the toolbar as
 // well as the icons you see on the home screen.
-function createPlayers(callbackWhenDone) {
+function createPlayers(from, callbackWhenDone) {
   var timing = {duration: duration, fill: 'forwards', easing: 'ease-in-out'};
   var firstPlayer = cover.animate([
     {transform: 'none'},
@@ -67,12 +67,15 @@ function createPlayers(callbackWhenDone) {
     }
   };
 
-  // Animate each ball on the main screen moving out in a random direction.
+  // Animate each ball on the main screen, moving away from the original position.
   timing.easing = 'ease-in';
   var players = [].slice.call(main.querySelectorAll('.ball')).map(function(ball) {
-    var x = randomInt(-100, +100);
-    var y = randomInt(-400, -200);
-    var deg = randomInt(-25, +25);
+    var rect = ball.getBoundingClientRect();
+    var position = {x: rect.left + rect.width/2, y: rect.top + rect.height/2};
+
+    var x = (position.x - from.x) * (from.y - position.y) / 100;
+    var y = -(from.y - position.y);
+    var deg = x < 0 ? -25 : +25;
     return ball.animate([
       {transform: 'none', opacity: 1},
       {transform: 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)', opacity: 0},
@@ -89,13 +92,14 @@ function createPlayers(callbackWhenDone) {
   var players = null;
   var previousAt = undefined;
 
-  function getY(ev) {
-    if (ev.screenY !== undefined) { return ev.screenY; }
-    if (ev.touches) { return ev.touches[0].screenY; }
+  function getPosition(ev) {
+    var target = ev.touches ? ev.touches[0] : ev;
+    if (target.screenY !== undefined) { return {x: target.pageX, y: target.pageY}; }
     throw new Error('couldn\'t find touch on event: ' + ev);
   }
   function onDown(ev) {
-    previousAt = getY(ev);
+    var position = getPosition(ev);
+    previousAt = position.y;
 
     if (players) {
       if (players[0].playState == 'pending') { return; }  // not ready yet
@@ -109,7 +113,7 @@ function createPlayers(callbackWhenDone) {
       });
     } else {
       // Create new players! Pass a callback, when the animation is finally done, clear stuff.
-      players = createPlayers(function() {
+      players = createPlayers(position, function() {
         players = null;
         previousAt = undefined;
       });
@@ -119,7 +123,7 @@ function createPlayers(callbackWhenDone) {
     if (previousAt === undefined) { return; }
 
     // Determine whether the user has moved their pointer.
-    var y = getY(ev);
+    var y = getPosition(ev).y;
     var delta = previousAt - y;
     if (!delta) { return; }  // moved left/right, ignore
     previousAt = y;
