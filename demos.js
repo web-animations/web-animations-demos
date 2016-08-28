@@ -110,7 +110,7 @@ var demos = [
     preview: 'resources/icons/clouds.png',
     darkTheme: true,
     description: [
-      "Use your touchpad or mousewheel to change the speed"
+      "Touch the page or scroll to change the speed"
     ],
   },
 
