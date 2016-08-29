@@ -137,7 +137,8 @@ function setRate(rate) {
 function handleCursor(ev) {
   var y = ev.clientY;
   if (y !== undefined) {
-    if (!ev.which) { return; }  // mouse event, ignore
+    var buttons = ev.buttons !== undefined ? ev.buttons : ev.which === 0 ? 0 : 1 << (ev.which - 1);
+    if (!(buttons & 1)) { return; }  // mouse event and button not down
   } else {
     y = ev.touches[0].clientY;
   }
