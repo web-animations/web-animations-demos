@@ -93,14 +93,13 @@ function createCloud() {
 function animateCloud(cloud) {
   var scale = 1.0 + Math.random() / 5;
   var player = cloud.animate([
-    {transform: 'translate(-20vw)'},
+    {transform: 'translate(-20vw) scale(1)'},
     {transform: 'translate(50vw) scale(' + scale + ')'},
-    {transform: 'translate(120vw)'},
+    {transform: 'translate(120vw) scale(1)'},
   ], {
     duration: (Math.random() * 5000) + 40000,
     easing: 'cubic-bezier(0.42, 0, 0.58, 1)',
     iterations: Infinity,
-    fill: 'both',
     delay: (Math.random() * 50000) - 50000,  // always -ve, so anim starts already playing
   });
   return player;
@@ -128,6 +127,11 @@ function setRate(rate) {
 
   players.forEach(function(player) {
     player.playbackRate = playbackRate;
+    if (playbackRate == 0) {
+      player.pause();
+    } else {
+      player.play();
+    }
   });
 
   var height = (playbackRate / maxPlaybackRate) * 100;
