@@ -113,6 +113,7 @@ var demos = [
       "Touch the page or scroll to change the speed"
     ],
   },
+  {
     name: 'Phone',
     path: 'phone/',
     shade: '#c6dbfe',
